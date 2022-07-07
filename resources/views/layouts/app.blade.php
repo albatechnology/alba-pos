@@ -14,6 +14,12 @@
   <link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
   <link href="{{ asset('plugins/select2/css/select2.min.css') }}" rel="stylesheet">
   <link href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.4.0/css/select.bootstrap4.min.css">
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet" />
   @yield('css')
   @stack('css')
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
@@ -232,6 +238,7 @@
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
+  @include('sweetalert::alert')
 @yield('content')
   <!-- /.content-wrapper -->
   <footer class="main-footer">
@@ -258,8 +265,18 @@
 <!-- overlayScrollbars -->
 <script src="{{ asset('plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
-@yield('js')
-@stack('js')
+
+<script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="https://cdn.datatables.net/select/1.4.0/js/dataTables.select.min.js"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
 <script>
     $(document).ready(function(){
         $('.form-loading').on('submit', function() {
@@ -267,8 +284,99 @@
         });
         $('label.required').append('<span class="text-danger"> *</span>');
         $(".select2").select2({theme: 'bootstrap4'});
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+        $.extend(true, $.fn.dataTable.Buttons.defaults.dom.button, {
+            className: 'btn'
+        })
+        $.extend(true, $.fn.dataTable.defaults, {
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }, {
+                orderable: false,
+                searchable: false,
+                targets: -1
+            }],
+            select: {
+                style: 'multi+shift',
+                selector: 'td:first-child'
+            },
+            lengthMenu: [
+                [10, 25, 50, 100, 500, 1000, 2500, -1],
+                [10, 25, 50, 100, 500, 1000, 2500, "All"]
+            ],
+            order: [],
+            pageLength: 100,
+            dom: 'lBfrtip<"actions">',
+            buttons: [{
+                    extend: 'selectAll',
+                    className: 'btn-primary',
+                    exportOptions: {
+                        columns: ':visible'
+                    },
+                    action: function(e, dt) {
+                        e.preventDefault()
+                        dt.rows().deselect();
+                        dt.rows({
+                            search: 'applied'
+                        }).select();
+                    }
+                },
+                {
+                    extend: 'selectNone',
+                    className: 'btn-primary',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'copy',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'csv',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdf',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'print',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'colvis',
+                    className: 'btn-default',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                }
+            ]
+        });
+
+        $.fn.dataTable.ext.classes.sPageButton = '';
     });
 </script>
+@yield('js')
+@stack('js')
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
 </body>

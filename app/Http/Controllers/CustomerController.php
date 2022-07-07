@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -14,14 +16,15 @@ class CustomerController extends Controller
         $this->middleware('permission:customers_access', ['only' => 'index']);
         $this->middleware('permission:customers_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:customers_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:customers_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:customers_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::with('company')->select(sprintf('%s.*', (new Customer)->table))->orderByDesc('id');
+            $data = Customer::with('company')->select(sprintf('%s.*', (new Customer)->table));
             return DataTables::of($data)->addIndexColumn()
+                ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
@@ -34,7 +37,7 @@ class CustomerController extends Controller
                     $crudRoutePart = 'customers';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
         }
         return view('customers.index');
@@ -42,37 +45,30 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies();
+        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+
         return view('customers.create', ['companies' => $companies]);
     }
 
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|unique:customers,name',
-            'company_id' => 'required|exists:companies,id',
-        ]);
-
-        Customer::create($validated);
-
-        return redirect('customers')->withStatus($this->flash_data('success', __('global.created_successfully')));
+        Customer::create($request->validated());
+        alert()->success('Success', 'Data created successfully');
+        return redirect('customers');
     }
 
     public function edit(Customer $customer)
     {
-        $companies = tenancy()->getCompanies();
+        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
         return view('customers.edit', ['customer' => $customer, 'companies' => $companies]);
     }
 
-    public function update(Request $request, Customer $customer)
+    public function update(StoreCustomerRequest $request, Customer $customer)
     {
-        $validated = $request->validate([
-            'name' => 'required|unique:customers,name,' . $customer->id,
-            'company_id' => 'required|exists:companies,id',
-        ]);
-        $customer->update($validated);
+        $customer->update($request->validated());
 
-        return redirect('customers')->withStatus($this->flash_data('success', __('global.updated_successfully')));
+        alert()->success('Success', 'Data updated successfully');
+        return redirect('customers');
     }
 
     public function destroy(Customer $customer)
@@ -83,6 +79,19 @@ class CustomerController extends Controller
             return $this->ajaxError($e->getMessage());
         }
         return $this->ajaxSuccess(__('global.deleted_successfully'));
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:customers,id',
+        ]);
+
+        Customer::whereIn('id', $request->ids)->delete();
+        // 204 = HTTP_NO_CONTENT
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 
     public function ajaxGetcustomers(Request $request)

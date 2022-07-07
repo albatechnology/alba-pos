@@ -31,5 +31,6 @@ Route::group(['middleware' => 'auth'], function($route){
     $route->resource('tenants', TenantController::class)->except('show');
     $route->resource('companies', CompanyController::class)->except('show');
 
-    $route->resource('customers', CustomerController::class);;
+    $route->delete('customers/massDestroy', [CustomerController::class, 'massDestroy'])->name('customers.massDestroy');
+    $route->resource('customers', CustomerController::class);
 });

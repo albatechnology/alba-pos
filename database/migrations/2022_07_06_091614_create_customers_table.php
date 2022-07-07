@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained('companies');
-            $table->foreignId('tenant_id')->constrained();
+            $table->foreignId('company_id')->constrained('companies')->nullable();
+            $table->foreignId('tenant_id')->constrained()->nullable();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('phone')->nullable();
+            $table->string('phone');
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->timestamps();

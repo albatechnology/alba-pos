@@ -20,6 +20,25 @@
                                 @method('PUT')
                                 <div class="card-body">
                                     <div class="form-group">
+                                        <label class="required">Company</label>
+                                        <select name="company_id" id="company_id" class="form-control select2 @error('company_id') is-invalid @enderror" required>
+                                            @foreach ($companies as $id => $name)
+                                                <option value="{{$id}}" {{ $customer->company_id == $id ? 'selected' : '' }}>{{$name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('company_id')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required">Tenant</label>
+                                        <select name="tenant_id" id="tenant_id" class="form-control select2 @error('tenant_id') is-invalid @enderror" disabled required>
+                                        </select>
+                                        @error('tenant_id')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label class="required">Name</label>
                                         <input name="name" type="text" value="{{ $customer->name }}" class="form-control @error('name') is-invalid @enderror" placeholder="Name" required>
                                         @error('name')
@@ -27,13 +46,30 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label class="required">Company</label>
-                                        <select name="company_id" id="company_id" class="form-control select2 @error('company_id') is-invalid @enderror" required>
-                                            @foreach ($companies as $company)
-                                                <option value="{{$company->id}}" {{ $customer->company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('company_id')
+                                        <label>Email</label>
+                                        <input name="email" type="email" value="{{ $customer->email }}" class="form-control @error('email') is-invalid @enderror" placeholder="Email">
+                                        @error('email')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required">Phone</label>
+                                        <input name="phone" type="number" value="{{ $customer->phone }}" class="form-control @error('phone') is-invalid @enderror" placeholder="phone" required>
+                                        @error('phone')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <textarea name="address" class="form-control @error('address') is-invalid @enderror" placeholder="Address" rows="5">{{ $customer->address }}</textarea>
+                                        @error('address')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label>
+                                        <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Description" rows="5">{{ $customer->description }}</textarea>
+                                        @error('description')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -49,3 +85,26 @@
         </section>
     </div>
 @endsection
+@push('js')
+    <script>
+        $(document).ready(function(){
+            var companyId = '{{ $customer->company_id }}';
+            var tenantId = '{{ $customer->tenant_id }}';
+            $('#company_id').on('change', function(){
+                var options = '';
+                if($(this).val().length > 0){
+                    $.get('{{ url("tenants/get-tenants") }}?company_id='+$(this).val(), function(res){
+                        res.forEach(data => {
+                            var selected = tenantId == data.id ? 'selected' : '';
+                            options +='<option value="'+data.id+'" '+selected+'>'+data.name+'</option>';
+                        });
+                        $('#tenant_id').attr('disabled', false).html(options);
+                    })
+                } else {
+                    $('#tenant_id').attr('disabled', true).html(options);
+                }
+            })
+            $('#company_id').val(companyId).change();
+        });
+    </script>
+@endpush

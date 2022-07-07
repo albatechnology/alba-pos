@@ -22,7 +22,7 @@ class TenantController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Tenant::with('company')->select(sprintf('%s.*', (new Tenant)->table))->orderByDesc('id');
+            $data = Tenant::with('company')->select(sprintf('%s.*', (new Tenant)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
