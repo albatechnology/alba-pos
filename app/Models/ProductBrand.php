@@ -5,19 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Tenant extends Model
+class ProductBrand extends Model
 {
     use SoftDeletes;
-    public $table = 'tenants';
+    public $table = 'product_brands';
     protected $guarded = [];
 
     public function company()
     {
         return $this->belongsTo(Company::class);
     }
-
-    // public function products()
-    // {
-    //     return $this->belongsTo(Company::class);
-    // }
 }

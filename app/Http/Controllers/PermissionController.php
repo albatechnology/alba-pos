@@ -17,7 +17,7 @@ class PermissionController extends Controller
         $this->middleware('permission:permissions_access', ['only' => 'index']);
         $this->middleware('permission:permissions_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:permissions_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:permissions_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:permissions_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
@@ -25,6 +25,7 @@ class PermissionController extends Controller
         if ($request->ajax()) {
             $data = Permission::orderByDesc('id');
             return DataTables::of($data)->addIndexColumn()
+            ->addColumn('placeholder', '&nbsp;')
             ->editColumn('created_at', function ($row) {
                 return date('d-m-Y H:i', strtotime($row->created_at));
             })
@@ -34,7 +35,7 @@ class PermissionController extends Controller
                     $crudRoutePart = 'permissions';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['placeholder','actions'])
                 ->make(true);
         }
         return view('permissions.index');
@@ -52,7 +53,7 @@ class PermissionController extends Controller
         ]);
 
         Permission::create(['name' => $request->name]);
-
+        alert()->success('Success', 'Data created successfully');
         return redirect('permissions')->withStatus($this->flash_data('success', __('global.created_successfully')));
     }
 
@@ -67,7 +68,7 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name,' . $permission->id,
         ]);
         $permission->update($request);
-
+        alert()->success('Success', 'Data updated successfully');
         return redirect('permissions')->withStatus($this->flash_data('success', __('global.updated_successfully')));
     }
 
@@ -78,7 +79,19 @@ class PermissionController extends Controller
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
-        return $this->ajaxSuccess(__('global.deleted_successfully'));
+        return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:companies,id',
+        ]);
+
+        Permission::whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 
     public function export()

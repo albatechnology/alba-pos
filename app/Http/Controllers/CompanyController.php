@@ -15,7 +15,7 @@ class CompanyController extends Controller
         $this->middleware('permission:companies_access', ['only' => 'index']);
         $this->middleware('permission:companies_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:companies_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:companies_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:companies_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
@@ -23,6 +23,7 @@ class CompanyController extends Controller
         if ($request->ajax()) {
             $data = Company::orderByDesc('id');
             return DataTables::of($data)->addIndexColumn()
+                ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
@@ -32,7 +33,7 @@ class CompanyController extends Controller
                     $crudRoutePart = 'companies';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
         }
         return view('companies.index');
@@ -50,8 +51,8 @@ class CompanyController extends Controller
         ]);
 
         Company::create(['name' => $request->name]);
-
-        return redirect('companies')->withStatus($this->flash_data('success', __('global.created_successfully')));
+        alert()->success('Success', 'Data created successfully');
+        return redirect('companies');
     }
 
     public function edit(Company $company)
@@ -65,8 +66,8 @@ class CompanyController extends Controller
             'name' => 'required|unique:companies,name,' . $company->id,
         ]);
         $company->update($request);
-
-        return redirect('companies')->withStatus($this->flash_data('success', __('global.updated_successfully')));
+        alert()->success('Success', 'Data updated successfully');
+        return redirect('companies');
     }
 
     public function destroy(Company $company)
@@ -76,7 +77,19 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
-        return $this->ajaxSuccess(__('global.deleted_successfully'));
+        return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:companies,id',
+        ]);
+
+        Company::whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 
     public function setActiveCompany(Request $request)
@@ -85,7 +98,7 @@ class CompanyController extends Controller
             'company_id' => 'required|exists:companies,id'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             session()->forget('active-company');
         } else {
             $company = Company::findOrFail($request->company_id);

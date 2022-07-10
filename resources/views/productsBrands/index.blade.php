@@ -1,14 +1,11 @@
 @extends('layouts.app')
-@section('css')
-    @includeIf('layouts.includes.datatableStyle')
-@endsection
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('users.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        <a href="{{ route('product-brands.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
                     </div>
                 </div>
             </div>
@@ -19,22 +16,24 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Admin List</h3>
+                                <h3 class="card-title">Product Brands List</h3>
                             </div>
                             <div class="card-body">
-                                <table id="dttbls" class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th width="10"></th>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Email</th>
-                                            <th>Created At</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table id="dttbls" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th width="10"></th>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Company</th>
+                                                <th>Created At</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -49,10 +48,10 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('users_delete')
+        @can('product_brands_delete')
             let deleteButton = {
                 text: 'Delete selected',
-                url: "{{ route('users.massDestroy') }}",
+                url: "{{ route('product-brands.massDestroy') }}",
                 className: 'btn-danger',
                 action: function(e, dt, node, config) {
                     var ids = $.map(dt.rows({
@@ -85,13 +84,13 @@
             dtButtons.push(deleteButton)
         @endcan
 
-        var table = $('#dttbls').DataTable({
+        let table = $('#dttbls').DataTable({
             buttons: dtButtons,
             processing: true,
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route('users.index') }}',
+            ajax: '{{ route("product-brands.index") }}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'
@@ -105,8 +104,8 @@
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
+                    data: 'company_name',
+                    name: 'company.name'
                 },
                 {
                     data: 'created_at',
@@ -154,7 +153,7 @@
 
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('users') }}/` + id, {
+                $.post(`{{ url('product-brands') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {

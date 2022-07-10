@@ -47,126 +47,123 @@
 @endsection
 @push('js')
     <script>
-        $(document).ready(function() {
-            let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-            @can('user_delete')
-                let deleteButtonTrans = '{{ trans('global.datatables.delete') }}';
-                let deleteButton = {
-                    text: 'Delete selected',
-                    url: "{{ route('customers.massDestroy') }}",
-                    className: 'btn-danger',
-                    action: function(e, dt, node, config) {
-                        var ids = $.map(dt.rows({
-                            selected: true
-                        }).data(), function(entry) {
-                            return entry.id
-                        });
-                        if (ids.length === 0) {
-                            alert('No data selected')
-                            return
-                        }
-
-                        if (confirm('Delete selected data?')) {
-                            console.log('config', config.url);
-                            console.log('ids', ids);
-                            $.ajax({
-                                    method: 'POST',
-                                    url: config.url,
-                                    data: {
-                                        ids: ids,
-                                        _method: 'DELETE'
-                                    }
-                                })
-                                .done(function() {
-                                    location.reload()
-                                })
-                        }
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        @can('customers_delete')
+            let deleteButton = {
+                text: 'Delete selected',
+                url: "{{ route('customers.massDestroy') }}",
+                className: 'btn-danger',
+                action: function(e, dt, node, config) {
+                    var ids = $.map(dt.rows({
+                        selected: true
+                    }).data(), function(entry) {
+                        return entry.id
+                    });
+                    if (ids.length === 0) {
+                        alert('No data selected')
+                        return
                     }
-                }
-                dtButtons.push(deleteButton)
-            @endcan
 
-            var table = $('#dttbls').DataTable({
-                buttons: dtButtons,
-                processing: true,
-                serverSide: true,
-                searching: true,
-                responsive: true,
-                ajax: '{{ route('customers.index') }}',
-                columns: [{
-                        data: 'placeholder',
-                        name: 'placeholder'
-                    },
-                    {
-                        data: 'id',
-                        name: 'id',
-                    },
-                    {
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'company_name',
-                        name: 'company.name'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at'
-                    },
-                    {
-                        data: 'actions',
-                        name: 'actions',
-                        orderable: false,
-                        searchable: false
+                    if (confirm('Delete selected data?')) {
+                        console.log('config', config.url);
+                        console.log('ids', ids);
+                        $.ajax({
+                                method: 'POST',
+                                url: config.url,
+                                data: {
+                                    ids: ids,
+                                    _method: 'DELETE'
+                                }
+                            })
+                            .done(function() {
+                                location.reload()
+                            })
                     }
-                ],
-                orderCellsTop: true,
-                order: [
-                    [1, 'desc']
-                ],
-                pageLength: 25,
-            });
-            $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
-                $($.fn.dataTable.tables(true)).DataTable()
-                    .columns.adjust();
-            });
-
-            let visibleColumnsIndexes = null;
-            $('.datatable thead').on('input', '.search', function() {
-                let strict = $(this).attr('strict') || false
-                let value = strict && this.value ? "^" + this.value + "$" : this.value
-
-                let index = $(this).parent().index()
-                if (visibleColumnsIndexes !== null) {
-                    index = visibleColumnsIndexes[index]
-                }
-
-                table
-                    .column(index)
-                    .search(value, strict)
-                    .draw()
-            });
-            table.on('column-visibility.dt', function(e, settings, column, state) {
-                visibleColumnsIndexes = []
-                table.columns(":visible").every(function(colIdx) {
-                    visibleColumnsIndexes.push(colIdx);
-                });
-            });
-
-            function deleteData(id) {
-                if (confirm('Delete data?')) {
-                    $.post(`{{ url('customers') }}/` + id, {
-                        _method: 'delete'
-                    }, function(res) {
-                        if (res.success) {
-                            table.ajax.reload();
-                            toastr.success(res.message);
-                        } else {
-                            toastr.error(res.message);
-                        }
-                    }, 'json');
                 }
             }
+            dtButtons.push(deleteButton)
+        @endcan
+
+        let table = $('#dttbls').DataTable({
+            buttons: dtButtons,
+            processing: true,
+            serverSide: true,
+            searching: true,
+            responsive: true,
+            ajax: '{{ route('customers.index') }}',
+            columns: [{
+                    data: 'placeholder',
+                    name: 'placeholder'
+                },
+                {
+                    data: 'id',
+                    name: 'id',
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'company_name',
+                    name: 'company.name'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            orderCellsTop: true,
+            order: [
+                [1, 'desc']
+            ],
+            pageLength: 25,
         });
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        });
+
+        let visibleColumnsIndexes = null;
+        $('.datatable thead').on('input', '.search', function() {
+            let strict = $(this).attr('strict') || false
+            let value = strict && this.value ? "^" + this.value + "$" : this.value
+
+            let index = $(this).parent().index()
+            if (visibleColumnsIndexes !== null) {
+                index = visibleColumnsIndexes[index]
+            }
+
+            table
+                .column(index)
+                .search(value, strict)
+                .draw()
+        });
+        table.on('column-visibility.dt', function(e, settings, column, state) {
+            visibleColumnsIndexes = []
+            table.columns(":visible").every(function(colIdx) {
+                visibleColumnsIndexes.push(colIdx);
+            });
+        });
+
+        function deleteData(id) {
+            if (confirm('Delete data?')) {
+                $.post(`{{ url('customers') }}/` + id, {
+                    _method: 'delete'
+                }, function(res) {
+                    if (res.success) {
+                        table.ajax.reload();
+                        toastr.success(res.message);
+                    } else {
+                        toastr.error(res.message);
+                    }
+                }, 'json');
+            }
+        }
     </script>
 @endpush

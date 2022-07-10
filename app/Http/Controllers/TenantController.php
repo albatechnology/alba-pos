@@ -16,7 +16,7 @@ class TenantController extends Controller
         $this->middleware('permission:tenants_access', ['only' => 'index']);
         $this->middleware('permission:tenants_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:tenants_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:tenants_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:tenants_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
@@ -24,6 +24,7 @@ class TenantController extends Controller
         if ($request->ajax()) {
             $data = Tenant::with('company')->select(sprintf('%s.*', (new Tenant)->table));
             return DataTables::of($data)->addIndexColumn()
+            ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
@@ -36,7 +37,7 @@ class TenantController extends Controller
                     $crudRoutePart = 'tenants';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['placeholder','actions'])
                 ->make(true);
         }
         return view('tenants.index');
@@ -55,8 +56,8 @@ class TenantController extends Controller
             'company_id' => 'required|exists:companies,id',
         ]);
 
-        tenant::create($validated);
-
+        Tenant::create($validated);
+        alert()->success('Success', 'Data created successfully');
         return redirect('tenants')->withStatus($this->flash_data('success', __('global.created_successfully')));
     }
 
@@ -73,7 +74,7 @@ class TenantController extends Controller
             'company_id' => 'required|exists:companies,id',
         ]);
         $tenant->update($validated);
-
+        alert()->success('Success', 'Data updated successfully');
         return redirect('tenants')->withStatus($this->flash_data('success', __('global.updated_successfully')));
     }
 
@@ -84,7 +85,19 @@ class TenantController extends Controller
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
-        return $this->ajaxSuccess(__('global.deleted_successfully'));
+        return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:companies,id',
+        ]);
+
+        Tenant::whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 
     /**

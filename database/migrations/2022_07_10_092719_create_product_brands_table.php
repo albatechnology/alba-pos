@@ -13,15 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('product_brands', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained('companies')->nullable();
-            $table->foreignId('tenant_id')->constrained()->nullable();
-            $table->string('name');
-            $table->string('email')->nullable();
-            $table->string('phone');
-            $table->text('description')->nullable();
-            $table->text('address')->nullable();
+            $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
+            $table->string('name', 100);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -34,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('product_brands');
     }
 };

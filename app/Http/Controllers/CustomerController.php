@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class CustomerController extends Controller
@@ -78,7 +77,7 @@ class CustomerController extends Controller
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
-        return $this->ajaxSuccess(__('global.deleted_successfully'));
+        return $this->ajaxSuccess('Data deleted successfully');
     }
 
     public function massDestroy(Request $request)
@@ -89,7 +88,6 @@ class CustomerController extends Controller
         ]);
 
         Customer::whereIn('id', $request->ids)->delete();
-        // 204 = HTTP_NO_CONTENT
         alert()->success('Success', 'Data deleted successfully');
         return response(null, 204);
     }

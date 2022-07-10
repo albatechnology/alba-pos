@@ -17,7 +17,7 @@ class UserController extends Controller
         $this->middleware('permission:users_view', ['only' => 'show']);
         $this->middleware('permission:users_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:users_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:users_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:users_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
@@ -25,7 +25,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $query = User::query();
             $table = Datatables::eloquent($query);
-            $table->editColumn('actions', function ($row) {
+            $table->addColumn('placeholder', '&nbsp;')->editColumn('actions', function ($row) {
                 $viewGate      = true;
                 $editGate      = true;
                 $deleteGate    = true;
@@ -39,7 +39,7 @@ class UserController extends Controller
                 ));
             });
 
-            $table->rawColumns(['actions']);
+            $table->rawColumns(['placeholder', 'actions']);
 
             return $table->make(true);
         }
@@ -78,7 +78,8 @@ class UserController extends Controller
         ]);
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
-        return redirect('users')->withStatus($this->flash_data('success', 'Data created successfully'));
+        alert()->success('Success', 'Data created successfully');
+        return redirect('users');
     }
 
     public function show(User $user)
@@ -118,7 +119,8 @@ class UserController extends Controller
         $user->save();
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
-        return redirect('users')->withStatus($this->flash_data('success', 'Data updated successfully'));
+        alert()->success('Success', 'Data updated successfully');
+        return redirect('users');
     }
 
     public function destroy(User $user)
@@ -134,5 +136,17 @@ class UserController extends Controller
             return $this->ajaxError($e->getMessage());
         }
         return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:companies,id',
+        ]);
+
+        User::whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 }

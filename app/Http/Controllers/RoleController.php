@@ -17,7 +17,7 @@ class RoleController extends Controller
         $this->middleware('permission:roles_view', ['only' => 'show']);
         $this->middleware('permission:roles_create', ['only' => ['create', 'store']]);
         $this->middleware('permission:roles_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:roles_delete', ['only' => ['destroy']]);
+        $this->middleware('permission:roles_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
     public function index(Request $request)
@@ -25,6 +25,7 @@ class RoleController extends Controller
         if ($request->ajax()) {
             $data = Role::orderByDesc('id');
             return DataTables::of($data)->addIndexColumn()
+                ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
@@ -40,7 +41,7 @@ class RoleController extends Controller
                     $crudRoutePart = 'roles';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['actions', 'permissions'])
+                ->rawColumns(['placeholder', 'actions', 'permissions'])
                 ->make(true);
         }
         return view('roles.index');
@@ -61,8 +62,8 @@ class RoleController extends Controller
 
         $role = Role::create(['name' => $request->name]);
         $role->syncPermissions($request->permissions ?? []);
-
-        return redirect('roles')->withStatus($this->flash_data('success', __('global.created_successfully')));
+        alert()->success('Success', 'Data created successfully');
+        return redirect('roles');
     }
 
     public function edit(Role $role)
@@ -83,8 +84,8 @@ class RoleController extends Controller
         $role->name = $request->name;
         $role->save();
         $role->syncPermissions($request->permissions ?? []);
-
-        return redirect('roles')->withStatus($this->flash_data('success', __('global.updated_successfully')));
+        alert()->success('Success', 'Data updated successfully');
+        return redirect('roles');
     }
 
     public function destroy($id)
@@ -94,6 +95,18 @@ class RoleController extends Controller
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
-        return $this->ajaxSuccess(__('global.deleted_successfully'));
+        return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:companies,id',
+        ]);
+
+        Role::whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 }
