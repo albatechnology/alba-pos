@@ -53,8 +53,8 @@
                                             <button type="button" class="btn btn-success btn-xs btnDeselectAll">Deselect All</button>
                                         </div>
                                         <select name="company_ids[]" id="company_ids" class="form-control select2 @error('company_ids') is-invalid @enderror" multiple required>
-                                            @foreach ($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                            @foreach ($companies as $id => $name)
+                                            <option value="{{ $id }}">{{ $name }}</option>
                                             @endforeach
                                         </select>
                                         @error('company_ids')
@@ -102,10 +102,10 @@
                         res.forEach(data => {
                             options +='<option value="'+data.id+'">'+data.name+'</option>';
                         });
-                        $('#tenant_ids').attr('disabled', false).html(options);
+                        $('#tenant_ids').attr('disabled', false).html(options).val('').change();
                     })
                 } else {
-                    $('#tenant_ids').attr('disabled', true).html(options);
+                    $('#tenant_ids').attr('disabled', true).html(options).val('').change();
                 }
             })
         });

@@ -48,15 +48,30 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    <div class="form-group">
+                                        <label class="required">Companies</label>
+                                        <div class="mb-1">
+                                            <button type="button" class="btn btn-success btn-xs btnSelectAll">Select All</button>
+                                            <button type="button" class="btn btn-success btn-xs btnDeselectAll">Deselect All</button>
+                                        </div>
+                                        <select name="company_ids[]" id="company_ids" class="form-control select2 @error('company_ids') is-invalid @enderror" multiple required>
+                                            @foreach ($companies as $id => $name)
+                                            <option value="{{ $id }}" {{ in_array($id, $userCompanies) ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('company_ids')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                     <div class="form-group @error('tenant_ids') has-error @enderror">
                                         <label class="required">Tenants</label>
                                         <div class="mb-1">
                                             <button type="button" class="btn btn-success btn-xs" id="btnSelectAll">Select All</button>
                                             <button type="button" class="btn btn-success btn-xs" id="btnDeselectAll">Deselect All</button>
                                         </div>
-                                        <select name="tenant_ids[]" class="form-control select2 @error('tenant_ids') is-invalid @enderror" multiple required>
-                                            @foreach ($tenants as $tenant)
-                                            <option value="{{ $tenant->id }}" {{ in_array($tenant->id, $userTenants) ? 'selected' : '' }}>{{ $tenant->name }}</option>
+                                        <select name="tenant_ids[]" id="tenant_ids" class="form-control select2 @error('tenant_ids') is-invalid @enderror" multiple required>
+                                            @foreach ($tenants as $id => $name)
+                                            <option value="{{ $id }}" {{ in_array($id, $userTenants) ? 'selected' : '' }}>{{ $name }}</option>
                                             @endforeach
                                         </select>
                                         @error('tenant_ids')
@@ -84,6 +99,20 @@
             $('#btnDeselectAll').on('click', function() {
                 $(this).parent().next().children().prop("selected", false).trigger("change");
             });
+
+            $('#company_ids').on('change', function(){
+                var options = '';
+                if($(this).val().length > 0){
+                    $.get('{{ url("tenants/get-tenants") }}?company_id='+$(this).val(), function(res){
+                        res.forEach(data => {
+                            options +='<option value="'+data.id+'">'+data.name+'</option>';
+                        });
+                        $('#tenant_ids').attr('disabled', false).html(options).val('').change();
+                    })
+                } else {
+                    $('#tenant_ids').attr('disabled', true).html(options).val('').change();
+                }
+            })
         });
     </script>
 @endpush

@@ -11,8 +11,8 @@ class MenuService
     {
         return [
             self::userManagement(),
-            self::productManagement(),
             self::corporateManagement(),
+            self::productManagement(),
             self::customerManagement(),
         ];
     }

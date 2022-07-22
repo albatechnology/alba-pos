@@ -48,7 +48,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies();
+        $companies = tenancy()->getCompanies()->pluck('name','id');
         return view('users.create', ['companies' => $companies]);
     }
 
@@ -89,9 +89,13 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $companies = tenancy()->getCompanies()->pluck('name','id');
+        $userCompanies = $user->companies()->pluck('id')->all();
+
+        $tenants = tenancy()->getTenants()->pluck('name','id');
         $userTenants = $user->tenants()->pluck('id')->all();
-        $tenants = tenancy()->getTenants(auth()->user());
-        return view('users.edit', ['user' => $user, 'tenants' => $tenants, 'userTenants' => $userTenants]);
+
+        return view('users.edit', ['user' => $user, 'companies' => $companies, 'userCompanies' => $userCompanies, 'tenants' => $tenants, 'userTenants' => $userTenants]);
     }
 
     public function update(Request $request, User $user)
@@ -126,7 +130,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         try {
-            if ($user == auth()->user()) {
+            if ($user == user()) {
                 return $this->ajaxError('Data failed to delete');
             } else {
                 $user->delete();
