@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserLevelEnum;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -40,7 +41,9 @@ class User extends Authenticatable implements TenantedInterface
      * @var array<string, string>
      */
     protected $casts = [
+        'level' => UserLevelEnum::class,
         'created_at' => 'datetime:d-m-Y H:i',
+        'updated_at' => 'datetime:d-m-Y H:i',
         'email_verified_at' => 'datetime',
     ];
 
@@ -53,14 +56,18 @@ class User extends Authenticatable implements TenantedInterface
 
     public function getIsSuperAdminAttribute(): bool
     {
-        if ($this->hasRole('super-admin')) return true;
-        return $this->roles()->where('id', 1)->exists();
+        if ($this->level->is(UserLevelEnum::SUPER_ADMIN)) return true;
+        return false;
+        // if ($this->hasRole('super-admin')) return true;
+        // return $this->roles()->where('id', 1)->exists();
     }
 
     public function getIsAdminAttribute(): bool
     {
-        if ($this->hasRole('admin')) return true;
-        return $this->roles()->where('id', 2)->exists();
+        if ($this->level->is(UserLevelEnum::ADMIN)) return true;
+        return false;
+        // if ($this->hasRole('admin')) return true;
+        // return $this->roles()->where('id', 2)->exists();
     }
 
     public function companies()

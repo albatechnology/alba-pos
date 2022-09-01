@@ -20,6 +20,17 @@
                                 @method('PUT')
                                 <div class="card-body">
                                     <div class="form-group">
+                                        <label class="{{auth()->user()->is_super_admin ? '' : 'required'}}">Company</label>
+                                        <select name="company_id" id="company_id" class="form-control select2 @error('company_id') is-invalid @enderror" {{auth()->user()->is_super_admin ? '' : 'required'}}>
+                                            @foreach ($companies as $id => $name)
+                                                <option value="{{$id}}" {{ $id == $role->company_id ? 'selected' : '' }}>{{$name}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('company_id')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
                                         <label class="required">Name</label>
                                         <input name="name" type="text" value="{{ $role->name }}" class="form-control @error('name') is-invalid @enderror" placeholder="Name" required>
                                         @error('name')
@@ -27,7 +38,7 @@
                                         @enderror
                                     </div>
                                     <div class="form-group @error('permissions') has-error @enderror">
-                                        <label>{{ __('cruds.role.fields.permissions') }}</label>
+                                        <label>Permissions</label>
                                         <div class="mb-1">
                                             <button type="button" class="btn btn-success btn-xs" id="btnSelectAll">Select All</button>
                                             <button type="button" class="btn btn-success btn-xs" id="btnDeselectAll">Deselect All</button>

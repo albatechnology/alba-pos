@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Interfaces\TenantedInterface;
+use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Product extends Model
+class Product extends Model implements TenantedInterface
 {
-    use SoftDeletes;
+    use SoftDeletes, TenantedTrait;
     public $table = 'products';
     protected $guarded = [];
 

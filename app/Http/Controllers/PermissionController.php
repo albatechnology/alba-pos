@@ -12,7 +12,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PermissionController extends Controller
 {
-    function __construct()
+    public function __construct()
     {
         $this->middleware('permission:permissions_access', ['only' => 'index']);
         $this->middleware('permission:permissions_create', ['only' => ['create', 'store']]);
@@ -25,17 +25,20 @@ class PermissionController extends Controller
         if ($request->ajax()) {
             $data = Permission::orderByDesc('id');
             return DataTables::of($data)->addIndexColumn()
-            ->addColumn('placeholder', '&nbsp;')
-            ->editColumn('created_at', function ($row) {
-                return date('d-m-Y H:i', strtotime($row->created_at));
-            })
+                ->addColumn('placeholder', '&nbsp;')
+                ->editColumn('created_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->created_at));
+                })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
+                })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'permission-edit';
                     $deleteGate    = 'permission-delete';
                     $crudRoutePart = 'permissions';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['placeholder','actions'])
+                ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
         }
         return view('permissions.index');

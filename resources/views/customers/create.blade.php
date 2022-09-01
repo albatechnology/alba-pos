@@ -30,8 +30,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label class="required">Tenant</label>
-                                        <select name="tenant_id" id="tenant_id" class="form-control select2 @error('tenant_id') is-invalid @enderror" disabled required>
+                                        <label>Tenant</label>
+                                        <select name="tenant_id" id="tenant_id" class="form-control select2 @error('tenant_id') is-invalid @enderror" disabled>
                                         </select>
                                         @error('tenant_id')
                                         <span class="error invalid-feedback">{{ $message }}</span>
@@ -90,6 +90,7 @@
             $('#company_id').on('change', function(){
                 var options = '';
                 if($(this).val().length > 0){
+                    options +='<option value="">- Select Tenant -</option>';
                     $.get('{{ url("tenants/get-tenants") }}?company_id='+$(this).val(), function(res){
                         res.forEach(data => {
                             options +='<option value="'+data.id+'">'+data.name+'</option>';

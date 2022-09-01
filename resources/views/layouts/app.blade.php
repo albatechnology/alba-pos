@@ -183,7 +183,7 @@
             <input type="hidden" name="next_url" value="{{url()->current()}}">
             <select name="company_id" class="form-control mb-1" onchange="document.getElementById('tenant-selector').submit();">
                 <option value="">All Companies</option>
-                @foreach (tenancy()->getCompanies() as $company)
+                @foreach (tenancy()->getMyAllCompanies() as $company)
                 <option value="{{ $company->id }}" {{ tenancy()->activeCompanyIs($company) ? 'selected' : '' }}>{{$company->name}}</option>
                 @endforeach
             </select>
@@ -209,12 +209,14 @@
                         <a href="#" class="nav-link {{ request()->is($menu->getAllSubmenuRoutes()) ? 'active' : '' }}"><i class="nav-icon {{ $menu->icon }}"></i><p>{{ $menu->title }}<i class="right fas fa-angle-left"></i></p></a>
                         <ul class="nav nav-treeview">
                             @foreach ($menu->submenus as $submenu)
+                            @can($submenu->permission)
                             <li class="nav-item">
                                 <a href="{{ url($submenu->url) }}" class="nav-link {{ request()->is($submenu->url.'*') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>{{$submenu->title}}</p>
                                 </a>
                             </li>
+                            @endcan
                             @endforeach
                         </ul>
                     </li>

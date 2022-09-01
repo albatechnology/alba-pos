@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
+use App\Models\Company;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -21,14 +23,20 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Customer::with('company')->select(sprintf('%s.*', (new Customer)->table));
+            $data = Customer::tenanted()->with('company')->select(sprintf('%s.*', (new Customer)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
+                })
                 ->addColumn('company_name', function ($row) {
                     return $row->company?->name ?? '-';
+                })
+                ->addColumn('tenant_name', function ($row) {
+                    return $row->tenant?->name ?? '-';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'customer-edit';
@@ -44,7 +52,7 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
 
         return view('customers.create', ['companies' => $companies]);
     }
@@ -58,11 +66,11 @@ class CustomerController extends Controller
 
     public function edit(Customer $customer)
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         return view('customers.edit', ['customer' => $customer, 'companies' => $companies]);
     }
 
-    public function update(StoreCustomerRequest $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
 
@@ -87,7 +95,7 @@ class CustomerController extends Controller
             'ids.*' => 'exists:customers,id',
         ]);
 
-        Customer::whereIn('id', $request->ids)->delete();
+        Customer::tenanted()->whereIn('id', $request->ids)->delete();
         alert()->success('Success', 'Data deleted successfully');
         return response(null, 204);
     }
@@ -95,7 +103,7 @@ class CustomerController extends Controller
     public function ajaxGetcustomers(Request $request)
     {
         if ($request->ajax()) {
-            $customers = Customer::query();
+            $customers = Customer::tenanted();
             if ($request->company_id) {
                 $company_id = explode(',', $request->company_id);
                 $customers = $customers->whereIn('company_id', $company_id ?? []);

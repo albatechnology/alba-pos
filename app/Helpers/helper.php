@@ -20,3 +20,13 @@ if (!function_exists('user')) {
         return tenancy()->checkUserLogin();
     }
 }
+
+if (!function_exists('arrayFilterAndReindex')) {
+    /**
+     * remove array where value is null and reindex from 0
+     */
+    function arrayFilterAndReindex(array $values = []): array
+    {
+        return array_values(array_filter($values)) ?? [];
+    }
+}

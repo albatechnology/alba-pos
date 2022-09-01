@@ -27,6 +27,9 @@ class CompanyController extends Controller
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
+                })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'company-edit';
                     $deleteGate    = 'company-delete';
@@ -72,6 +75,7 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
+        if ($company->id == 1) return $this->ajaxError('This company can not deleted!');
         try {
             $company->delete();
         } catch (\Exception $e) {

@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserLevelEnum;
+use App\Models\Company;
+use App\Models\Role;
 use App\Models\User;
 use App\Traits\Media;
+use BenSampo\Enum\Rules\EnumKey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
@@ -23,13 +28,42 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::query();
+            $query = User::with(['companies', 'tenants', 'roles']);
             $table = Datatables::eloquent($query);
+            $table->addColumn('companies', function ($row) {
+                $html = '';
+                if ($row->companies->count() > 0) {
+                    foreach ($row->companies as $company) {
+                        $html .= '<div class="badge badge-info">' . $company->name . '</div><br>';
+                    }
+                }
+                return $html;
+            });
+            $table->addColumn('tenants', function ($row) {
+                $html = '';
+                if ($row->tenants->count() > 0) {
+                    foreach ($row->tenants as $tenant) {
+                        $html .= '<div class="badge badge-info">' . $tenant->name . '</div><br>';
+                    }
+                }
+                return $html;
+            });
+            $table->addColumn('roles', function ($row) {
+                $roles = DB::table('model_has_roles')->join('roles', 'roles.id', '=', 'model_has_roles.role_id')->where('model_type', 'App\Models\User')->where('model_id', $row->id)->get();
+                $html = '';
+                if ($roles->count() > 0) {
+                    foreach ($roles as $role) {
+                        $html .= '<div class="badge badge-info">' . $role->name . '</div><br>';
+                    }
+                }
+                return $html;
+            });
             $table->addColumn('placeholder', '&nbsp;')->editColumn('actions', function ($row) {
                 $viewGate      = true;
                 $editGate      = true;
                 $deleteGate    = true;
                 $crudRoutePart = 'users';
+
 
                 return view('layouts.includes.datatablesActions', compact(
                     'editGate',
@@ -39,7 +73,7 @@ class UserController extends Controller
                 ));
             });
 
-            $table->rawColumns(['placeholder', 'actions']);
+            $table->rawColumns(['placeholder', 'actions', 'companies', 'tenants','roles']);
 
             return $table->make(true);
         }
@@ -48,8 +82,9 @@ class UserController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies()->pluck('name','id');
-        return view('users.create', ['companies' => $companies]);
+        $companies = Company::tenanted()->pluck('name', 'id');
+        $roles = Role::pluck('name', 'id')->prepend('- Select Role -', '');
+        return view('users.create', ['companies' => $companies, 'roles' => $roles]);
     }
 
     public function store(Request $request)
@@ -61,9 +96,12 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:1024',
             'company_ids' => 'required|array',
             'company_ids.*' => 'integer|exists:companies,id',
-            'tenant_ids' => 'required|array',
+            'tenant_ids' => 'nullable|array',
             'tenant_ids.*' => 'integer|exists:tenants,id',
+            'role_id' => 'required|integer|exists:roles,id',
+            'level' => ['nullable', new EnumKey(UserLevelEnum::class)],
         ]);
+        // dd($request->all());
 
         if ($file = $request->file('image')) {
             $fileData = $this->uploadFile($file, 'users/');
@@ -74,10 +112,16 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'photo' => $image_url ?? null
+            'photo' => $image_url ?? null,
+            'level' => in_array(1, $request->company_ids) ? UserLevelEnum::SUPER_ADMIN : ($request->level ? $request->level : UserLevelEnum::ADMIN),
         ]);
+
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
+        foreach($request->company_ids as $company_id){
+            $user->roles()->syncWithPivotValues($request->role_id, ['company_id' => $company_id]);
+        }
+
         alert()->success('Success', 'Data created successfully');
         return redirect('users');
     }
@@ -89,13 +133,15 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $companies = tenancy()->getCompanies()->pluck('name','id');
+        $companies = Company::tenanted()->pluck('name', 'id');
         $userCompanies = $user->companies()->pluck('id')->all();
 
-        $tenants = tenancy()->getTenants()->pluck('name','id');
+        $tenants = tenancy()->getTenants()->pluck('name', 'id');
         $userTenants = $user->tenants()->pluck('id')->all();
 
-        return view('users.edit', ['user' => $user, 'companies' => $companies, 'userCompanies' => $userCompanies, 'tenants' => $tenants, 'userTenants' => $userTenants]);
+        $roles = Role::pluck('name', 'id')->prepend('- Select Role -', '');
+        $userRole = DB::table('model_has_roles')->where('model_type', 'App\Models\User')->where('model_id', $user->id)->first();
+        return view('users.edit', ['user' => $user, 'companies' => $companies, 'userCompanies' => $userCompanies, 'tenants' => $tenants, 'userTenants' => $userTenants, 'roles' => $roles, 'userRole' => $userRole]);
     }
 
     public function update(Request $request, User $user)
@@ -107,8 +153,10 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:1024',
             'company_ids' => 'required|array',
             'company_ids.*' => 'integer|exists:companies,id',
-            'tenant_ids' => 'required|array',
+            'tenant_ids' => 'nullable|array',
             'tenant_ids.*' => 'integer|exists:tenants,id',
+            'role_id' => 'required|integer|exists:roles,id',
+            'level' => ['nullable', new EnumKey(UserLevelEnum::class)],
         ]);
 
         if ($file = $request->file('image')) {
@@ -119,10 +167,18 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->level = in_array(1, $request->company_ids) ? UserLevelEnum::SUPER_ADMIN : ($request->level ? $request->level : UserLevelEnum::ADMIN);
         if ($request->password) $user->password = bcrypt($request->password);
         $user->save();
+
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
+
+        DB::table('model_has_roles')->where('model_type', 'App\Models\User')->where('model_id', $user->id)->delete();
+        foreach($request->company_ids as $company_id){
+            $user->roles()->syncWithPivotValues($request->role_id, ['company_id' => $company_id]);
+        }
+
         alert()->success('Success', 'Data updated successfully');
         return redirect('users');
     }

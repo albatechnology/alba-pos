@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
+use App\Models\Company;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,7 +23,7 @@ class ProductCategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ProductCategory::with('company')->select(sprintf('%s.*', (new ProductCategory)->table));
+            $data = ProductCategory::tenanted()->with('company')->select(sprintf('%s.*', (new ProductCategory)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
@@ -45,14 +46,14 @@ class ProductCategoryController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
 
         return view('productsCategories.create', ['companies' => $companies]);
     }
 
     public function store(StoreProductCategoryRequest $request)
     {
-        foreach ($request->company_ids as $company_id) {
+        foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
             ProductCategory::create($data);
@@ -63,7 +64,7 @@ class ProductCategoryController extends Controller
 
     public function edit(ProductCategory $productCategory)
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         return view('productsCategories.edit', ['productCategory' => $productCategory, 'companies' => $companies]);
     }
 
@@ -92,7 +93,7 @@ class ProductCategoryController extends Controller
             'ids.*' => 'exists:product_categories,id',
         ]);
 
-        ProductCategory::whereIn('id', $request->ids)->delete();
+        ProductCategory::tenanted()->whereIn('id', $request->ids)->delete();
         alert()->success('Success', 'Data deleted successfully');
         return response(null, 204);
     }
@@ -100,7 +101,7 @@ class ProductCategoryController extends Controller
     public function ajaxGetProductCategories(Request $request)
     {
         if ($request->ajax()) {
-            $productCategories = ProductCategory::query();
+            $productCategories = ProductCategory::tenanted();
             if ($request->company_id) {
                 $company_id = explode(',', $request->company_id);
                 $productCategories = $productCategories->whereIn('company_id', $company_id ?? []);

@@ -27,14 +27,15 @@ class StoreProductCategoryRequest extends FormRequest
     {
         return [
             'name' => ['required', function ($attribute, $value, $fail) {
-                foreach ($this->company_ids as $company_id) {
+                foreach (arrayFilterAndReindex($this->company_ids) as $company_id) {
                     $product = ProductCategory::where('company_id', $company_id)->where('name', $value)->first();
                     if ($product) $fail('The product ' . $value . ' is already in company ' . $product->company->name);
                 }
             }],
             'company_ids' => ['required', 'array', function ($attribute, $value, $fail) {
-                $companies = Company::tenantedMyCompanies()->whereIn('id', $value)->count();
-                if ($companies < count($value)) $fail('Invalid company');
+                $company_ids = arrayFilterAndReindex($value);
+                $companies = Company::tenantedMyAllCompanies()->whereIn('id', $company_ids)->count();
+                if ($companies < count($company_ids)) $fail('Invalid company');
             }],
         ];
     }

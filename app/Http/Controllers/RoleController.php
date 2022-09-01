@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
+use App\Models\Role;
 use Illuminate\Http\Request;
-use PDO;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -23,11 +24,17 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Role::orderByDesc('id');
+            $data = Role::tenanted()->with('company')->select(sprintf('%s.*', (new Role)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
+                ->addColumn('company_name', function ($row) {
+                    return $row->company?->name ?? '-';
+                })
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
+                })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('permissions', function ($row) {
                     $permissions = $row->permissions->map(function ($p) {
@@ -49,8 +56,9 @@ class RoleController extends Controller
 
     public function create()
     {
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         $permissions = Permission::pluck('name', 'id');
-        return view('roles.create', ['permissions' => $permissions]);
+        return view('roles.create', ['companies' => $companies, 'permissions' => $permissions]);
     }
 
     public function store(Request $request)
@@ -58,9 +66,15 @@ class RoleController extends Controller
         $request->validate([
             'name' => 'required|unique:roles,name',
             'permissions' => 'nullable|array',
+            'company_id' => [function ($attribute, $value, $fail) {
+                if (!auth()->user()->is_super_admin) {
+                    if (!$value) $fail('Company ID is required');
+                    if (Company::where('id', $value)->doesntExist()) $fail('The selected company id is invalid');
+                }
+            }]
         ]);
 
-        $role = Role::create(['name' => $request->name]);
+        $role = Role::create(['name' => $request->name, 'company_id' => $request->company_id]);
         $role->syncPermissions($request->permissions ?? []);
         alert()->success('Success', 'Data created successfully');
         return redirect('roles');
@@ -68,30 +82,40 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         $rolePermissions = $role->permissions->pluck('id')->all();
         $permissions = Permission::pluck('name', 'id');
-        return view('roles.edit', ['role' => $role, 'permissions' => $permissions, 'rolePermissions' => $rolePermissions]);
+        return view('roles.edit', ['role' => $role, 'companies' => $companies, 'permissions' => $permissions, 'rolePermissions' => $rolePermissions]);
     }
 
     public function update(Request $request, $id)
     {
+        // dd(!auth()->user()->is_super_admin);
         $request->validate([
             'name' => 'required|unique:roles,name,' . $id,
             'permissions' => 'nullable|array',
+            'company_id' => [function ($attribute, $value, $fail) {
+                if (!auth()->user()->is_super_admin) {
+                    if (!$value) $fail('Company ID is required');
+                    if (Company::where('id', $value)->doesntExist()) $fail('The selected company id is invalid');
+                }
+            }]
         ]);
 
         $role = Role::findOrFail($id);
         $role->name = $request->name;
+        $role->company_id = $request->company_id;
         $role->save();
         $role->syncPermissions($request->permissions ?? []);
         alert()->success('Success', 'Data updated successfully');
         return redirect('roles');
     }
 
-    public function destroy($id)
+    public function destroy(Role $role)
     {
+        if (in_array($role->id, [1, 2])) return $this->ajaxError('This role can not deleted!');
         try {
-            Role::destroy($id);
+            $role->delete();
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }

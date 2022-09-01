@@ -29,7 +29,11 @@
                                             <th>ID</th>
                                             <th>Name</th>
                                             <th>Email</th>
+                                            <th>Companies</th>
+                                            <th>Tenants</th>
+                                            <th>Role</th>
                                             <th>Created At</th>
+                                            <th>Updated At</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -109,8 +113,24 @@
                     name: 'email'
                 },
                 {
+                    data: 'companies',
+                    name: 'companies.name'
+                },
+                {
+                    data: 'tenants',
+                    name: 'tenants.name'
+                },
+                {
+                    data: 'roles',
+                    name: 'roles'
+                },
+                {
                     data: 'created_at',
                     name: 'created_at'
+                },
+                {
+                    data: 'updated_at',
+                    name: 'updated_at'
                 },
                 {
                     data: 'actions',

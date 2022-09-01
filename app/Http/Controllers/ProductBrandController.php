@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductBrandRequest;
 use App\Http\Requests\UpdateProductBrandRequest;
+use App\Models\Company;
 use App\Models\ProductBrand;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,11 +23,14 @@ class ProductBrandController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ProductBrand::with('company')->select(sprintf('%s.*', (new ProductBrand)->table));
+            $data = ProductBrand::tenanted()->with('company')->select(sprintf('%s.*', (new ProductBrand)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
+                })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
                     return $row->company?->name ?? '-';
@@ -45,14 +49,14 @@ class ProductBrandController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
 
         return view('productsBrands.create', ['companies' => $companies]);
     }
 
     public function store(StoreProductBrandRequest $request)
     {
-        foreach ($request->company_ids as $company_id) {
+        foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
             ProductBrand::create($data);
@@ -63,7 +67,7 @@ class ProductBrandController extends Controller
 
     public function edit(ProductBrand $productBrand)
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         return view('productsBrands.edit', ['productBrand' => $productBrand, 'companies' => $companies]);
     }
 
@@ -92,7 +96,7 @@ class ProductBrandController extends Controller
             'ids.*' => 'exists:product_brands,id',
         ]);
 
-        ProductBrand::whereIn('id', $request->ids)->delete();
+        ProductBrand::tenanted()->whereIn('id', $request->ids)->delete();
         alert()->success('Success', 'Data deleted successfully');
         return response(null, 204);
     }
@@ -100,7 +104,7 @@ class ProductBrandController extends Controller
     public function ajaxGetProductBrands(Request $request)
     {
         if ($request->ajax()) {
-            $productBrands = ProductBrand::query();
+            $productBrands = ProductBrand::tenanted();
             if ($request->company_id) {
                 $company_id = explode(',', $request->company_id);
                 $productBrands = $productBrands->whereIn('company_id', $company_id ?? []);

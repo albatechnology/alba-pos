@@ -62,14 +62,25 @@
                                         @enderror
                                     </div>
                                     <div class="form-group">
-                                        <label class="required">Tenants</label>
+                                        <label>Tenants</label>
                                         <div class="mb-1">
                                             <button type="button" class="btn btn-success btn-xs btnSelectAll">Select All</button>
                                             <button type="button" class="btn btn-success btn-xs btnDeselectAll">Deselect All</button>
                                         </div>
-                                        <select name="tenant_ids[]" id="tenant_ids" class="form-control select2 @error('tenant_ids') is-invalid @enderror" multiple disabled required>
+                                        <select name="tenant_ids[]" id="tenant_ids" class="form-control select2 @error('tenant_ids') is-invalid @enderror" multiple disabled>
                                         </select>
                                         @error('tenant_ids')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="required">Role</label>
+                                        <select name="role_id" id="role_id" class="form-control select2 @error('role_id') is-invalid @enderror" required>
+                                            @foreach ($roles as $id => $name)
+                                            <option value="{{ $id }}">{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('role_id')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>

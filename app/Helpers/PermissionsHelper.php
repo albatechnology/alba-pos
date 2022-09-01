@@ -1,21 +1,20 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Helpers;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
-
-class PermissionSeeder extends Seeder
+class PermissionsHelper
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public static function getAllPermissions(): array
     {
-        $permissions = [
+        return [
+            ...static::adminPermissions(),
+            ...static::superAdminPermissions(),
+        ];
+    }
+
+    public static function adminPermissions(): array
+    {
+        return [
             'dashboard_access',
             'user_management_access',
             'roles_access',
@@ -23,11 +22,6 @@ class PermissionSeeder extends Seeder
             'roles_create',
             'roles_edit',
             'roles_delete',
-            'permissions_access',
-            'permissions_view',
-            'permissions_create',
-            'permissions_edit',
-            'permissions_delete',
             'users_access',
             'users_view',
             'users_create',
@@ -35,11 +29,6 @@ class PermissionSeeder extends Seeder
             'users_delete',
 
             'corporate_management_access',
-            'companies_access',
-            'companies_view',
-            'companies_create',
-            'companies_edit',
-            'companies_delete',
             'tenants_access',
             'tenants_view',
             'tenants_create',
@@ -70,12 +59,22 @@ class PermissionSeeder extends Seeder
             'product_brands_edit',
             'product_brands_delete',
         ];
+    }
 
-        collect($permissions)->map(function ($p) {
-            Permission::firstOrCreate([
-                'name' => $p,
-                'guard_name' => 'web'
-            ]);
-        });
+    public static function superAdminPermissions(): array
+    {
+        return [
+            'permissions_access',
+            'permissions_view',
+            'permissions_create',
+            'permissions_edit',
+            'permissions_delete',
+
+            'companies_access',
+            'companies_view',
+            'companies_create',
+            'companies_edit',
+            'companies_delete',
+        ];
     }
 }

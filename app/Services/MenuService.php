@@ -47,6 +47,6 @@ class MenuService
     {
         $customers = new Submenu('customers_access', 'customers', 'fa fa-users', 'Customers');
 
-        return new Menu('corporate_management_access', 'fa fa-users', 'Customers Management', ...[$customers]);
+        return new Menu('customer_management_access', 'fa fa-users', 'Customers Management', ...[$customers]);
     }
 }

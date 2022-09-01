@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\Company;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,7 +24,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::with('company')->select(sprintf('%s.*', (new Product)->table));
+            $data = Product::tenanted()->with('company')->select(sprintf('%s.*', (new Product)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
@@ -37,7 +38,7 @@ class ProductController extends Controller
                     $editGate      = 'products_edit';
                     $deleteGate    = 'products_delete';
                     $crudRoutePart = 'products';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate','editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -47,14 +48,14 @@ class ProductController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
 
         return view('products.create', ['companies' => $companies]);
     }
 
     public function store(StoreProductRequest $request)
     {
-        foreach ($request->company_ids as $company_id) {
+        foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
             Product::create($data);
@@ -65,7 +66,7 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $companies = tenancy()->getCompanies()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
         return view('products.edit', ['product' => $product, 'companies' => $companies]);
     }
 
@@ -94,7 +95,7 @@ class ProductController extends Controller
             'ids.*' => 'exists:products,id',
         ]);
 
-        Product::whereIn('id', $request->ids)->delete();
+        Product::tenanted()->whereIn('id', $request->ids)->delete();
         alert()->success('Success', 'Data deleted successfully');
         return response(null, 204);
     }
@@ -102,7 +103,7 @@ class ProductController extends Controller
     public function ajaxGetproducts(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::query();
+            $products = Product::tenanted();
             if ($request->company_id) {
                 $company_id = explode(',', $request->company_id);
                 $products = $products->whereIn('company_id', $company_id ?? []);

@@ -62,7 +62,7 @@ class TenancyService
      */
     public function setActiveCompany(Company $company)
     {
-        $companies = $this->getCompanies();
+        $companies = $this->getMyAllCompanies();
 
         $allowedCompaniesIds = $companies->isEmpty() ? collect([]) : $companies->pluck('id');
 
@@ -76,7 +76,7 @@ class TenancyService
      * @param User|null $user
      * @return mixed|null
      */
-    public function getCompanies(User $user = null): Collection
+    public function getMyAllCompanies(User $user = null): Collection
     {
         if (!$user) $user = $this->checkUserLogin();
         if ($user->is_super_admin) return Company::all();
@@ -96,7 +96,7 @@ class TenancyService
         if ($activeCompany = $this->getActiveCompany()) return Tenant::where('company_id', $activeCompany->id)->get();
 
         if ($user->is_super_admin) return Tenant::all();
-        if ($user->is_admin) return Tenant::all();
+        if ($user->is_admin) return Tenant::whereIn('company_id', $this->getMyAllCompanies($user)->pluck('id'))->get();
 
         return $user->tenants;
     }

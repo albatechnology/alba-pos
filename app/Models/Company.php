@@ -18,19 +18,26 @@ class Company extends Model implements TenantedInterface
      */
     public function scopeTenanted($query)
     {
+        $activeCompany = tenancy()->getActiveCompany();
+        if ($activeCompany) return $query->where('id', $activeCompany->id);
+
+        $activeTenant = tenancy()->getActiveTenant();
+        if ($activeTenant) return $query->where('id', $activeTenant->company->id);
+
         $user = user();
         if ($user->is_super_admin) return $query;
-
-        // return $query->where
+        // if ($user->is_admin) return $query->whereIn('id', $user->companies->pluck('id'));
+        return $query->whereIn('id', $user->companies->pluck('id'));
     }
 
     public function scopeFindTenanted($query, int $id)
     {
+        return $query->tenanted()->where('id', $id)->firstOrFail();
     }
 
-    public function scopeTenantedMyCompanies($query)
+    public function scopeTenantedMyAllCompanies($query)
     {
-        return $query->whereIn('id', tenancy()->getCompanies()->pluck('id'));
+        return $query->whereIn('id', tenancy()->getMyAllCompanies()->pluck('id'));
     }
 
     /**

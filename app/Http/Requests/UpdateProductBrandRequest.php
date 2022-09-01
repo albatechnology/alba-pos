@@ -28,13 +28,13 @@ class UpdateProductBrandRequest extends FormRequest
         $oldProductBrand = $this->route('product_brand');
         return [
             'company_id' => ['required', 'exists:companies,id', function ($attribute, $value, $fail) {
-                $company = Company::tenantedMyCompanies()->where('id', $value)->first();
+                $company = Company::tenantedMyAllCompanies()->where('id', $value)->first();
                 if (!$company) $fail('Invalid company');
             }],
             'name' => ['required', function ($attribute, $value, $fail) use ($oldProductBrand) {
                 if ($oldProductBrand->name != $value) {
                     $product = ProductBrand::where('company_id', $this->company_id)->where('name', $value)->first();
-                    if ($product) $fail('The product ' . $value . ' is already in company ' . $product->company->name);
+                    if ($product) $fail('The product brand ' . $value . ' is already in company ' . $product->company->name);
                 }
             }]
         ];

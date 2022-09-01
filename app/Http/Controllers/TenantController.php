@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,11 +23,14 @@ class TenantController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Tenant::with('company')->select(sprintf('%s.*', (new Tenant)->table));
+            $data = Tenant::getAllMyTenant()->with('company')->select(sprintf('%s.*', (new Tenant)->table));
             return DataTables::of($data)->addIndexColumn()
-            ->addColumn('placeholder', '&nbsp;')
+                ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
+                })
+                ->editColumn('updated_at', function ($row) {
+                    return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
                     return $row->company?->name ?? '-';
@@ -37,7 +41,7 @@ class TenantController extends Controller
                     $crudRoutePart = 'tenants';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['placeholder','actions'])
+                ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
         }
         return view('tenants.index');
@@ -45,7 +49,7 @@ class TenantController extends Controller
 
     public function create()
     {
-        $companies = tenancy()->getCompanies();
+        $companies = Company::tenanted();
         return view('tenants.create', ['companies' => $companies]);
     }
 
@@ -63,7 +67,7 @@ class TenantController extends Controller
 
     public function edit(Tenant $tenant)
     {
-        $companies = tenancy()->getCompanies();
+        $companies = Company::tenanted();
         return view('tenants.edit', ['tenant' => $tenant, 'companies' => $companies]);
     }
 
@@ -117,7 +121,7 @@ class TenantController extends Controller
     public function ajaxGetTenants(Request $request)
     {
         if ($request->ajax()) {
-            $tenants = Tenant::query();
+            $tenants = Tenant::tenanted();
             if ($request->company_id) {
                 $company_id = explode(',', $request->company_id);
                 $tenants = $tenants->whereIn('company_id', $company_id ?? []);

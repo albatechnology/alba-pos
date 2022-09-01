@@ -26,8 +26,12 @@
                                                 <th width="10"></th>
                                                 <th>ID</th>
                                                 <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
                                                 <th>Company</th>
+                                                <th>Tenant</th>
                                                 <th>Created At</th>
+                                                <th>Updated At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -104,12 +108,28 @@
                     name: 'name'
                 },
                 {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'phone',
+                    name: 'phone'
+                },
+                {
                     data: 'company_name',
                     name: 'company.name'
                 },
                 {
+                    data: 'tenant_name',
+                    name: 'tenant.name'
+                },
+                {
                     data: 'created_at',
                     name: 'created_at'
+                },
+                {
+                    data: 'updated_at',
+                    name: 'updated_at'
                 },
                 {
                     data: 'actions',

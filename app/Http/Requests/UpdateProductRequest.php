@@ -28,7 +28,7 @@ class UpdateProductRequest extends FormRequest
         $oldProduct = $this->route('product');
         return [
             'company_id' => ['required', 'exists:companies,id', function ($attribute, $value, $fail) {
-                $company = Company::tenantedMyCompanies()->where('id', $value)->first();
+                $company = Company::tenantedMyAllCompanies()->where('id', $value)->first();
                 if (!$company) $fail('Invalid company');
             }],
             'name' => ['required', function ($attribute, $value, $fail) use ($oldProduct) {
