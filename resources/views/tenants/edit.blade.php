@@ -29,8 +29,8 @@
                                     <div class="form-group">
                                         <label class="required">Company</label>
                                         <select name="company_id" id="company_id" class="form-control select2 @error('company_id') is-invalid @enderror" required>
-                                            @foreach ($companies as $company)
-                                                <option value="{{$company->id}}" {{ $tenant->company_id == $company->id ? 'selected' : '' }}>{{$company->name}}</option>
+                                            @foreach ($companies as $id => $name)
+                                                <option value="{{$id}}" {{ $tenant->company_id == $id ? 'selected' : '' }}>{{$name}}</option>
                                             @endforeach
                                         </select>
                                         @error('company_id')
