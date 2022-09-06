@@ -25,6 +25,29 @@ class Product extends Model implements TenantedInterface
                     ]);
                 }
             }
+
+            /**
+             * Create stock for product
+             *
+             * 1. check tenants of product company
+             * 2. check stock by tenant_id and product_id. if not found create stock
+             */
+
+            $tenantIds = Tenant::where('company_id', $model->company_id)->pluck('id');
+            if ($tenantIds->count() > 0) {
+                $tenantIds->map(function ($tenantId) use ($model) {
+                    Stock::firstOrCreate(
+                        [
+                            'tenant_id' => $tenantId,
+                            'product_id' => $model->id
+                        ],
+                        [
+                            'company_id' => $model->company_id,
+                            'stock' => 0
+                        ]
+                    );
+                });
+            }
         });
     }
 

@@ -15,6 +15,7 @@ class MenuService
             self::productManagement(),
             self::customerManagement(),
             self::transactionManagement(),
+            self::warehouseManagement(),
         ];
     }
 
@@ -68,5 +69,12 @@ class MenuService
         $payments = new Submenu('payments_access', 'payments', 'fa fa-users', 'Payments');
 
         return new Menu('transaction_management_access', 'fa fa-shopping-cart', 'Transaction', ...[$orders, $orderDetails, $payments]);
+    }
+
+    protected static function warehouseManagement()
+    {
+        $stocks = new Submenu('stocks_access', 'stocks', 'fa fa-warehouse', 'Stocks');
+
+        return new Menu('warehouse_management_access', 'fa fa-warehouse', 'Warehouse', ...[$stocks]);
     }
 }

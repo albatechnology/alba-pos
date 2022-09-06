@@ -75,6 +75,13 @@ class PermissionsHelper
             'payments_create',
             'payments_edit',
             'payments_delete',
+
+            'warehouse_management_access',
+            'stocks_access',
+            'stocks_view',
+            // 'stocks_create',
+            'stocks_edit',
+            // 'stocks_delete',
         ];
     }
 
