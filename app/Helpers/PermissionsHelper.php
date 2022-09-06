@@ -58,6 +58,23 @@ class PermissionsHelper
             'product_brands_create',
             'product_brands_edit',
             'product_brands_delete',
+
+            'payment_management_access',
+            'payment_categories_access',
+            'payment_categories_view',
+            'payment_categories_create',
+            'payment_categories_edit',
+            'payment_categories_delete',
+            'payment_types_access',
+            'payment_types_view',
+            'payment_types_create',
+            'payment_types_edit',
+            'payment_types_delete',
+            'payments_access',
+            'payments_view',
+            'payments_create',
+            'payments_edit',
+            'payments_delete',
         ];
     }
 

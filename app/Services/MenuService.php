@@ -14,6 +14,7 @@ class MenuService
             self::corporateManagement(),
             self::productManagement(),
             self::customerManagement(),
+            self::transactionManagement(),
         ];
     }
 
@@ -39,8 +40,10 @@ class MenuService
     {
         $companies = new Submenu('companies_access', 'companies', 'fa fa-building', 'Companies');
         $tenants = new Submenu('tenants_access', 'tenants', 'fa fa-store', 'Tenants');
+        $paymentCategories = new Submenu('payments_access', 'payment-categories', 'fa fa-users', 'Payment Categories');
+        $paymentTypes = new Submenu('payments_access', 'payment-types', 'fa fa-users', 'Payment Types');
 
-        return new Menu('corporate_management_access', 'fa fa-building', 'Corporate Management', ...[$companies, $tenants]);
+        return new Menu('corporate_management_access', 'fa fa-building', 'Corporate Management', ...[$companies, $tenants, $paymentCategories, $paymentTypes]);
     }
 
     protected static function customerManagement()
@@ -48,5 +51,22 @@ class MenuService
         $customers = new Submenu('customers_access', 'customers', 'fa fa-users', 'Customers');
 
         return new Menu('customer_management_access', 'fa fa-users', 'Customers Management', ...[$customers]);
+    }
+
+    // protected static function paymentManagement()
+    // {
+    //     $paymentCategories = new Submenu('payments_access', 'payment-categories', 'fa fa-users', 'Payment Categories');
+    //     $paymentTypes = new Submenu('payments_access', 'payment-types', 'fa fa-users', 'Payment Types');
+
+    //     return new Menu('payment_management_access', 'fa fa-dollar-sign', 'Payment Management', ...[$paymentCategories, $paymentTypes]);
+    // }
+
+    protected static function transactionManagement()
+    {
+        $orders = new Submenu('orders_access', 'orders', 'fa fa-users', 'Orders');
+        $orderDetails = new Submenu('order_details_access', 'order-details', 'fa fa-users', 'Order Detail');
+        $payments = new Submenu('payments_access', 'payments', 'fa fa-users', 'Payments');
+
+        return new Menu('transaction_management_access', 'fa fa-shopping-cart', 'Transaction', ...[$orders, $orderDetails, $payments]);
     }
 }

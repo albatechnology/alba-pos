@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\PaymentCategoryController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
@@ -24,7 +29,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function($route){
+Route::group(['middleware' => 'auth'], function ($route) {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     $route->delete('users/massDestroy', [UserController::class, 'massDestroy'])->name('users.massDestroy');
     $route->resource('users', UserController::class);
@@ -54,4 +59,19 @@ Route::group(['middleware' => 'auth'], function($route){
 
     $route->delete('product-brands/massDestroy', [ProductBrandController::class, 'massDestroy'])->name('product-brands.massDestroy');
     $route->resource('product-brands', ProductBrandController::class);
+
+    $route->delete('payment-categories/massDestroy', [PaymentCategoryController::class, 'massDestroy'])->name('payment-categories.massDestroy');
+    $route->resource('payment-categories', PaymentCategoryController::class);
+
+    $route->delete('payment-types/massDestroy', [PaymentTypeController::class, 'massDestroy'])->name('payment-types.massDestroy');
+    $route->resource('payment-types', PaymentTypeController::class);
+
+    $route->delete('payments/massDestroy', [PaymentController::class, 'massDestroy'])->name('payments.massDestroy');
+    $route->resource('payments', PaymentController::class);
+
+    $route->delete('orders/massDestroy', [OrderController::class, 'massDestroy'])->name('orders.massDestroy');
+    $route->resource('orders', OrderController::class);
+
+    $route->delete('order-details/massDestroy', [OrderDetailController::class, 'massDestroy'])->name('order-details.massDestroy');
+    $route->resource('order-details', OrderDetailController::class);
 });

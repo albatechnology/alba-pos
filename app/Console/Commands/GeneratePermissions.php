@@ -35,7 +35,7 @@ class GeneratePermissions extends Command
         $permissions = PermissionsHelper::getAllPermissions();
 
         // 2 is admin ID
-        $adminRole = Role::find(200);
+        $adminRole = Role::find(2);
         if (!$adminRole) {
             $this->error('Admin role not found');
             return;
