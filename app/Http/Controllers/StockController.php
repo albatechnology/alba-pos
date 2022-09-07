@@ -93,6 +93,16 @@ class StockController extends Controller
                     );
                 }
 
+                // StockHistory::Create(
+                //     [
+                //         'stock_id' => $stock->id,
+                //         'user_id' => Auth::user()->id,
+                //         'type' => $request->option == '1' ? StockTypeEnum::INCREASE : StockTypeEnum::DECREASE,
+                //         'amount' => $request->amount,
+                //         'source' => 'Stock'
+                //     ]
+                // );
+
         //     });
         // }
         alert()->success('Success', 'Data updated successfully');
