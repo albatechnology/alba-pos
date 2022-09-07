@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\StockHistoryController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -78,4 +79,7 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->delete('stocks/massDestroy', [StockController::class, 'massDestroy'])->name('stocks.massDestroy');
     $route->resource('stocks', StockController::class)->only(['index', 'edit', 'update']);
+
+    $route->delete('stocks-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stocks-histories.massDestroy');
+    $route->resource('stocks-histories', StockHistoryController::class)->only(['index']);
 });

@@ -74,7 +74,8 @@ class MenuService
     protected static function warehouseManagement()
     {
         $stocks = new Submenu('stocks_access', 'stocks', 'fa fa-warehouse', 'Stocks');
+        $stocksHistory = new Submenu('stocks_histories_access', 'stocks-histories', 'fa fa-warehouse', 'Stocks History');
 
-        return new Menu('warehouse_management_access', 'fa fa-warehouse', 'Warehouse', ...[$stocks]);
+        return new Menu('warehouse_management_access', 'fa fa-warehouse', 'Warehouse', ...[$stocks, $stocksHistory]);
     }
 }

@@ -82,6 +82,11 @@ class PermissionsHelper
             // 'stocks_create',
             'stocks_edit',
             // 'stocks_delete',
+            'stocks_history_access',
+            'stocks_history_view',
+            // 'stocks_history_create',
+            'stocks_history_edit',
+            'stocks_history_delete',
         ];
     }
 

@@ -25,13 +25,8 @@ class UpdateStockRequest extends FormRequest
     {
         $stock = $this->route('stock');
         return [
-            'company_id' => 'required|exists:companies,id',
-            'tenant_id' => 'nullable|exists:tenants,id',
-            'name' => 'required',
-            'email' => 'nullable|email|unique:stocks,email,' . $stock->id,
-            'phone' => 'required|numeric|unique:stocks,phone,' . $stock->id,
-            'address' => 'nullable',
-            'description' => 'nullable',
+            'option' => 'required',
+            'amount' => 'required|min:1',
         ];
     }
 }
