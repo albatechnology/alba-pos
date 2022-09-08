@@ -26,6 +26,8 @@ return new class extends Migration
             $table->text('note');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['order_id', 'tenant_id', 'company_id', 'payment_type_id', 'added_by_id', 'approved_by_id']);
         });
     }
 

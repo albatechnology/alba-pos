@@ -24,6 +24,7 @@
   @yield('css')
   @stack('css')
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -381,5 +382,6 @@
 @stack('js')
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+@livewireScripts
 </body>
 </html>

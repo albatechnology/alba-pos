@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tenant_id')->nullable();
             $table->foreignId('company_id')->nullable();
+            $table->foreignId('user_id')->nullable();
+            $table->foreignId('customer_id')->nullable();
             $table->foreignId('discount_id')->nullable();
             $table->string('invoice_number')->unique();
             $table->string('status', 30); // enum
@@ -27,6 +29,8 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['tenant_id', 'company_id', 'user_id', 'customer_id', 'discount_id']);
         });
     }
 

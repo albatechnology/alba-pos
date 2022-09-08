@@ -21,15 +21,6 @@ trait TenantedTrait
 
         $user = user();
         return $user->is_super_admin ? $query : $query->tenantedUserTenants();
-
-        // $user = user();
-        // if($user->is_super_admin){
-        //     return $query;
-        // } elseif ($user->is_admin){
-        //     return $query->whereIn('id', tenancy()->getMyAllCompanies()->pluck('id'))
-        // }
-
-        // return $query->tenantedUserTenants();
     }
 
     public function scopeFindTenanted($query, int $id)

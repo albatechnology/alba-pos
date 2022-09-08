@@ -10,7 +10,7 @@ trait Media
     public function uploadFile($file, $path)
     {
         if ($file) {
-            $fileName = time() . '-' . $file->getClientOriginalName();
+            $fileName = time() . '' . $file->getClientOriginalName();
             Storage::disk('public')->put($path . $fileName, File::get($file));
             $file_name = $file->getClientOriginalName();
             $file_type = $file->getClientOriginalExtension();

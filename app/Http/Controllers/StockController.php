@@ -34,13 +34,13 @@ class StockController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('product_name', function ($row) {
-                    return $row->product?->name ?? '-';
+                    return $row->product?->name ?? '';
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('tenant_name', function ($row) {
-                    return $row->tenant?->name ?? '-';
+                    return $row->tenant?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'stock-edit';

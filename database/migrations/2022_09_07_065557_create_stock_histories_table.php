@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('amount');
             $table->string('source', 30);
             $table->timestamps();
+
+            $table->index(['stock_id', 'user_id']);
         });
     }
 

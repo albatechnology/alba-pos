@@ -70,11 +70,6 @@ class PermissionsHelper
             'payment_types_create',
             'payment_types_edit',
             'payment_types_delete',
-            'payments_access',
-            'payments_view',
-            'payments_create',
-            'payments_edit',
-            'payments_delete',
 
             'warehouse_management_access',
             'stocks_access',
@@ -87,6 +82,23 @@ class PermissionsHelper
             // 'stocks_history_create',
             'stocks_history_edit',
             'stocks_history_delete',
+
+            'transaction_management_access',
+            'orders_access',
+            'orders_view',
+            'orders_create',
+            'orders_edit',
+            'orders_delete',
+            'order_details_access',
+            'order_details_view',
+            'order_details_create',
+            'order_details_edit',
+            'order_details_delete',
+            'payments_access',
+            'payments_view',
+            'payments_create',
+            'payments_edit',
+            'payments_delete',
         ];
     }
 

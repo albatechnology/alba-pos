@@ -28,7 +28,7 @@ class RoleController extends Controller
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
