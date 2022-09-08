@@ -16,6 +16,8 @@ class PermissionsHelper
     {
         return [
             'dashboard_access',
+            'cashier_access',
+
             'user_management_access',
             'roles_access',
             'roles_view',

@@ -200,9 +200,16 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @can('dashboard_access')
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}"><i class="nav-icon fa fa-tachometer-alt"></i><p>Dashboard</p></a>
             </li>
+            @endcan
+            @can('cashier_access')
+            <li class="nav-item">
+                <a href="{{ url('cashier') }}" class="nav-link {{ request()->is('cashier') ? 'active' : '' }}"><i class="nav-icon fa fa-cash-register"></i><p>Cashier</p></a>
+            </li>
+            @endcan
             @foreach (\App\Services\MenuService::menu() as $menu)
                 @can($menu->permission)
                     @if(count($menu->submenus) > 1)
