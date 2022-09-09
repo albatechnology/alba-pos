@@ -39,10 +39,11 @@ class CustomerController extends Controller
                     return $row->tenant?->name ?? '-';
                 })
                 ->addColumn('actions', function ($row) {
+                    $viewGate      = 'customer-show';
                     $editGate      = 'customer-edit';
                     $deleteGate    = 'customer-delete';
                     $crudRoutePart = 'customers';
-                    return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -76,6 +77,11 @@ class CustomerController extends Controller
 
         alert()->success('Success', 'Data updated successfully');
         return redirect('customers');
+    }
+
+    public function show(Customer $customer)
+    {
+        return view('customers.show', ['customer' => $customer]);
     }
 
     public function destroy(Customer $customer)

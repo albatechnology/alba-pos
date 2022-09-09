@@ -25,13 +25,12 @@
                                             <tr>
                                                 <th width="10"></th>
                                                 <th>ID</th>
-                                                {{-- <th>Product</th> --}}
                                                 <th>Stock</th>
-                                                <th>Amount</th>
                                                 <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Old Amount</th>
+                                                <th>New Amount</th>
                                                 <th>Source</th>
-                                                {{-- <th>Tenant</th>
-                                                <th>Company</th> --}}
                                                 <th>Created At</th>
                                                 <th>Updated At</th>
                                                 <th>Action</th>
@@ -110,12 +109,20 @@
                     name: 'stock.id'
                 },
                 {
-                    data: 'amount',
-                    name: 'amount'
-                },
-                {
                     data: 'type',
                     name: 'type'
+                },
+                {
+                    data: 'changes',
+                    name: 'changes'
+                },
+                {
+                    data: 'old_amount',
+                    name: 'old.amount'
+                },
+                {
+                    data: 'new_amount',
+                    name: 'new.amount'
                 },
                 {
                     data: 'source',

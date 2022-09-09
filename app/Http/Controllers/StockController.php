@@ -60,48 +60,55 @@ class StockController extends Controller
 
     public function update(UpdateStockRequest $request, Stock $stock)
     {
-
-        if ($request->option == '1') {
+        $oldAmount = $stock->stock;
+        if ($request->option == 'increase') {
             $stock->stock = $stock->stock + $request->amount;
         } else {
             $stock->stock = $stock->stock - $request->amount;
+        }
+
+        if ($stock->stock < 0){
+             alert()->error('Error', 'Data may not below 0');
+            return redirect('stocks');
         }
         $stock->update();
 
         // $stockIds = Stock::where('stock_id', $stock->stockid);
         // if ($stockIds->count() > 0) {
         //     $stockIds->map(function ($stockId) use ($request) {
-                if ($request->option == '1') {
-                    StockHistory::Create(
-                        [
-                            'stock_id' => $stock->id,
-                            'user_id' => Auth::user()->id,
-                            'type' => StockTypeEnum::INCREASE,
-                            'amount' => $request->amount,
-                            'source' => 'Stock'
-                        ]
-                    );
-                } else {
-                    StockHistory::Create(
-                        [
-                            'stock_id' => $stock->id,
-                            'user_id' => Auth::user()->id,
-                            'type' => StockTypeEnum::DECREASE,
-                            'amount' => $request->amount,
-                            'source' => 'Stock'
-                        ]
-                    );
-                }
+                // if ($request->option == '1') {
+                //     StockHistory::Create(
+                //         [
+                //             'stock_id' => $stock->id,
+                //             'user_id' => Auth::user()->id,
+                //             'type' => StockTypeEnum::INCREASE,
+                //             'amount' => $request->amount,
+                //             'source' => 'Stock'
+                //         ]
+                //     );
+                // } else {
+                //     StockHistory::Create(
+                //         [
+                //             'stock_id' => $stock->id,
+                //             'user_id' => Auth::user()->id,
+                //             'type' => StockTypeEnum::DECREASE,
+                //             'amount' => $request->amount,
+                //             'source' => 'Stock'
+                //         ]
+                //     );
+                // }
 
-                // StockHistory::Create(
-                //     [
-                //         'stock_id' => $stock->id,
-                //         'user_id' => Auth::user()->id,
-                //         'type' => $request->option == '1' ? StockTypeEnum::INCREASE : StockTypeEnum::DECREASE,
-                //         'amount' => $request->amount,
-                //         'source' => 'Stock'
-                //     ]
-                // );
+                StockHistory::Create(
+                    [
+                        'stock_id' => $stock->id,
+                        'user_id' => Auth::user()->id,
+                        'type' => $request->option == '1' ? StockTypeEnum::INCREASE : StockTypeEnum::DECREASE,
+                        'changes' => $request->amount,
+                        'old_amount' => $oldAmount,
+                        'new_amount' => $stock->stock,
+                        'source' => 'Stock'
+                    ]
+                );
 
         //     });
         // }

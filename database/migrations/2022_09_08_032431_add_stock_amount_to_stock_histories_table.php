@@ -13,16 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('stock_histories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('stock_id')->nullable();
-            $table->foreignId('user_id')->nullable();
-            $table->unsignedTinyInteger('type');
-            $table->integer('changes');
+        Schema::table('stock_histories', function (Blueprint $table) {
             $table->integer('old_amount');
             $table->integer('new_amount');
-            $table->string('source', 30);
-            $table->timestamps();
         });
     }
 
@@ -33,6 +26,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('stock_histories');
+        Schema::table('stock_histories', function (Blueprint $table) {
+            //
+        });
     }
 };

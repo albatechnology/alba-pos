@@ -28,11 +28,11 @@
                                         <label class="required">Option</label>
                                         <div>
                                             <div class="form-check form-check-inline">
-                                                <input name="option" type="radio" value="1" class="form-check-input radio-inline @error('option') is-invalid @enderror">
+                                                <input name="option" type="radio" value="increase" class="form-check-input radio-inline @error('option') is-invalid @enderror">
                                                 <label class="form-check-label" for="check_add">Increase</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input name="option" type="radio" value="2" class="form-check-input radio-inline @error('option') is-invalid @enderror">
+                                                <input name="option" type="radio" value="decrease" class="form-check-input radio-inline @error('option') is-invalid @enderror">
                                                 <label class="form-check-label" for="check_subtract">Decrease</label>
                                             </div>
                                         </div>
