@@ -33,7 +33,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function ($route) {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('cashier', [App\Http\Controllers\HomeController::class, 'index'])->name('cashier');
+    Route::get('cashier', [App\Http\Controllers\CashierController::class, 'index'])->name('cashier');
 
     $route->patch('users/restore', [UserController::class, 'restore'])->name('users.restore');
     $route->delete('users/forceDestroy', [UserController::class, 'forceDestroy'])->name('users.forceDestroy');

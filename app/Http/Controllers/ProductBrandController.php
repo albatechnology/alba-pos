@@ -49,7 +49,7 @@ class ProductBrandController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
         return view('productsBrands.create', ['companies' => $companies]);
     }
@@ -67,7 +67,7 @@ class ProductBrandController extends Controller
 
     public function edit(ProductBrand $productBrand)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('productsBrands.edit', ['productBrand' => $productBrand, 'companies' => $companies]);
     }
 

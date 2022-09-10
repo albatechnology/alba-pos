@@ -63,7 +63,7 @@ class PaymentController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
         return view('payments.create', ['companies' => $companies]);
     }
@@ -81,7 +81,7 @@ class PaymentController extends Controller
 
     public function edit(Payment $payment)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('payments.edit', ['Payment' => $payment, 'companies' => $companies]);
     }
 

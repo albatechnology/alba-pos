@@ -56,7 +56,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         $permissions = Permission::pluck('name', 'id');
         return view('roles.create', ['companies' => $companies, 'permissions' => $permissions]);
     }
@@ -82,7 +82,7 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         $rolePermissions = $role->permissions->pluck('id')->all();
         $permissions = Permission::pluck('name', 'id');
         return view('roles.edit', ['role' => $role, 'companies' => $companies, 'permissions' => $permissions, 'rolePermissions' => $rolePermissions]);

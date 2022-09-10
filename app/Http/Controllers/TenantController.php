@@ -50,7 +50,7 @@ class TenantController extends Controller
     public function create()
     {
         // $companies = Company::tenanted()->get();
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('tenants.create', ['companies' => $companies]);
     }
 
@@ -69,7 +69,7 @@ class TenantController extends Controller
     public function edit(Tenant $tenant)
     {
         // $companies = Company::tenanted()->get();
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('tenants.edit', ['tenant' => $tenant, 'companies' => $companies]);
     }
 

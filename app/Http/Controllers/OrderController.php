@@ -60,7 +60,7 @@ class OrderController extends Controller
 
     // public function create()
     // {
-    //     $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+    //     $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
     //     return view('orders.create', ['companies' => $companies]);
     // }
@@ -78,7 +78,7 @@ class OrderController extends Controller
 
     public function edit(Order $order)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('orders.edit', ['Order' => $order, 'companies' => $companies]);
     }
 

@@ -7,6 +7,8 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Company;
 use App\Models\Product;
+use App\Models\ProductBrand;
+use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -48,9 +50,11 @@ class ProductController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
+        $productCategories = ProductCategory::tenanted()->pluck('name', 'id')->prepend('- Select Product Categories -', '');
+        $productBrands = ProductBrand::tenanted()->pluck('name', 'id')->prepend('- Select Product Brand -', '');
 
-        return view('products.create', ['companies' => $companies]);
+        return view('products.create', ['companies' => $companies, 'productCategories' => $productCategories, 'productBrands' => $productBrands]);
     }
 
     public function store(StoreProductRequest $request)
@@ -58,7 +62,9 @@ class ProductController extends Controller
         foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
-            Product::create($data);
+
+            $product = Product::create($data);
+            $product->productCategories()->sync($request->product_category_ids);
         }
         alert()->success('Success', 'Data created successfully');
         return redirect('products');
@@ -66,13 +72,19 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
-        return view('products.edit', ['product' => $product, 'companies' => $companies]);
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
+        $productCategories = ProductCategory::tenanted()->pluck('name', 'id')->prepend('- Select Product Categories -', '');
+        $productBrands = ProductBrand::tenanted()->pluck('name', 'id')->prepend('- Select Product Brand -', '');
+
+        $selectedProductCategories = $product->productCategories->pluck('id')->all() ?? [];
+
+        return view('products.edit', ['product' => $product, 'selectedProductCategories' => $selectedProductCategories, 'companies' => $companies, 'productCategories' => $productCategories, 'productBrands' => $productBrands]);
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
         $product->update($request->validated());
+        $product->productCategories()->sync($request->product_category_ids);
 
         alert()->success('Success', 'Data updated successfully');
         return redirect('products');

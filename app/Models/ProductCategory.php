@@ -17,4 +17,8 @@ class ProductCategory extends Model implements TenantedInterface
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function products(){
+        return $this->belongsToMany(ProductCategory::class, 'product_product_categories');
+    }
 }

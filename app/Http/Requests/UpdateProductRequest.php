@@ -39,6 +39,9 @@ class UpdateProductRequest extends FormRequest
             }],
             'price' => 'required|integer|min:0',
             'uom' => 'required|integer|min:1',
+            'product_category_ids' => 'nullable|array',
+            'product_category_ids.*' => 'exists:product_categories,id',
+            'product_brand_id' => 'nullable|exists:product_brands,id',
         ];
     }
 }

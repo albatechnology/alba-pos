@@ -48,6 +48,32 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    <div class="form-group">
+                                        <label>Product Categories</label>
+                                        <div class="mb-1">
+                                            <button type="button" class="btn btn-success btn-xs btnSelectAll">Select All</button>
+                                            <button type="button" class="btn btn-success btn-xs btnDeselectAll">Deselect All</button>
+                                        </div>
+                                        <select name="product_category_ids[]" id="product_category_ids" class="form-control select2 @error('product_category_ids') is-invalid @enderror" multiple>
+                                            @foreach ($productCategories as $id => $name)
+                                            <option value="{{ $id }}" {{ in_array($id, $selectedProductCategories) ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('product_category_ids')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Product Brand</label>
+                                        <select name="product_brand_id" id="product_brand_id" class="form-control select2 @error('product_brand_id') is-invalid @enderror">
+                                            @foreach ($productBrands as $id => $name)
+                                            <option value="{{ $id }}" {{ $product->product_brand_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('product_brand_id')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Save</button>
