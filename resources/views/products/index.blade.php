@@ -27,6 +27,7 @@
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Company</th>
+                                                <th>Product Categories</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
@@ -106,6 +107,10 @@
                 {
                     data: 'company_name',
                     name: 'company.name'
+                },
+                {
+                    data: 'product_categories',
+                    name: 'product_categories'
                 },
                 {
                     data: 'created_at',

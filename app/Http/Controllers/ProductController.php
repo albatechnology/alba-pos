@@ -26,7 +26,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::tenanted()->with('company')->select(sprintf('%s.*', (new Product)->table));
+            $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
@@ -35,6 +35,16 @@ class ProductController extends Controller
                 ->addColumn('company_name', function ($row) {
                     return $row->company?->name ?? '';
                 })
+                ->addColumn('product_categories', function ($row) {
+                    $html = '';
+                    $productCategories = $row->productCategories;
+                    if ($productCategories->count() > 0) {
+                        foreach ($productCategories as $category) {
+                            $html .= '<div class="badge badge-info">' . $category->name . '</div><br>';
+                        }
+                    }
+                    return $html;
+                })
                 ->addColumn('actions', function ($row) {
                     $viewGate      = 'products_show';
                     $editGate      = 'products_edit';
@@ -42,7 +52,7 @@ class ProductController extends Controller
                     $crudRoutePart = 'products';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
-                ->rawColumns(['placeholder', 'actions'])
+                ->rawColumns(['placeholder', 'actions', 'product_categories'])
                 ->make(true);
         }
         return view('products.index');

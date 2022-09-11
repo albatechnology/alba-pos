@@ -11,7 +11,7 @@ class Product extends Model implements TenantedInterface
 {
     use SoftDeletes, TenantedTrait;
     public $table = 'products';
-    // protected $guarded = [];
+
     protected $fillable = [
         'company_id',
         'product_brand_id',
