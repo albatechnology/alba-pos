@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tenant_id')->nullable();
-            $table->foreignId('company_id')->nullable();
-            $table->foreignId('discount_id')->nullable();
+            $table->foreignId('tenant_id')->nullable()->index();
+            $table->foreignId('company_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('customer_id')->nullable()->index();
+            $table->foreignId('discount_id')->nullable()->index();
             $table->string('invoice_number')->unique();
             $table->string('status', 30); // enum
             $table->string('payment_status', 30); // enum
@@ -27,6 +29,8 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            // $table->index(['tenant_id', 'company_id', 'user_id', 'customer_id', 'discount_id']);
         });
     }
 

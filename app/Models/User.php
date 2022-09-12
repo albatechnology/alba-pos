@@ -79,4 +79,9 @@ class User extends Authenticatable implements TenantedInterface
     {
         return $this->belongsToMany(Tenant::class, 'user_tenants');
     }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class);
+    }
 }

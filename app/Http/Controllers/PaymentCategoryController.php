@@ -38,7 +38,7 @@ class PaymentCategoryController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'payment_categories_edit';
@@ -59,7 +59,7 @@ class PaymentCategoryController extends Controller
      */
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
         return view('paymentCategories.create', ['companies' => $companies]);
     }
@@ -100,7 +100,7 @@ class PaymentCategoryController extends Controller
      */
     public function edit(PaymentCategory $paymentCategory)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('paymentCategories.edit', ['paymentCategory' => $paymentCategory, 'companies' => $companies]);
     }
 

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
+use App\Models\Tenant;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -26,6 +27,25 @@ class CompanySeeder extends Seeder
         Company::create([
             'id' => 3,
             'name' => 'PT. Dua',
+        ]);
+
+        Tenant::insert([
+            [
+                'company_id' => 2,
+                'name' => 'Tenant 1 PT Satu',
+            ],
+            [
+                'company_id' => 2,
+                'name' => 'Tenant 2 PT Satu',
+            ],
+            [
+                'company_id' => 3,
+                'name' => 'Tenant 1 PT Satu',
+            ],
+            [
+                'company_id' => 3,
+                'name' => 'Tenant 2 PT Satu',
+            ],
         ]);
     }
 }

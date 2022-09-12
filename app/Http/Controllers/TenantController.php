@@ -33,7 +33,7 @@ class TenantController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'tenant-edit';
@@ -50,7 +50,7 @@ class TenantController extends Controller
     public function create()
     {
         // $companies = Company::tenanted()->get();
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('tenants.create', ['companies' => $companies]);
     }
 
@@ -69,7 +69,7 @@ class TenantController extends Controller
     public function edit(Tenant $tenant)
     {
         // $companies = Company::tenanted()->get();
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('tenants.edit', ['tenant' => $tenant, 'companies' => $companies]);
     }
 

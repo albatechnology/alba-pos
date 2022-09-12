@@ -38,10 +38,10 @@ class PaymentTypeController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('payment_category', function ($row) {
-                    return $row->paymentCategory?->name ?? '-';
+                    return $row->paymentCategory?->name ?? '';
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'payment_types_edit';

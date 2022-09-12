@@ -15,17 +15,19 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->nullable();
-            $table->foreignId('company_id')->nullable();
-            $table->foreignId('tenant_id')->nullable();
-            $table->foreignId('payment_type_id')->nullable();
-            $table->foreignId('added_by_id')->nullable();
-            $table->foreignId('approved_by_id')->nullable();
+            $table->foreignId('order_id')->nullable()->index();
+            $table->foreignId('company_id')->nullable()->index();
+            $table->foreignId('tenant_id')->nullable()->index();
+            $table->foreignId('payment_type_id')->nullable()->index();
+            $table->foreignId('added_by_id')->nullable()->index();
+            $table->foreignId('approved_by_id')->nullable()->index();
             $table->string('status', 30); // enum
             $table->float('value');
             $table->text('note');
             $table->timestamps();
             $table->softDeletes();
+
+            // $table->index(['order_id', 'tenant_id', 'company_id', 'payment_type_id', 'added_by_id', 'approved_by_id']);
         });
     }
 

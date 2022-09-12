@@ -35,7 +35,7 @@ class StockHistoryController extends Controller
                     return $row->type->description;
                 })
                 ->addColumn('stock_id', function ($row) {
-                    return $row->stock?->id ?? '-';
+                    return $row->stock?->id ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     // $editGate      = 'stocks-histories-edit';

@@ -11,7 +11,14 @@ class Product extends Model implements TenantedInterface
 {
     use SoftDeletes, TenantedTrait;
     public $table = 'products';
-    protected $guarded = [];
+
+    protected $fillable = [
+        'company_id',
+        'product_brand_id',
+        'name',
+        'uom',
+        'price',
+    ];
 
     protected static function booted()
     {
@@ -56,8 +63,12 @@ class Product extends Model implements TenantedInterface
         return $this->belongsTo(Company::class);
     }
 
-    // public function tenant()
-    // {
-    //     return $this->belongsTo(Tenant::class);
-    // }
+    public function productBrand()
+    {
+        return $this->belongsTo(ProductBrand::class);
+    }
+
+    public function productCategories(){
+        return $this->belongsToMany(ProductCategory::class, 'product_product_categories');
+    }
 }

@@ -26,6 +26,8 @@ return new class extends Migration
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->index(['order_id', 'tenant_id', 'company_id', 'product_id']);
         });
     }
 

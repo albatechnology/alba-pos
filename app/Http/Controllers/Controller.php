@@ -6,43 +6,44 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\MessageBag;
 
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     const STATUS_ERROR = false;
-	const STATUS_SUCCESS = true;
+    const STATUS_SUCCESS = true;
 
-	const KEY_STATUS = 'success';
-	const KEY_MESSAGE = 'message';
-	const KEY_DATA = 'data';
+    const KEY_STATUS = 'success';
+    const KEY_MESSAGE = 'message';
+    const KEY_DATA = 'data';
 
-	public static function ajaxError($message, MessageBag $error_message_bag = null)
-	{
-		if ($error_message_bag) {
-			$message = collect($error_message_bag)->collapse()->implode("\n");
-		}
+    public static function ajaxError($message, MessageBag $error_message_bag = null)
+    {
+        if ($error_message_bag) {
+            $message = collect($error_message_bag)->collapse()->implode("\n");
+        }
 
-		$data = [self::KEY_STATUS => self::STATUS_ERROR, self::KEY_MESSAGE => $message];
+        $data = [self::KEY_STATUS => self::STATUS_ERROR, self::KEY_MESSAGE => $message];
 
-		return response()->json($data);
-	}
+        return response()->json($data);
+    }
 
-	public static function ajaxSuccess($message = null, $datas= null)
-	{
-		$data = [self::KEY_STATUS => self::STATUS_SUCCESS];
+    public static function ajaxSuccess($datas = null, $message = null, $statusCode = 200)
+    {
+        $data = [self::KEY_STATUS => self::STATUS_SUCCESS];
 
-		if ($message) {
-			$data[self::KEY_MESSAGE] = $message;
-		}
+        if ($message) {
+            $data[self::KEY_MESSAGE] = $message;
+        }
 
-		if ($datas) {
-			$data[self::KEY_DATA] = $datas;
-		}
+        if ($datas) {
+            $data[self::KEY_DATA] = $datas;
+        }
 
-		return response()->json($data);
-	}
+        return response()->json($data, $statusCode);
+    }
 
     public function flash_data($type, $msg, $icon = null)
     {

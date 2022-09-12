@@ -33,7 +33,7 @@ class ProductBrandController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $editGate      = 'product_brands_edit';
@@ -49,7 +49,7 @@ class ProductBrandController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
         return view('productsBrands.create', ['companies' => $companies]);
     }
@@ -67,7 +67,7 @@ class ProductBrandController extends Controller
 
     public function edit(ProductBrand $productBrand)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         return view('productsBrands.edit', ['productBrand' => $productBrand, 'companies' => $companies]);
     }
 

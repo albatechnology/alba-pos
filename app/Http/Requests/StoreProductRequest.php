@@ -26,6 +26,11 @@ class StoreProductRequest extends FormRequest
     public function rules()
     {
         return [
+            'company_ids' => ['required', 'array', function ($attribute, $value, $fail) {
+                $company_ids = arrayFilterAndReindex($value);
+                $companies = Company::tenantedMyAllCompanies()->whereIn('id', $company_ids)->count();
+                if ($companies < count($company_ids)) $fail('Invalid company');
+            }],
             'name' => ['required', function ($attribute, $value, $fail) {
                 foreach (arrayFilterAndReindex($this->company_ids) as $company_id) {
                     $product = Product::where('company_id', $company_id)->where('name', $value)->first();
@@ -34,11 +39,9 @@ class StoreProductRequest extends FormRequest
             }],
             'price' => 'required|integer|min:0',
             'uom' => 'required|integer|min:1',
-            'company_ids' => ['required', 'array', function ($attribute, $value, $fail) {
-                $company_ids = arrayFilterAndReindex($value);
-                $companies = Company::tenantedMyAllCompanies()->whereIn('id', $company_ids)->count();
-                if ($companies < count($company_ids)) $fail('Invalid company');
-            }],
+            'product_category_ids' => 'nullable|array',
+            'product_category_ids.*' => 'exists:product_categories,id',
+            'product_brand_id' => 'nullable|exists:product_brands,id',
         ];
     }
 }

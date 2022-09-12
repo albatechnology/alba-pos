@@ -24,6 +24,7 @@
   @yield('css')
   @stack('css')
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  @livewireStyles
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -159,7 +160,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside id="control_sidebar" class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -199,9 +200,16 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @can('dashboard_access')
             <li class="nav-item">
                 <a href="{{ url('/') }}" class="nav-link {{ request()->is('/') ? 'active' : '' }}"><i class="nav-icon fa fa-tachometer-alt"></i><p>Dashboard</p></a>
             </li>
+            @endcan
+            @can('cashier_access')
+            <li class="nav-item">
+                <a href="{{ url('cashier') }}" class="nav-link {{ request()->is('cashier') ? 'active' : '' }}"><i class="nav-icon fa fa-cash-register"></i><p>Cashier</p></a>
+            </li>
+            @endcan
             @foreach (\App\Services\MenuService::menu() as $menu)
                 @can($menu->permission)
                     @if(count($menu->submenus) > 1)
@@ -381,5 +389,6 @@
 @stack('js')
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.js') }}"></script>
+@livewireScripts
 </body>
 </html>

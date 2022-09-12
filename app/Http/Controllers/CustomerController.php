@@ -33,10 +33,10 @@ class CustomerController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '-';
+                    return $row->company?->name ?? '';
                 })
                 ->addColumn('tenant_name', function ($row) {
-                    return $row->tenant?->name ?? '-';
+                    return $row->tenant?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $viewGate      = 'customer-show';
@@ -53,7 +53,7 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
         return view('customers.create', ['companies' => $companies]);
     }
