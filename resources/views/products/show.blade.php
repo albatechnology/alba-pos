@@ -5,7 +5,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('customers.index') }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="{{ route('products.index') }}" class="btn btn-success" title="Back"><i
+                                class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -27,27 +28,35 @@
                                         <tbody>
                                             <tr>
                                                 <td>ID</td>
-                                                <td>{{$customer->id}}</td>
+                                                <td>{{ $product->id }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Name</td>
-                                                <td>{{$customer->name}}</td>
+                                                <td>{{ $product->name }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Email</td>
-                                                <td>{{$customer->email}}</td>
+                                                <td>Price</td>
+                                                <td>{{ $product->price }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Phone</td>
-                                                <td>{{$customer->phone}}</td>
+                                                <td>UOM</td>
+                                                <td>{{ $product->uom }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Address</td>
-                                                <td>{{$customer->address}}</td>
+                                                <td>Brands</td>
+                                                <td>{{ $product->productBrand->name }}</td>
                                             </tr>
                                             <tr>
-                                                <td>Description</td>
-                                                <td>{{$customer->description}}</td>
+                                                <td>Categories</td>
+                                                <td>
+                                                    @foreach ($product->productCategories as $categories)
+                                                        {{ $categories->name }} <br>
+                                                    @endforeach
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Company</td>
+                                                <td>{{ $product->company->name }}</td>
                                             </tr>
                                     </table>
                                 </div>
@@ -60,6 +69,5 @@
     </div>
 @endsection
 @push('js')
-    <script>
-    </script>
+    <script></script>
 @endpush

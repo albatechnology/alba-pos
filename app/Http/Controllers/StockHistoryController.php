@@ -22,7 +22,10 @@ class StockHistoryController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = StockHistory::with(['stock'])->select(sprintf('%s.*', (new StockHistory())->table));
+            $data = StockHistory::with(['stock']);
+            if ($stock_id = $request->stock_id) $data = $data->where('stock_id', $stock_id);
+            $data = $data->select(sprintf('%s.*', (new StockHistory())->table));
+
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {

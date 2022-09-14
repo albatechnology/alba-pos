@@ -5,7 +5,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        {{-- <a href="{{ route('stocks.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a> --}}
+                        <a href="{{ route('stocks.index') }}" class="btn btn-success" title="Back"><i
+                                class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -14,9 +15,39 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Stock History List</h3>
+                        <div class="card card-primary">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Title</th>
+                                                <th>Values</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>{{ $stock->id }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Product Name</td>
+                                                <td>{{ $stock->product->name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Stock</td>
+                                                <td>{{ $stock->stock }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Tenant</td>
+                                                <td>{{ $stock->tenant->name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Company</td>
+                                                <td>{{ $stock->company->name }}</td>
+                                            </tr>
+                                    </table>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -95,7 +126,8 @@
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route('stocks-histories.index') }}',
+            // ajax: '{{ route('stocks-histories.index') }}',
+            ajax: '{{ route('stocks-histories.index') }}?stock_id={{ $stock->id}}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'

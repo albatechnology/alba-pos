@@ -11,6 +11,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockHistoryController;
@@ -106,8 +107,10 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('order-details', OrderDetailController::class);
 
     $route->delete('stocks/massDestroy', [StockController::class, 'massDestroy'])->name('stocks.massDestroy');
-    $route->resource('stocks', StockController::class)->only(['index', 'edit', 'update']);
+    $route->resource('stocks', StockController::class)->only(['index', 'show', 'edit', 'update']);
 
     $route->delete('stocks-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stocks-histories.massDestroy');
     $route->resource('stocks-histories', StockHistoryController::class)->only(['index']);
+
+    $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
 });

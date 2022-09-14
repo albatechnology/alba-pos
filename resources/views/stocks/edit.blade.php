@@ -23,7 +23,7 @@
                                     <label>Company       :  </label> {{ $stock->company->name }}<br>
                                     <label>Tenant        :  </label> {{ $stock->tenant->name }}<br>
                                     <label>Product       :  </label> {{ $stock->product->name }}<br>
-                                    <label>Current Stock :  </label> {{ $stock->stock }}<br>
+                                    <label>Current stock :  </label> {{ $stock->stock }}<br>
                                     <div class="form-group">
                                         <label class="required">Option</label>
                                         <div>

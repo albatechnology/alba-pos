@@ -80,6 +80,11 @@ class ProductController extends Controller
         return redirect('products');
     }
 
+    public function show(Product $product)
+    {
+        return view('products.show', ['product' => $product]);
+    }
+
     public function edit(Product $product)
     {
         $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
