@@ -19,18 +19,20 @@ class MakeOrderDetails
         // }
 
         $orderDetails = collect($items)->map(function ($item) {
-            $productPrice = DB::table('products')->where('id', $item['id'])->first('price')?->price ?? 0;
+            $product = DB::table('products')->select('price', 'tax')->where('id', $item['product_id'])->first();
 
             $detail = new OrderDetail();
-            $detail->product_id = $item['id'];
-            $detail->unit_price = $productPrice;
+            $detail->product_id = $item['product_id'];
+            $detail->unit_price = $product->price;
             $detail->quantity = (int)$item['quantity'];
             $detail->total_discount = 0;
             $detail->total_price = $detail->unit_price * $detail->quantity;
+            $detail->total_tax = $product->tax * $detail->quantity;
             return $detail;
         });
 
         $order->order_details = $orderDetails;
+        $order->total_tax = $orderDetails->sum('total_tax');
         $order->total_price = $orderDetails->sum('total_price');
 
         return $next($order);

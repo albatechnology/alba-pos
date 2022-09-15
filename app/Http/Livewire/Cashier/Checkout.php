@@ -11,7 +11,9 @@ class Checkout extends Component
     public $cart;
     public array $items = [];
     public int $additional_discount = 0;
+    public int $sub_total_price = 0;
     public int $total_price = 0;
+    public int $total_tax = 0;
     public int $total_user_pay = 0;
 
     protected $listeners = ['refreshCart'];
@@ -24,46 +26,42 @@ class Checkout extends Component
     public function refreshCart()
     {
         $this->cart = CartService::getMyCart()?->load('cartDetails');
-        $this->total_price = $this->cart?->total_price ?? 0;
+        // $this->total_price = $this->cart?->total_price ?? 0;
 
         $this->fillItemsAttribute();
-        $this->dispatchBrowserEvent('contentChanged');
         $this->previewOrder();
-        // dd('refreshCart');
+        $this->dispatchBrowserEvent('contentChanged');
     }
 
     protected function fillItemsAttribute()
     {
         if ($this->cart?->cartDetails->count() > 0) {
             $cartDetails = $this->cart->cartDetails;
-            // dump($cartDetails);
-            // $this->items = [];
+
             foreach ($cartDetails as $detail) {
-                $this->items[$detail->id] = [
-                    'id' => (int) $detail->id,
+                $this->items[$detail->product_id] = [
+                    'product_id' => (int) $detail->product_id,
                     'quantity' => (int) $detail->quantity,
                 ];
             }
         }
-        // dd($this->items);
     }
 
     public function updatedItems($value)
     {
-        // dd('updatedItems');
         $this->dispatchBrowserEvent('contentChanged');
         $this->previewOrder();
-        // dump($value);
-        // dd($this->items);
+        CartService::syncCart($this->items);
     }
 
     public function previewOrder()
     {
         $validatedData = $this->validateData();
-        // dd($validatedData);
 
         $order = \App\Services\OrderService::previewOrder(Order::make(['raw_source' => $validatedData]));
-        $this->total_price = $order?->total_price ?? 0;
+        $this->total_tax = $order?->total_tax ?? 0;
+        $this->sub_total_price = $order?->total_price ?? 0;
+        $this->total_price = $this->sub_total_price + $this->total_tax ?? 0;
     }
 
     public function processOrder()
@@ -72,7 +70,9 @@ class Checkout extends Component
         dump($validatedData);
         dd('processOrder');
         $order = \App\Services\OrderService::processOrder(Order::make(['raw_source' => $validatedData]));
-        $this->total_price = $order?->total_price ?? 0;
+        $this->total_tax = $order?->total_tax ?? 0;
+        $this->sub_total_price = $order?->total_price ?? 0;
+        $this->total_price = $this->sub_total_price + $this->total_tax ?? 0;
     }
 
     private function validateData()
@@ -80,7 +80,7 @@ class Checkout extends Component
         return $this->validate(
             [
                 'items' => 'required|array',
-                'items.*.id' => 'required|exists:products,id',
+                'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|min:0',
 
                 'total_price' => 'required|numeric|min:0',
@@ -95,13 +95,6 @@ class Checkout extends Component
             //     'email' => 'Email Address'
             // ]
         );
-    }
-
-    public function deleteCartDetail($cart_detail_id, $product_id)
-    {
-        unset($this->items[$product_id]);
-        CartService::deleteDetail($cart_detail_id);
-        $this->emit('toggleSelectedProductIds', $product_id);
     }
 
     public function render()

@@ -15,6 +15,7 @@ class Product extends Model implements TenantedInterface
     protected $fillable = [
         'company_id',
         'product_brand_id',
+        'code',
         'name',
         'uom',
         'price',

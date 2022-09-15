@@ -1,17 +1,16 @@
 <div>
     <div>
-        @dump($items)
         @if ($cart)
             @forelse ($cart?->cartDetails as $detail)
-                <div wire:ignore class="card p-2 shadow">
+                <div class="card p-2 shadow">
                     <p class="font-weight-bold">{{ $detail->product->name }}</p>
-                    <div class="d-flex justify-content-between">
+                    <div wire:ignore class="d-flex justify-content-between">
                         <div class="w-75">
-                            <input wire:ignore wire:model="items.{{ $detail->id }}.quantity" type="number"
-                                value="{{ $items[$detail->id]['quantity'] }}" min="0">
+                            <input wire:model="items.{{ $detail->product_id }}.quantity" type="number"
+                                value="{{ $items[$detail->product_id]['quantity'] }}" min="0">
                         </div>
-                        <button wire:click="$emit('setSelectedProductIds', {{ $detail->product->id }})" class="btn btn-danger"><i
-                                class="fa fa-trash"></i></button>
+                        <button wire:click="$emit('setSelectedProductIds', {{ $detail->product_id }})"
+                            class="btn btn-danger"><i class="fa fa-trash"></i></button>
                     </div>
                 </div>
             @empty
@@ -25,28 +24,28 @@
         <table class="table table-borderless">
             <tr>
                 <td>Sub Total</td>
-                <td>0</td>
+                <td align="right">{{ $sub_total_price }}</td>
             </tr>
             <tr>
                 <td>Tax</td>
-                <td>0</td>
+                <td align="right">{{ $total_tax }}</td>
             </tr>
             <tr>
                 <td>Total</td>
-                <td>{{ $total_price }}</td>
+                <td align="right">{{ $total_price }}</td>
             </tr>
         </table>
     </div>
     <div wire:ignore>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label>Discount</label>
             <input wire:model="additional_discount" wire:ignore type="text" class="form-control" type="number"
                 min="0" disabled>
-        </div>
+        </div> --}}
         <div class="form-group">
             <label>Additional Discount</label>
             <input wire:model="additional_discount" wire:ignore type="text" class="form-control" type="number"
-                min="0" disabled>
+                min="0">
         </div>
         <div class="form-group">
             <label>Pay</label>

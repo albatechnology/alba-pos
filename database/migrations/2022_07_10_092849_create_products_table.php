@@ -17,9 +17,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained('companies')->cascadeOnDelete();
             $table->foreignId('product_brand_id')->nullable();
+            $table->string('code', 100)->nullable();
             $table->string('name');
             $table->integer('uom')->default(0);
             $table->integer('price')->default(0);
+            $table->integer('tax')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

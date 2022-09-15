@@ -9,6 +9,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
 
 class ProductSeeder extends Seeder
 {
@@ -35,9 +36,11 @@ class ProductSeeder extends Seeder
             $product = Product::create([
                 'company_id' => 2,
                 'product_brand_id' => $productBrand->id,
+                'code' => Str::random(15),
                 'name' => $faker->name,
                 'uom' => 1,
                 'price' => 50000,
+                'tax' => 1000,
             ]);
 
             $product->productCategories()->attach($productCategory->id);
@@ -60,9 +63,11 @@ class ProductSeeder extends Seeder
             $product = Product::create([
                 'company_id' => 3,
                 'product_brand_id' => $productBrand2->id,
+                'code' => Str::random(15),
                 'name' => $faker->name,
                 'uom' => 1,
                 'price' => 50000,
+                'tax' => 1000,
             ]);
 
             $product->productCategories()->attach($productCategory2->id);

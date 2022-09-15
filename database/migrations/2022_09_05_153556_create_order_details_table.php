@@ -23,6 +23,7 @@ return new class extends Migration
             $table->float('quantity')->default(0);
             $table->float('total_discount')->default(0);
             $table->float('total_price')->default(0);
+            $table->float('total_tax')->default(0); // total tax per product
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
