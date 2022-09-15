@@ -11,7 +11,36 @@ class Order extends Model implements TenantedInterface
 {
     use SoftDeletes, TenantedTrait;
     public $table = 'orders';
-    protected $guarded = [];
+
+    protected $fillable = [
+        'raw_source',
+        'additional_discount',
+        'tenant_id',
+        'company_id',
+        'user_id',
+        'customer_id',
+        'discount_id',
+        'invoice_number',
+        'status',
+        'payment_status',
+        'total_discount',
+        'total_price',
+        'amount_paid',
+        'note',
+    ];
+
+    protected $casts = [
+        'tenant_id' => 'integer',
+        'company_id' => 'integer',
+        'user_id' => 'integer',
+        'customer_id' => 'integer',
+        'discount_id' => 'integer',
+        // 'status',
+        // 'payment_status',
+        'total_discount' => 'integer',
+        'total_price' => 'integer',
+        'amount_paid' => 'integer',
+    ];
 
     protected static function booted()
     {

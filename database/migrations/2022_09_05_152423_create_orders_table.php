@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('status', 30); // enum
             $table->string('payment_status', 30); // enum
             $table->float('total_discount')->default(0);
+            $table->float('additional_discount')->default(0);
             $table->float('total_price')->default(0);
             $table->float('amount_paid')->default(0);
             $table->text('note')->nullable();
