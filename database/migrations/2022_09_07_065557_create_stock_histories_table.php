@@ -18,7 +18,9 @@ return new class extends Migration
             $table->foreignId('stock_id')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->unsignedTinyInteger('type');
-            $table->integer('amount');
+            $table->integer('changes');
+            $table->integer('old_amount');
+            $table->integer('new_amount');
             $table->string('source', 30);
             $table->timestamps();
 

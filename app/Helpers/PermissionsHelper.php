@@ -101,6 +101,12 @@ class PermissionsHelper
             'payments_create',
             'payments_edit',
             'payments_delete',
+
+            'profiles_access',
+            'profiles_view',
+            // 'profiles_create',
+            'profiles_edit',
+            // 'profiles_delete',
         ];
     }
 
