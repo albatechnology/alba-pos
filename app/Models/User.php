@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Enums\UserLevelEnum;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -68,6 +68,16 @@ class User extends Authenticatable implements TenantedInterface
         return false;
         // if ($this->hasRole('admin')) return true;
         // return $this->roles()->where('id', 2)->exists();
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function tenant()
+    {
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 
     public function companies()
