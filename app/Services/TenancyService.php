@@ -32,6 +32,8 @@ class TenancyService
 
     /**
      * set user active tenant
+     * also set tenant_id on table users
+     *
      * @param Tenant $tenant
      * @return Tenant|null
      */
@@ -42,6 +44,9 @@ class TenancyService
         $allowedTenantsIds = $tenants->isEmpty() ? collect([]) : $tenants->pluck('id');
 
         if (!$allowedTenantsIds->contains($tenant->id)) return new Exception('No tenants allowed');
+
+        $user = $this->getUser();
+        $user->update(['tenant_id' => $tenant->id]);
 
         return session(['active-tenant' => $tenant]);
     }
@@ -57,6 +62,8 @@ class TenancyService
 
     /**
      * set user active company
+     * also set company_id on table users
+     *
      * @param Company $company
      * @return Company|null
      */
@@ -67,6 +74,9 @@ class TenancyService
         $allowedCompaniesIds = $companies->isEmpty() ? collect([]) : $companies->pluck('id');
 
         if (!$allowedCompaniesIds->contains($company->id)) return new Exception('No Companies allowed');
+
+        $user = $this->getUser();
+        $user->update(['company_id' => $company->id]);
 
         return session(['active-company' => $company]);
     }

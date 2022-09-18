@@ -22,8 +22,9 @@ return new class extends Migration
             $table->float('unit_price')->default(0);
             $table->float('quantity')->default(0);
             $table->float('total_discount')->default(0);
-            $table->float('total_price')->default(0);
-            $table->float('total_tax')->default(0); // total tax per product
+            $table->float('total_tax')->default(0)->comment('total tax per product');
+            $table->float('original_price')->default(0)->comment('(quantity * unit_price)');
+            $table->float('total_price')->default(0)->comment('original_price + total_tax - total_discount');
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();

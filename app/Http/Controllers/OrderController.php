@@ -49,7 +49,7 @@ class OrderController extends Controller
                     $viewGate      = 'orders_show';
                     $editGate      = 'orders_edit';
                     $deleteGate    = 'orders_delete';
-                    $crudRoutePart = 'Orders';
+                    $crudRoutePart = 'orders';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
@@ -73,7 +73,7 @@ class OrderController extends Controller
             Order::create($data);
         }
         alert()->success('Success', 'Data created successfully');
-        return redirect('Orders');
+        return redirect('orders');
     }
 
     public function edit(Order $order)
@@ -87,7 +87,7 @@ class OrderController extends Controller
         $order->update($request->validated());
 
         alert()->success('Success', 'Data updated successfully');
-        return redirect('Orders');
+        return redirect('orders');
     }
 
     public function destroy(Order $order)
@@ -104,7 +104,7 @@ class OrderController extends Controller
     {
         $request->validate([
             'ids'   => 'required|array',
-            'ids.*' => 'exists:Orders,id',
+            'ids.*' => 'exists:orders,id',
         ]);
 
         Order::tenanted()->whereIn('id', $request->ids)->delete();
@@ -112,7 +112,7 @@ class OrderController extends Controller
         return response(null, 204);
     }
 
-    public function ajaxGetOrders(Request $request)
+    public function ajaxGetorders(Request $request)
     {
         if ($request->ajax()) {
             $orders = Order::tenanted();

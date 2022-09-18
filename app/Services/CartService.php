@@ -90,17 +90,18 @@ class CartService
         $tenant = activeTenant();
 
         if (!$tenant) throw new Exception('No tenant active selected');
+
+        $cart = Cart::firstOrCreate(
+            [
+                'user_id' => $user->id,
+                'tenant_id' => $tenant->id,
+            ]
+        );
+
         foreach ($datas as $data) {
             DB::beginTransaction();
             try {
-                $cart = Cart::firstOrCreate(
-                    [
-                        'user_id' => $user->id,
-                        'tenant_id' => $tenant->id,
-                    ]
-                );
-
-                $detail = $cart->cartDetails()->updateOrCreate(
+                $detail = $cart->cartDetails()->firstOrCreate(
                     [
                         'cart_id' => $cart->id,
                         'product_id' => $data['product_id']
@@ -120,7 +121,7 @@ class CartService
             }
         }
 
-        // return $cart;
+        return $cart;
     }
 
     // public static function updateCart($request)

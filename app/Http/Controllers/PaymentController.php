@@ -52,7 +52,7 @@ class PaymentController extends Controller
                     $viewGate      = 'payments_show';
                     $editGate      = 'payments_edit';
                     $deleteGate    = 'payments_delete';
-                    $crudRoutePart = 'Payments';
+                    $crudRoutePart = 'payments';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
@@ -76,7 +76,7 @@ class PaymentController extends Controller
             Payment::create($data);
         }
         alert()->success('Success', 'Data created successfully');
-        return redirect('Payments');
+        return redirect('payments');
     }
 
     public function edit(Payment $payment)
@@ -90,7 +90,7 @@ class PaymentController extends Controller
         $payment->update($request->validated());
 
         alert()->success('Success', 'Data updated successfully');
-        return redirect('Payments');
+        return redirect('payments');
     }
 
     public function destroy(Payment $payment)
@@ -107,7 +107,7 @@ class PaymentController extends Controller
     {
         $request->validate([
             'ids'   => 'required|array',
-            'ids.*' => 'exists:Payments,id',
+            'ids.*' => 'exists:payments,id',
         ]);
 
         Payment::tenanted()->whereIn('id', $request->ids)->delete();

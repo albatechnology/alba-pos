@@ -40,11 +40,11 @@ class CompanySeeder extends Seeder
             ],
             [
                 'company_id' => 3,
-                'name' => 'Tenant 1 PT Satu',
+                'name' => 'Tenant 1 PT Dua',
             ],
             [
                 'company_id' => 3,
-                'name' => 'Tenant 2 PT Satu',
+                'name' => 'Tenant 2 PT Dua',
             ],
         ]);
     }

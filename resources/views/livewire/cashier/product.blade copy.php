@@ -1,6 +1,7 @@
 <div class="row">
     <div class="col-12">
         <h4>Product Categories</h4>
+        <h1>{{ $selectedProductCategoryId }}</h1>
         <button wire:click="changeProductCategory()" class="btn btn-app">
             <i class="fas fa-heart"></i> All Category
         </button>

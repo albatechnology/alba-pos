@@ -14,7 +14,6 @@ class Order extends Model implements TenantedInterface
 
     protected $fillable = [
         'raw_source',
-        'additional_discount',
         'tenant_id',
         'company_id',
         'user_id',
@@ -24,8 +23,10 @@ class Order extends Model implements TenantedInterface
         'status',
         'payment_status',
         'total_discount',
-        'total_price',
+        'additional_discount',
         'amount_paid',
+        'total_tax',
+        'total_price',
         'note',
     ];
 

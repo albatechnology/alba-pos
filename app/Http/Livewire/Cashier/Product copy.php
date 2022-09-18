@@ -83,7 +83,6 @@ class Product extends Component
             $this->toggleCart($product_id, false);
             $this->toggleSelectedProductIds($product_id, false);
         }
-        $this->dispatchBrowserEvent('refreshCart');
     }
 
     public function toggleSelectedProductIds($product_id, $unset = true)
