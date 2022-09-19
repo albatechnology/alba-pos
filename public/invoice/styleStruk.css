@@ -1,0 +1,101 @@
+#invoice-POS{
+        box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+        padding: 2mm;
+        margin: 0 auto;
+        width: 100mm;
+        background: #FFF;
+}
+
+p{
+    width: 90%;
+}
+
+
+#top {
+    min-height: 20px;
+}
+
+#mid {
+    min-height: 30px;
+}
+
+#bot {
+    min-height: 50px;
+}
+
+.info-header{
+    min-height: 20px;
+    justify-content: 'center';
+    align-items: 'center';
+    align-self: 'center';
+    margin-left: 80px;
+}
+
+table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabletitle {
+    font-size: .5em;    
+}
+
+.table-header{
+    border-bottom: 1px solid #000;
+}
+
+.service-end {
+    border-bottom: 1px solid #000;    
+}
+
+
+
+#legalcopy {
+    margin-top: 2mm;
+}
+
+.icon{
+    margin-top: 10px;
+    height: 150px;
+    width: 100px;    
+}
+
+.text-social-media{
+    /* margin-bottom: 5px; */
+    margin-left: 5px;
+}
+
+.icon-instagram{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-center{
+    margin-left: 100px;
+}
+
+.table-payment{
+    border-top: 1px solid #000;
+}
+
+.items-text{
+    margin-left: 50px;
+}
+
+.invoice-section{
+    width: 40%;
+}
+
+.itemtext{
+    margin: 5px 0 0 0;
+    /* font-size: 17px; */
+}
+
+.itemtext-mt{
+    margin-top: 10px;
+}
+
+dl{
+    margin: 0;
+}
