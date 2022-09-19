@@ -22,8 +22,8 @@ return new class extends Migration
             $table->foreignId('added_by_id')->nullable()->index();
             $table->foreignId('approved_by_id')->nullable()->index();
             $table->string('status', 30); // enum
-            $table->float('value');
-            $table->text('note');
+            $table->float('value')->default(0);
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

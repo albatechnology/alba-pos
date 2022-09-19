@@ -12,7 +12,7 @@ class ApplyAdditionalDiscount
         if (empty($order->raw_source['additional_discount']) && is_null($order->raw_source['additional_discount'])) return $next($order);
 
         $order->additional_discount = $order->raw_source['additional_discount'] ?? 0;
-        $order->total_price -= $order->total_discount;
+        $order->total_price -= $order->additional_discount;
 
         return $next($order);
     }

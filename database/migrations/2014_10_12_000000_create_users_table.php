@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->nullable(); // default user company
-            $table->foreignId('tenant_id')->nullable(); // default user tenant
+            $table->foreignId('company_id')->nullable(); // current user company
+            $table->foreignId('tenant_id')->nullable(); // current user tenant
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

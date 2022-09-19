@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\OrderController;
@@ -35,7 +36,15 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function ($route) {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('cashier', [App\Http\Controllers\CashierController::class, 'index'])->name('cashier');
+
+    $route->group(['prefix' => 'cashier', 'as' => 'cashier.'], function ($route) {
+        $route->get('/', [CashierController::class, 'index']);
+        $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
+        $route->get('/cart', [CashierController::class, 'cart'])->name('cart');
+        $route->post('/proceed-payment', [CashierController::class, 'proceedPayment'])->name('proceedPayment');
+        $route->post('/delete-cart-detail/{id}', [CashierController::class, 'deleteCartDetail']);
+        $route->post('/plus-minus/{product_id}/{qty}', [CashierController::class, 'plusMinus']);
+    });
 
     $route->patch('users/restore', [UserController::class, 'restore'])->name('users.restore');
     $route->delete('users/forceDestroy', [UserController::class, 'forceDestroy'])->name('users.forceDestroy');

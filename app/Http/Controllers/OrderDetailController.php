@@ -70,7 +70,7 @@ class OrderDetailController extends Controller
             OrderDetail::create($data);
         }
         alert()->success('Success', 'Data created successfully');
-        return redirect('OrderDetails');
+        return redirect('order-details');
     }
 
     public function edit(OrderDetail $orderDetail)
@@ -84,7 +84,7 @@ class OrderDetailController extends Controller
         $orderDetail->update($request->validated());
 
         alert()->success('Success', 'Data updated successfully');
-        return redirect('OrderDetails');
+        return redirect('order-details');
     }
 
     public function destroy(OrderDetail $orderDetail)
@@ -101,7 +101,7 @@ class OrderDetailController extends Controller
     {
         $request->validate([
             'ids'   => 'required|array',
-            'ids.*' => 'exists:OrderDetails,id',
+            'ids.*' => 'exists:order_details,id',
         ]);
 
         OrderDetail::tenanted()->whereIn('id', $request->ids)->delete();
