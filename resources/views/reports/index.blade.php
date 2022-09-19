@@ -5,7 +5,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('payment-types.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        <a href="/" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i>
+                            Back</a>
+                        <input type='text' readonly id='date' class="datepicker" placeholder='Pick date'>
                     </div>
                 </div>
             </div>
@@ -16,7 +18,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Payment Types List</h3>
+                                <h3 class="card-title">Daily Report</h3>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -24,12 +26,11 @@
                                         <thead>
                                             <tr>
                                                 <th width="10"></th>
-                                                <th>ID</th>
-                                                <th>Name</th>
-                                                <th>Payment Category</th>
-                                                <th>Company</th>
-                                                <th>Created At</th>
-                                                <th>Updated At</th>
+                                                <th>Date</th>
+                                                <th>Invoice Number</th>
+                                                <th>Total Price</th>
+                                                <th>Total Discount</th>
+                                                <th>Amount Paid</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -50,77 +51,42 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('payment_types_delete')
-            let deleteButton = {
-                text: 'Delete selected',
-                url: "{{ route('payment-types.massDestroy') }}",
-                className: 'btn-danger',
-                action: function(e, dt, node, config) {
-                    var ids = $.map(dt.rows({
-                        selected: true
-                    }).data(), function(entry) {
-                        return entry.id
-                    });
-                    if (ids.length === 0) {
-                        alert('No data selected')
-                        return
-                    }
 
-                    if (confirm('Delete selected data?')) {
-                        console.log('config', config.url);
-                        console.log('ids', ids);
-                        $.ajax({
-                                method: 'POST',
-                                url: config.url,
-                                data: {
-                                    ids: ids,
-                                    _method: 'DELETE'
-                                }
-                            })
-                            .done(function() {
-                                location.reload()
-                            })
-                    }
-                }
-            }
-            dtButtons.push(deleteButton)
-        @endcan
+        $(document).ready(function() {
+            new DateTime(document.getElementById('date'));
+        });
 
         let table = $('#dttbls').DataTable({
-            scrollY: '50vh',
             buttons: dtButtons,
             processing: true,
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route("payment-types.index") }}',
+            ajax: '{{ route('orders.index') }}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'
                 },
-                {
-                    data: 'id',
-                    name: 'id',
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'payment_category',
-                    name: 'paymentCategory.name'
-                },
-                {
-                    data: 'company_name',
-                    name: 'company.name'
-                },
+
                 {
                     data: 'created_at',
                     name: 'created_at'
                 },
                 {
-                    data: 'updated_at',
-                    name: 'updated_at'
+                    data: 'invoice_number',
+                    name: 'invoice_number'
+                },
+                {
+                    data: 'total_price',
+                    name: 'total_price'
+                },
+                {
+                    data: 'total_discount',
+                    name: 'total_discount'
+                },
+                {
+                    data: 'amount_paid',
+                    name: 'amount_paid'
                 },
                 {
                     data: 'actions',
@@ -162,9 +128,34 @@
             });
         });
 
+        // $.fn.dataTable.ext.search.push(
+        //     function(settings, data, dataIndex) {
+        //         var search = searchDate.val();
+        //         var date = new Date(data[1]);
+
+        //         return true;
+        //     }
+        // );
+
+        // $(document).ready(function() {
+        //     // Create date inputs
+        //     searchDate = new DateTime($('#date'), {
+        //         format: 'MMMM Do YYYY'
+        //     });
+
+
+        //     // DataTables initialisation
+        //     var table = $('#dttbls').DataTable();
+
+        //     // Refilter the table
+        //     $('#date').on('change', function() {
+        //         table.draw();
+        //     });
+        // });
+
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('payment-types') }}/` + id, {
+                $.post(`{{ url('reports') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {

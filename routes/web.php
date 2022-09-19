@@ -12,6 +12,7 @@ use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockHistoryController;
@@ -113,4 +114,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('stocks-histories', StockHistoryController::class)->only(['index']);
 
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
+
+    $route->resource('reports', ReportController::class)->only(['index']);
 });

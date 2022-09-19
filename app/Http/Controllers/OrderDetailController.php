@@ -46,7 +46,7 @@ class OrderDetailController extends Controller
                     $viewGate      = 'order_details_show';
                     $editGate      = 'order_details_edit';
                     $deleteGate    = 'order_details_delete';
-                    $crudRoutePart = 'OrderDetails';
+                    $crudRoutePart = 'order-details';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])

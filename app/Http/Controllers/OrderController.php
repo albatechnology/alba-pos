@@ -49,8 +49,8 @@ class OrderController extends Controller
                     $viewGate      = 'orders_show';
                     $editGate      = 'orders_edit';
                     $deleteGate    = 'orders_delete';
-                    $crudRoutePart = 'Orders';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    $crudRoutePart = 'orders';
+                    return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -74,6 +74,11 @@ class OrderController extends Controller
         }
         alert()->success('Success', 'Data created successfully');
         return redirect('Orders');
+    }
+
+    public function show(Order $order){
+
+        return view('orders.show', ['order' => $order]);
     }
 
     public function edit(Order $order)

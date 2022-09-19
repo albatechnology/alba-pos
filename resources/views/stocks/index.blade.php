@@ -88,6 +88,7 @@
         @endcan
 
         let table = $('#dttbls').DataTable({
+            scrollY: '50vh',
             buttons: dtButtons,
             processing: true,
             serverSide: true,
