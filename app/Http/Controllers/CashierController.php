@@ -17,7 +17,7 @@ class CashierController extends Controller
         $productCategories = ProductCategory::tenanted()->get();
         $cart = CartService::getMyCart() ?? new Cart();
 
-        $paymentTypes = PaymentType::tenanted()->pluck('name', 'id')->prepend('- Select Payment -', '');;
+        $paymentTypes = PaymentType::tenanted()->pluck('name', 'id')->prepend('- Select Payment -', '');
 
         return view('cashiers.index', ['productCategories' => $productCategories, 'paymentTypes' => $paymentTypes, 'cart' => $cart]);
     }

@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Interfaces\TenantedInterface;
+use App\Traits\CustomInteractsWithMedia;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
 
-class Product extends Model implements TenantedInterface
+class Product extends Model implements TenantedInterface, HasMedia
 {
-    use SoftDeletes, TenantedTrait;
+    use SoftDeletes, TenantedTrait, CustomInteractsWithMedia;
     public $table = 'products';
 
     protected $fillable = [

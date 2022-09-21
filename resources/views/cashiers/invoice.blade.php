@@ -250,7 +250,6 @@
             &nbsp;
         </div>
     </div>
-
     <script>
         window.print();
         window.onafterprint = window.close;
