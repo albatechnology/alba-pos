@@ -43,7 +43,7 @@
                                     <div class="form-group">
                                         <label>Photo</label>
                                         <input name="image" type="file" class="form-control @error('image') is-invalid @enderror">
-                                        <img src="{{ $user->photo }}" alt="">
+                                        <img src="{{ $user->getFirstMediaUrl('users') }}" alt="">
                                         @error('image')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror

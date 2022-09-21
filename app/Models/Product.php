@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Interfaces\TenantedInterface;
-use App\Traits\CustomInteractsWithMedia;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class Product extends Model implements TenantedInterface, HasMedia
 {
-    use SoftDeletes, TenantedTrait, CustomInteractsWithMedia;
+    use SoftDeletes, TenantedTrait, InteractsWithMedia;
     public $table = 'products';
 
     protected $fillable = [
@@ -59,6 +60,22 @@ class Product extends Model implements TenantedInterface, HasMedia
                 });
             }
         });
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('products')
+            ->useFallbackUrl('/https://www.tibs.org.tw/images/default.jpg')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232)
+            ->sharpen(10);
     }
 
     public function company()

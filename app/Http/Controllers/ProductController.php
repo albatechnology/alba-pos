@@ -75,6 +75,13 @@ class ProductController extends Controller
 
             $product = Product::create($data);
             $product->productCategories()->sync($request->product_category_ids);
+
+            if ($file = $request->file('image')) {
+                $product
+                ->addMedia($file)
+                ->usingName(str_replace(' ','-',$request->name))
+                ->toMediaCollection('products');
+            }
         }
         alert()->success('Success', 'Data created successfully');
         return redirect('products');
@@ -98,6 +105,13 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $request, Product $product)
     {
+        if ($file = $request->file('image')) {
+            $product
+                ->addMedia($file)
+                ->usingName(str_replace(' ','-',$request->name))
+                ->toMediaCollection('products');
+        }
+
         $product->update($request->validated());
         $product->productCategories()->sync($request->product_category_ids);
 

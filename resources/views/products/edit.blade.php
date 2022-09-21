@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-primary">
-                            <form method="post" action="{{ route('products.update', $product->id) }}" class="form-loading">
+                            <form method="post" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data" class="form-loading">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="company_id" value="{{ $product->company_id }}">
@@ -45,6 +45,14 @@
                                         <label class="required">UOM</label>
                                         <input name="uom" type="number" value="{{ $product->uom }}" class="form-control @error('uom') is-invalid @enderror" placeholder="uom" required>
                                         @error('uom')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Photo</label>
+                                        <input name="image" type="file" class="form-control @error('image') is-invalid @enderror">
+                                        <img src="{{ $product->getFirstMediaUrl('products', 'thumb') }}" alt="">
+                                        @error('image')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>

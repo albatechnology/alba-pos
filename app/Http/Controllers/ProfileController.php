@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\User;
 use App\Traits\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 
 class ProfileController extends Controller
 {
@@ -18,7 +20,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profile = User::where('id', Auth::id())->get();
+        $profile = User::where('id', Auth::id())->first();
         return view('profiles.index', ['profile' => $profile]);
     }
 
@@ -50,15 +52,16 @@ class ProfileController extends Controller
             'image' => 'nullable|image|mimes:png,jpg,jpeg,webp,svg|max:1024',
         ]);
 
-        if ($file = $request->file('image')) {
-            $fileData = $this->updateFile($profile->photo, $file, 'profiles/');
-            $image_url = \App::make('url')->to('/') . '/' . $fileData['filePath'];
-            $profile->photo = $image_url;
-        }
-
         $profile->name = $request->name;
         $profile->email = $request->email;
         if ($request->password) $profile->password = bcrypt($request->password);
+
+        if ($file = $request->file('image')) {
+            $profile
+                ->addMedia($file)
+                ->usingName(str_replace(' ','-',$request->name))
+                ->toMediaCollection('users');
+        }
 
         $profile->save();
         alert()->success('Success', 'Data updated successfully');

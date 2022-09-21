@@ -23,8 +23,9 @@
         <div class="row row-cols-1 row-cols-md-4 mt-2">
             @foreach ($products as $product)
                 <div class="col mb-4">
-                    <div wire:click="setSelectedProductIds({{ $product->id }})" class="card h-100 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
-                        {{-- <img src="..." class="card-img-top" alt="..."> --}}
+                    <div wire:click="setSelectedProductIds({{ $product->id }})"
+                        class="card h-100 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
+                        <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title font-weight-bold">{{ $product->name }}</h5>
                             <br>

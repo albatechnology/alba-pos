@@ -13,10 +13,13 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements TenantedInterface
+class User extends Authenticatable implements TenantedInterface, HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, TenantedTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, SoftDeletes, TenantedTrait, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -68,6 +71,22 @@ class User extends Authenticatable implements TenantedInterface
         return false;
         // if ($this->hasRole('admin')) return true;
         // return $this->roles()->where('id', 2)->exists();
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this
+            ->addMediaCollection('users')
+            ->useFallbackUrl('/https://www.tibs.org.tw/images/default.jpg')
+            ->singleFile();
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('thumb')
+            ->width(368)
+            ->height(232)
+            ->sharpen(10);
     }
 
     public function company()

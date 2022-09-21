@@ -101,20 +101,20 @@ class UserController extends Controller
             'role_id' => 'required|integer|exists:roles,id',
             'level' => ['nullable', new EnumKey(UserLevelEnum::class)],
         ]);
-        // dd($request->all());
-
-        if ($file = $request->file('image')) {
-            $fileData = $this->uploadFile($file, 'users/');
-            $image_url = \App::make('url')->to('/') . '/' . $fileData['filePath'];
-        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'photo' => $image_url ?? null,
             'level' => in_array(1, $request->company_ids) ? UserLevelEnum::SUPER_ADMIN : ($request->level ? $request->level : UserLevelEnum::ADMIN),
         ]);
+
+        if ($file = $request->file('image')) {
+            $user
+                ->addMedia($file)
+                ->usingName(str_replace(' ','-',$request->name))
+                ->toMediaCollection('users');
+        }
 
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
@@ -160,9 +160,10 @@ class UserController extends Controller
         ]);
 
         if ($file = $request->file('image')) {
-            $fileData = $this->updateFile($user->photo, $file, 'users/');
-            $image_url = \App::make('url')->to('/') . '/' . $fileData['filePath'];
-            $user->photo = $image_url;
+            $user
+                ->addMedia($file)
+                ->usingName(str_replace(' ','-',$request->name))
+                ->toMediaCollection('users');
         }
 
         $user->name = $request->name;

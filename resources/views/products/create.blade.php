@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-primary">
-                            <form method="post" action="{{ route('products.store') }}" class="form-loading">
+                            <form method="post" action="{{ route('products.store') }}"  enctype="multipart/form-data" class="form-loading">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -36,6 +36,13 @@
                                         <label class="required">UOM</label>
                                         <input name="uom" type="number" value="{{ old('uom') }}" class="form-control @error('uom') is-invalid @enderror" placeholder="uom" required>
                                         @error('uom')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Photo</label>
+                                        <input name="image" type="file" class="form-control @error('image') is-invalid @enderror">
+                                        @error('image')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>

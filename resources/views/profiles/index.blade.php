@@ -16,12 +16,10 @@
                     <div class="col-12">
                         <div class="card p-4">
                             <div class=" image d-flex flex-column justify-content-center align-items-center">
-                                @foreach ($profile as $item)
-                                    <button class="btn btn-secondary"> <img src={{ $item->photo }} height="100"
+                                    <button class="btn btn-secondary"> <img src={{ $profile->getFirstMediaUrl('users', 'thumb') }} height="100"
                                             width="100" /></button>
-                                    <span class="name mt-3">{{ $item->name }}</span>
-                                    <span class="email">{{ $item->email }}</span>
-                                @endforeach
+                                    <span class="name mt-3">{{ $profile->name }}</span>
+                                    <span class="email">{{ $profile->email }}</span>
                                 {{-- <span class="idd">@eleanorpena</span>
                                 <div class="d-flex flex-row justify-content-center align-items-center gap-2"> <span
                                         class="idd1">Oxc4c16a645_b21a</span> <span><i class="fa fa-copy"></i></span>
