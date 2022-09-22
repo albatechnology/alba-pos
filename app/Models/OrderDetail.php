@@ -38,7 +38,8 @@ class OrderDetail extends Model implements TenantedInterface
 
     protected static function booted()
     {
-        static::saving(function ($model) {
+        static::created(function ($model) {
+            Stock::where('tenant_id', $model->tenant_id)->where('product_id', $model->product_id)->decrement('stock', $model->quantity);
         });
     }
 

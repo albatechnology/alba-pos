@@ -50,9 +50,9 @@ class Order extends Model implements TenantedInterface
             //     Stock::where('tenant_id', $model->tenant_id)->where('product_id', $orderDetail->product_id)->decrement('stock', $orderDetail->quantity);
             // });
 
-            foreach ($model->orderDetails as $orderDetail) {
-                Stock::where('tenant_id', $model->tenant_id)->where('product_id', $orderDetail->product_id)->decrement('stock', $orderDetail->quantity);
-            }
+            // foreach ($model->orderDetails as $orderDetail) {
+            //     Stock::where('tenant_id', $model->tenant_id)->where('product_id', $orderDetail->product_id)->decrement('stock', $orderDetail->quantity);
+            // }
         });
     }
 
