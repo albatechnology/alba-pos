@@ -12,6 +12,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductTenantController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
@@ -125,4 +126,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
 
     $route->resource('reports', ReportController::class)->only(['index']);
+
+    $route->resource('product-tenants', ProductTenantController::class)->only(['index', 'edit', 'update']);
 });

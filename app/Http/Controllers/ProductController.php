@@ -46,11 +46,12 @@ class ProductController extends Controller
                     return $html;
                 })
                 ->addColumn('actions', function ($row) {
+                    $tenantGate    = 'products_tenant';
                     $viewGate      = 'products_show';
                     $editGate      = 'products_edit';
                     $deleteGate    = 'products_delete';
                     $crudRoutePart = 'products';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'tenantGate', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions', 'product_categories'])
                 ->make(true);

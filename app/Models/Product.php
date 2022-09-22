@@ -33,6 +33,8 @@ class Product extends Model implements TenantedInterface, HasMedia
                     ProductTenant::create([
                         'tenant_id' => $tenant->id,
                         'product_id' => $model->id,
+                        'uom' => $model->uom,
+                        'price' => $model->price,
                     ]);
                 }
             }

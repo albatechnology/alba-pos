@@ -1,3 +1,6 @@
+@if ($tenantGate ?? false)
+    <button><a class="btn btn-sm" href="product-tenants">Tenant Product</a></button>
+@endif
 @if($viewGate ?? false)
     <a class="btn btn-sm btn-primary" href="{{ $viewRoute ?? route($crudRoutePart . '.show', $row->id) }}" title="Detail"><i class="fa fa-eye"></i></a>
 @endif

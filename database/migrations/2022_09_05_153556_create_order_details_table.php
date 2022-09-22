@@ -19,12 +19,12 @@ return new class extends Migration
             $table->foreignId('tenant_id')->nullable();
             $table->foreignId('company_id')->nullable();
             $table->foreignId('product_id')->nullable();
-            $table->float('unit_price')->default(0);
-            $table->float('quantity')->default(0);
-            $table->float('total_discount')->default(0);
-            $table->float('total_tax')->default(0)->comment('total tax per product');
-            $table->float('original_price')->default(0)->comment('(quantity * unit_price)');
-            $table->float('total_price')->default(0)->comment('original_price + total_tax - total_discount');
+            $table->integer('unit_price')->default(0);
+            $table->integer('quantity')->default(0);
+            $table->integer('total_discount')->default(0);
+            $table->integer('total_tax')->default(0)->comment('total tax per product');
+            $table->integer('original_price')->default(0)->comment('(quantity * unit_price)');
+            $table->integer('total_price')->default(0)->comment('original_price + total_tax - total_discount');
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -60,6 +60,11 @@ class PermissionsHelper
             'product_brands_create',
             'product_brands_edit',
             'product_brands_delete',
+            'product_tenants_access',
+            'product_tenants_view',
+            // 'product_tenants_create',
+            'product_tenants_edit',
+            // 'product_tenants_delete',
 
             'payment_management_access',
             'payment_categories_access',

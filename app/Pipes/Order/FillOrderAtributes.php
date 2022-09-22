@@ -12,10 +12,11 @@ class FillOrderAtributes
     public function handle(Order $order, Closure $next)
     {
         $user = user();
+        $tenant = activeTenant();
 
         $order->user_id = $user->id;
-        $order->company_id = $user->company_id;
-        $order->tenant_id = $user->tenant_id;
+        $order->company_id = $tenant->company->id;
+        $order->tenant_id = $tenant->id;
         $order->note = $order->raw_source['note'] ?? null;
         $order->invoice_number = sprintf('INV%s', date('Ymdhis'));
 

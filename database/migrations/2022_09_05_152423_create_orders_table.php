@@ -23,12 +23,12 @@ return new class extends Migration
             $table->string('invoice_number')->unique()->index()->nullable();
             $table->string('status', 30); // enum
             $table->string('payment_status', 30); // enum
-            $table->float('total_discount')->default(0)->comment('total discount of discount selected');
-            $table->float('additional_discount')->default(0)->comment('manual additional discount');
-            $table->float('amount_paid')->default(0)->comment('amount paid of total_price');
-            $table->float('total_tax')->default(0)->comment('SUM of total_tax from order_details');
-            $table->float('original_price')->default(0)->comment('SUM of original_price from order_details');
-            $table->float('total_price')->default(0)->comment('SUM of total_price from order_details - (additional_discount + discount selected)');
+            $table->integer('total_discount')->default(0)->comment('total discount of discount selected');
+            $table->integer('additional_discount')->default(0)->comment('manual additional discount');
+            $table->integer('amount_paid')->default(0)->comment('amount paid of total_price');
+            $table->integer('total_tax')->default(0)->comment('SUM of total_tax from order_details');
+            $table->integer('original_price')->default(0)->comment('SUM of original_price from order_details');
+            $table->integer('total_price')->default(0)->comment('SUM of total_price from order_details - (additional_discount + discount selected)');
             $table->text('note')->nullable();
             $table->timestamps();
             $table->softDeletes();
