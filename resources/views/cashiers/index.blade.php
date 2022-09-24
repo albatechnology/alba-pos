@@ -82,7 +82,7 @@
                     </div>`
                 );
 
-                $(this).html(html);
+                $(this).css({'opacity': 1, 'pointer-events': 'initial'}).html(html);
             });
         }
 
@@ -94,6 +94,7 @@
         }
 
         function plusMinus(productId, qty) {
+            $('#container-cart').css({'opacity': 0.4, 'pointer-events': 'none'})
             $.post("{{ url('cashier/plus-minus') }}/" + productId + '/' + qty, function(res) {
                 refreshCart();
             })

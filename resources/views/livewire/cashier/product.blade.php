@@ -31,7 +31,7 @@
                             <br>
                             <h5>Rp. {{ number_format($product->price) }}</h5>
                             <h5>ID: {{ $product->id }}</h5>
-                            <h5>Stock: {{ $product->stock }}</h5>
+                            <h5 wire:ignore>Stock: {{ $product->stock }}</h5>
                             <br>
                         </div>
                     </div>

@@ -43,4 +43,9 @@ class CartDetail extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function getStock()
+    {
+        return Stock::select('stock')->where('product_id', $this->product_id)->where('tenant_id', $this->cart->tenant_id)->first()?->stock ?? 0;
+    }
 }
