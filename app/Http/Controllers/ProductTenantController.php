@@ -18,7 +18,7 @@ class ProductTenantController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ProductTenant::with(['company', 'tenant', 'product'])->select(sprintf('%s.*', (new ProductTenant())->table));
+            $data = ProductTenant::tenanted()->with(['company', 'tenant', 'product'])->select(sprintf('%s.*', (new ProductTenant())->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {

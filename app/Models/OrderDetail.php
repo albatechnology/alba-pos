@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -61,5 +62,10 @@ class OrderDetail extends Model implements TenantedInterface
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function scopeWhereOrderDeal($query)
+    {
+        return $query->order->whereIn('status', [OrderStatus::SHIPMENT, OrderStatus::DELIVERING, OrderStatus::ARRIVED, OrderStatus::DONE]);
     }
 }

@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Interfaces\TenantedInterface;
+use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
 
-class ProductTenant extends Model
+class ProductTenant extends Model implements TenantedInterface
 {
+    use TenantedTrait;
+
     public $table = 'product_tenants';
     protected $guarded = [];
 

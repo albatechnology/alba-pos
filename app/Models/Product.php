@@ -93,4 +93,8 @@ class Product extends Model implements TenantedInterface, HasMedia
     public function productCategories(){
         return $this->belongsToMany(ProductCategory::class, 'product_product_categories');
     }
+
+    public function orderDetails(){
+        return $this->hasMany(OrderDetail::class);
+    }
 }
