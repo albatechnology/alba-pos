@@ -18,15 +18,15 @@
 <table class="table table-borderless">
     <tr>
         <td>Sub Total</td>
-        <td align="right">{{ $sub_total_price }}</td>
+        <td align="right">{{ number_format($sub_total_price) }}</td>
     </tr>
     <tr>
         <td>Tax</td>
-        <td align="right">{{ $total_tax }}</td>
+        <td align="right">{{ number_format($total_tax) }}</td>
     </tr>
     <tr>
         <td>Total</td>
-        <td align="right">{{ $total_price }}</td>
+        <td align="right">{{ number_format($total_price) }}</td>
     </tr>
 </table>
 <script>
