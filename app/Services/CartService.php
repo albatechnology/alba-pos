@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Cart;
 use App\Models\CartDetail;
+use App\Models\Stock;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -36,6 +37,9 @@ class CartService
         $tenant = activeTenant();
 
         if (!$tenant) throw new Exception('No tenant active selected');
+
+        $stock = Stock::select('stock')->where('product_id', $data['product_id'])->where('tenant_id', $tenant->id)->first()?->stock ?? 0;
+        if ($stock < 1) return;
 
         DB::beginTransaction();
         try {

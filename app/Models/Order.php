@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderStatus;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -36,8 +37,7 @@ class Order extends Model implements TenantedInterface
         'user_id' => 'integer',
         'customer_id' => 'integer',
         'discount_id' => 'integer',
-        // 'status',
-        // 'payment_status',
+        'status' => OrderStatus::class,
         'total_discount' => 'integer',
         'total_price' => 'integer',
         'amount_paid' => 'integer',
@@ -84,5 +84,10 @@ class Order extends Model implements TenantedInterface
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);
+    }
+
+    public function scopeWhereOrderDeal($query)
+    {
+        return $query->whereIn('status', [OrderStatus::SHIPMENT, OrderStatus::DELIVERING, OrderStatus::ARRIVED, OrderStatus::DONE]);
     }
 }

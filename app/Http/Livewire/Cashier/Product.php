@@ -50,7 +50,7 @@ class Product extends Component
     {
         $tenant = activeTenant();
         // $products = ModelsProduct::where('name', 'like', '%' . $this->search . '%');
-        $products = ModelsProduct::select('products.id', 'products.name', 'product_tenants.price','stocks.stock')
+        $products = ModelsProduct::select('products.id', 'products.name', 'product_tenants.price', 'stocks.stock')
             ->join('product_tenants', 'product_tenants.product_id', '=', 'products.id')
             ->join('stocks', 'stocks.product_id', '=', 'products.id')
             ->where('name', 'like', '%' . $this->search . '%')
@@ -77,6 +77,7 @@ class Product extends Component
             $cart = CartService::store([
                 'product_id' => $product_id,
             ]);
+            if ($cart) $this->toggleSelectedProductIds($product_id, false);
         }
 
         $this->emit('refreshCart');
@@ -89,7 +90,6 @@ class Product extends Component
             $this->toggleSelectedProductIds($product_id);
         } else {
             $this->toggleCart($product_id, false);
-            $this->toggleSelectedProductIds($product_id, false);
         }
         $this->dispatchBrowserEvent('refreshCart');
     }
