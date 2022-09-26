@@ -9,34 +9,34 @@
         @foreach ($order?->order_details as $detail)
             <tr>
                 <td>{{ $detail->product->name . ' @' . $detail->quantity }}</td>
-                <td align="right">{{ $detail->total_price }}</td>
+                <td align="right">{{ number_format($detail->total_price) }}</td>
             </tr>
         @endforeach
     </table>
     <table class="table table-borderless">
         <tr>
             <td>Sub Total</td>
-            <td align="right">{{ $order->original_price }}</td>
+            <td align="right">{{ number_format($order->original_price) }}</td>
         </tr>
         <tr>
             <td>Tax</td>
-            <td align="right">{{ $order->total_tax }}</td>
+            <td align="right">{{ number_format($order->total_tax) }}</td>
         </tr>
         <tr>
             <td>Additional Discount</td>
-            <td align="right">{{ $order->additional_discount }}</td>
+            <td align="right">{{ number_format($order->additional_discount) }}</td>
         </tr>
         <tr>
             <td>Total Price</td>
-            <td align="right">{{ $order->total_price }}</td>
+            <td align="right">{{ number_format($order->total_price) }}</td>
         </tr>
         <tr>
             <td>Amount Paid</td>
-            <td align="right">{{ $order->amount_paid }}</td>
+            <td align="right">{{ number_format($order->amount_paid) }}</td>
         </tr>
         <tr>
             <td>Kembali</td>
-            <td align="right">{{ $kembali }}</td>
+            <td align="right">{{ number_format($kembali) }}</td>
         </tr>
     </table>
 </div>
