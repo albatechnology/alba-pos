@@ -254,10 +254,10 @@
         window.print();
 
         setTimeout(function (){
-            window.close;
+            window.onafterprint = window.close;
         }, 4000);
 
-        window.onafterprint = window.close;
+        // window.onafterprint = window.close;
     </script>
 </body>
 
