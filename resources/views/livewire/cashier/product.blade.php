@@ -26,7 +26,7 @@
                 <input wire:model="search" type="text" class="form-control" placeholder="Search Product Name">
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-4 row-cols-sm-3 mt-2">
+        <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 mt-2">
             @foreach ($products as $product)
                 <div class="col mb-4">
                     <div wire:click="setSelectedProductIds({{ $product->id }})"
