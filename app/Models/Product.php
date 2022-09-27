@@ -97,4 +97,8 @@ class Product extends Model implements TenantedInterface, HasMedia
     public function orderDetails(){
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_details');
+    }
 }

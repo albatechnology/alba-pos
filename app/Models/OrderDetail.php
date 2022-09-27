@@ -64,8 +64,4 @@ class OrderDetail extends Model implements TenantedInterface
         return $this->belongsTo(Product::class);
     }
 
-    public function scopeWhereOrderDeal($query)
-    {
-        return $query->order->whereIn('status', [OrderStatus::SHIPMENT, OrderStatus::DELIVERING, OrderStatus::ARRIVED, OrderStatus::DONE]);
-    }
 }

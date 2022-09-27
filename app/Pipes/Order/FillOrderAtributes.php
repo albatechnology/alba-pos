@@ -14,8 +14,8 @@ class FillOrderAtributes
         $user = user();
 
         $order->user_id = $user->id;
-        $order->company_id = $user->company->id;
-        $order->tenant_id = $user->id;
+        $order->company_id = $user->company_id;
+        $order->tenant_id = $user->tenant_id;
         $order->note = $order->raw_source['note'] ?? null;
         $order->invoice_number = sprintf('INV%s', date('Ymdhis'));
 

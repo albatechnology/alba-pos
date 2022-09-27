@@ -27,12 +27,10 @@ class HomeController extends Controller
     public function index()
     {
         $orderSummary = Order::tenanted()->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
-        $topProduct = Product::tenanted()->withSum(['orderDetails'=>function($q){
-             $q->whereHas('order', function($q){
-                $q->whereOrderDeal();
-            });
-            $q->orderBy('quantity', 'DESC');
-        }],'quantity')->limit(10)->get();
+        $topProduct = Product::tenanted()->whereHas('orders', function($q){
+            $q->whereOrderDeal();
+        })->withSum('orderDetails','quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
+
 
         // $topProduct = OrderDetail::tenanted()->whereHas('order', function($q){
         //     $q->whereOrderDeal();
