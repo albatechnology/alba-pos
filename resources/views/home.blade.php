@@ -50,12 +50,12 @@
                                         <p>{{ $products->name }}</p>
                                         <p>{{ $products->order_details_sum_quantity }}</p>
                                     </ul> --}}
-                                <table class="table no-border table-hover ">
+                                <table class="table no-border ">
                                     <tbody>
                                         @foreach ($topProduct as $products)
                                             <tr>
                                                 <td>{{ $products->name }}</td>
-                                                <td>{{ ($products->order_details_sum_quantity)?? 0 }}</td>
+                                                <td>{{ $products->order_details_sum_quantity }}</td>
                                             </tr>
                                         @endforeach
                                 </table>
@@ -65,7 +65,7 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="order-details" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>

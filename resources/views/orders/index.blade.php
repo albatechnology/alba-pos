@@ -5,7 +5,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('orders.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        <a href="{{ route('orders.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i>
+                            Add Data</a>
                     </div>
                 </div>
             </div>
@@ -20,27 +21,29 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="dttbls" class="table table-bordered table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th width="10"></th>
-                                                <th>ID</th>
-                                                <th>Invoice Number</th>
-                                                <th>Customer</th>
-                                                <th>User</th>
-                                                <th>Tenant</th>
-                                                <th>Company</th>
-                                                <th>Payment Status</th>
-                                                <th>Total Price</th>
-                                                <th>Total Discount</th>
-                                                <th>Amount Paid</th>
-                                                <th>Note</th>
-                                                <th>Created At</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="nowrap"></tbody>
-                                    </table>
+                                    <div class="d-inline-block">
+                                        <table id="dttbls" class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10"></th>
+                                                    <th>ID</th>
+                                                    <th>Invoice Number</th>
+                                                    <th>Customer</th>
+                                                    <th>User</th>
+                                                    <th>Tenant</th>
+                                                    <th>Company</th>
+                                                    <th>Payment Status</th>
+                                                    <th>Total Price</th>
+                                                    <th>Total Discount</th>
+                                                    <th>Amount Paid</th>
+                                                    <th>Note</th>
+                                                    <th>Created At</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="nowrap"></tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,6 +96,7 @@
         @endcan
 
         let table = $('#dttbls').DataTable({
+            scrollX: true,
             scrollY: '50vh',
             buttons: dtButtons,
             processing: true,
@@ -101,64 +105,50 @@
             responsive: true,
             ajax: '{{ route('orders.index') }}',
             columns: [{
-                    data: 'placeholder',
-                    name: 'placeholder'
-                },
-                {
-                    data: 'id',
-                    name: 'id',
-                },
-                {
-                    data: 'invoice_number',
-                    name: 'invoice_number'
-                },
-                {
-                    data: 'customer_name',
-                    name: 'customer.name'
-                },
-                {
-                    data: 'user_name',
-                    name: 'user.name'
-                },
-                {
-                    data: 'tenant_name',
-                    name: 'tenant.name'
-                },
-                {
-                    data: 'company_name',
-                    name: 'company.name'
-                },
-                {
-                    data: 'payment_status',
-                    name: 'payment_status'
-                },
-                {
-                    data: 'total_price',
-                    name: 'total_price'
-                },
-                {
-                    data: 'total_discount',
-                    name: 'total_discount'
-                },
-                {
-                    data: 'amount_paid',
-                    name: 'amount_paid'
-                },
-                {
-                    data: 'note',
-                    name: 'note'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
-                },
-                {
-                    data: 'actions',
-                    name: 'actions',
-                    orderable: false,
-                    searchable: false
-                }
-            ],
+                data: 'placeholder',
+                name: 'placeholder'
+            }, {
+                data: 'id',
+                name: 'id',
+            }, {
+                data: 'invoice_number',
+                name: 'invoice_number'
+            }, {
+                data: 'customer_name',
+                name: 'customer.name'
+            }, {
+                data: 'user_name',
+                name: 'user.name'
+            }, {
+                data: 'tenant_name',
+                name: 'tenant.name'
+            }, {
+                data: 'company_name',
+                name: 'company.name'
+            }, {
+                data: 'payment_status',
+                name: 'payment_status'
+            }, {
+                data: 'total_price',
+                name: 'total_price'
+            }, {
+                data: 'total_discount',
+                name: 'total_discount'
+            }, {
+                data: 'amount_paid',
+                name: 'amount_paid'
+            }, {
+                data: 'note',
+                name: 'note'
+            }, {
+                data: 'created_at',
+                name: 'created_at'
+            }, {
+                data: 'actions',
+                name: 'actions',
+                orderable: false,
+                searchable: false
+            }],
             orderCellsTop: true,
             order: [
                 [1, 'desc']
