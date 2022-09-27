@@ -4,7 +4,17 @@
 
     </style>
 @endpush
-<div class="row">
+<div class="">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <input wire:model="search" type="text" class="form-control" placeholder="Search Product Name">
+            </div>
+        </div>
+    </div>
     <div class="col-12">
         <ul class="nav nav-tabs" role="tablist">
             <li class="nav-item">
@@ -28,14 +38,7 @@
 
     <div class="tab-content">
         <div id="ayamgoreng" class=" tabcontent col-12 tab-pane active">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <h4>Product</h4>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <input wire:model="search" type="text" class="form-control" placeholder="Search Product Name">
-                </div>
-            </div>
+
             <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 mt-2">
                 @foreach ($products as $product)
                     <div class="col mb-4">
@@ -57,14 +60,6 @@
         </div>
 
         <div id="minuman" class=" tabcontent col-12 tab-pane fade">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <h4>Product</h4>
-                </div>
-                <div class="col-md-6 col-sm-12">
-                    <input wire:model="search" type="text" class="form-control" placeholder="Search Product Name">
-                </div>
-            </div>
             <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 mt-2">
                 @foreach ($products as $product)
                     <div class="col mb-4">
