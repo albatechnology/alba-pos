@@ -20,10 +20,10 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-lg-8 col-12">
+                    <div class="col-lg-9 col-12">
                         @livewire('cashier.product', ['productCategories' => $productCategories, 'cart' => $cart])
                     </div>
-                    <div class="col-lg-4 col-12 bg-white rounded shadow">
+                    <div class="col-lg-3 col-12 bg-white rounded shadow" >
                         <div id="container-cart">
                             <div class="text-center mt-5">
                                 <div class="spinner-border" role="status">
