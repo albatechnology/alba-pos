@@ -4,7 +4,7 @@
             <p class="font-weight-bold">{{ $detail->product->name }}</p>
             <div class="d-flex justify-content-between">
                 <div class="w-75">
-                    <input name="add[{{$detail->product_id}}]" type="number" value="{{ $detail->quantity }}" min="1" max="{{ $detail->getStock() }}" onchange="plusMinus({{$detail->product_id}}, this.value)">
+                    <input name="add[{{$detail->product_id}}]" type="number" class="btnPlusMinus" value="{{ $detail->quantity }}" min="1" max="{{ $detail->getStock() }}" onchange="plusMinus({{$detail->product_id}}, this.value)">
                 </div>
                 <button class="btn btn-danger removeItem" onclick="removeCartDetail({{ $detail->id . ', ' . $detail->product_id }})"><i class="fa fa-trash"></i></button>
             </div>
@@ -30,7 +30,7 @@
     </tr>
 </table>
 <script>
-    $("input[type='number']").inputSpinner({
+    $(".btnPlusMinus").inputSpinner({
         buttonsOnly: true
     });
 </script>

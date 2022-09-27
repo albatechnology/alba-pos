@@ -36,12 +36,12 @@
                                 @csrf
                                 <div class="form-group">
                                     <label>Additional Discount</label>
-                                    <input type="text" name="additional_discount" class="form-control" type="number"
+                                    <input type="number" name="additional_discount" class="form-control"
                                         min="0">
                                 </div>
                                 <div class="form-group">
                                     <label class="required">Pay</label>
-                                    <input type="text" name="amount_paid" class="form-control" type="number"
+                                    <input type="number" name="amount_paid" class="form-control"
                                         min="0" required>
                                 </div>
                                 <div class="form-group">
