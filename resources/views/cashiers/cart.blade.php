@@ -20,10 +20,10 @@
         <td>Sub Total</td>
         <td align="right">{{ number_format($sub_total_price) }}</td>
     </tr>
-    <tr>
+    {{-- <tr>
         <td>Tax</td>
         <td align="right">{{ number_format($total_tax) }}</td>
-    </tr>
+    </tr> --}}
     <tr>
         <td>Total</td>
         <td align="right">{{ number_format($total_price) }}</td>
