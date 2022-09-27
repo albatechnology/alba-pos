@@ -253,9 +253,9 @@
     <script>
         window.print();
 
-        setTimeout(function (){
-            window.onafterprint = window.close;
-        }, 4000);
+        // setTimeout(function (){
+        //     window.onafterprint = window.close;
+        // }, 4000);
 
         // window.onafterprint = window.close;
     </script>
