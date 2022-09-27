@@ -1,3 +1,9 @@
+@push('css')
+    <style>
+
+
+    </style>
+@endpush
 <div class="row">
     <div class="col-12">
         <h4>Product Categories</h4>
@@ -20,14 +26,15 @@
                 <input wire:model="search" type="text" class="form-control" placeholder="Search Product Name">
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-4 mt-2">
+        <div class="row row-cols-1 row-cols-md-4 row-cols-sm-3 mt-2">
             @foreach ($products as $product)
                 <div class="col mb-4">
                     <div wire:click="setSelectedProductIds({{ $product->id }})"
                         class="card h-100 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
-                        <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top" alt="...">
+                        {{-- <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top" alt="..."> --}}
+                        <img src="https://asset.kompas.com/crops/-f5twHSFFkYYRxy3Cg9VytJ1i5M=/0x298:750x798/375x240/data/photo/2020/09/25/5f6da653c1860.jpg" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-title font-weight-bold">{{ $product->name }}</h5>
+                            <h5 class="card-title font-weight-bold", style="font-size: 16px">{{ $product->name }}</h5>
                             <br>
                             <h5>Rp. {{ number_format($product->price) }}</h5>
                             <h5>ID: {{ $product->id }}</h5>
