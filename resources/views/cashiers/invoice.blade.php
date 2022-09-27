@@ -252,11 +252,12 @@
     </div>
     <script>
         window.print();
-        // window.onafterprint = window.close;
 
-setTimeout(function (){
-    window.close;
-}, 2000);
+        setTimeout(function (){
+            window.close;
+        }, 4000);
+
+        window.onafterprint = window.close;
     </script>
 </body>
 
