@@ -14,9 +14,12 @@ class CashierController extends Controller
 {
     public function index()
     {
+        if (!activeTenant()) {
+            alert()->warning('Warning', 'Please choose a tenant');
+            return redirect()->back();
+        }
         $productCategories = ProductCategory::tenanted()->get();
         $cart = CartService::getMyCart() ?? new Cart();
-
         $paymentTypes = PaymentType::tenanted()->pluck('name', 'id')->prepend('- Select Payment -', '');
 
         return view('cashiers.index', ['productCategories' => $productCategories, 'paymentTypes' => $paymentTypes, 'cart' => $cart]);

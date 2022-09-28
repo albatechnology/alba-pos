@@ -33,4 +33,8 @@
     $(".btnPlusMinus").inputSpinner({
         buttonsOnly: true
     });
+
+    // $(document).on('mouseleave', '.btn-decrement', function () {
+    //     alert('aw');
+    // });
 </script>
