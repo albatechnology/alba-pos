@@ -11,7 +11,7 @@
     <title>Receipt</title>
 </head>
 
-<body style="padding-top: 0 !important; padding-bottom:0 !important">
+<body style="padding-top: 0 !important; padding-bottom:0 !important; margin-top: -2rem">
 
     <!-- <button onclick="generatePDF()">Print</button> -->
     <div id="invoice-POS">
