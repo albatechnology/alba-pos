@@ -1,5 +1,4 @@
 @if ($cart)
-    <div  style="overflow-y: scroll; height: 50vh">
         @forelse ($cart?->cartDetails as $detail)
             <div class="card p-2 shadow">
                 <p class="font-weight-bold">{{ $detail->product->name }}</p>
@@ -13,7 +12,6 @@
         @empty
             <div class="alert alert-warning">Cart is empty</div>
         @endforelse
-    </div>
 @else
     <div class="alert alert-warning">Cart is empty</div>
 @endif

@@ -41,7 +41,7 @@
                     </div>
                     <div class="col-lg-3 col-12 bg-white rounded shadow">
                         <div class="sidebar-item">
-                            <div class="make-me-sticky">
+                            <div class="make-me-sticky"  style="overflow-y: scroll; height: 100vh">
                                 <div id="container-cart">
                                     <div class="text-center mt-5">
                                         <div class="spinner-border" role="status">
@@ -52,25 +52,25 @@
                                 <div id="container-input-payment">
                                     <form id="formProceedPayment">
                                         @csrf
-                                        <div class="form-group mb-0 ">
-                                            <label class="col-form-label col-form-label-sm">Additional Discount</label>
-                                            <input type="number" name="additional_discount" class="form-control form-control-sm"
+                                        <div class="form-group">
+                                            <label>Additional Discount</label>
+                                            <input type="number" name="additional_discount" class="form-control"
                                                 min="0">
                                         </div>
-                                        <div class="form-group mb-0">
-                                            <label class="required col-form-label col-form-label-sm">Pay</label>
-                                            <input type="number" name="amount_paid" class="form-control form-control-sm" min="0"
+                                        <div class="form-group">
+                                            <label class="required">Pay</label>
+                                            <input type="number" name="amount_paid" class="form-control" min="0"
                                                 required>
                                         </div>
-                                        <div class="form-group mb-4">
-                                            <label class="required col-form-label col-form-label-sm">Payment Type</label>
-                                            <select name="payment_type_id" class="form-control form-control-sm" required>
+                                        <div class="form-group">
+                                            <label class="required">Payment Type</label>
+                                            <select name="payment_type_id" class="form-control" required>
                                                 @foreach ($paymentTypes as $id => $name)
                                                     <option value="{{ $id }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-block">Proceed Payment</button>
+                                        <button type="submit" class="btn btn-primary btn-block mb-4">Proceed Payment</button>
                                     </form>
 
                                     <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
