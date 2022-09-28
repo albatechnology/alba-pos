@@ -11,7 +11,7 @@
     <title>Receipt</title>
 </head>
 
-<body>
+<body style="padding-top: 0 !important; padding-bottom:0 !important">
 
     <!-- <button onclick="generatePDF()">Print</button> -->
     <div id="invoice-POS">
@@ -199,7 +199,8 @@
                         <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 30px">Grand Total</h2>
                     </td>
                     <td class="">
-                        <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
+                        <h2 class="itemprice"
+                            style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
                             {{ number_format($order->total_price) }}</h2>
                     </td>
                 </tr>
@@ -212,7 +213,8 @@
                         <h2 style="font-size: 16px; margin: 0; margin-top: 5px; margin-left: 30px">Tunai</h2>
                     </td>
                     <td class=" table-payment">
-                        <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-top: 5px; margin-right: 8px; text-align:right">
+                        <h2 class="itemprice"
+                            style="font-size: 16px; margin: 0; margin-top: 5px; margin-right: 8px; text-align:right">
                             {{ number_format($order->amount_paid) }}</h2>
                     </td>
                 </tr>
@@ -225,7 +227,8 @@
                         <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 30px">Change</h2>
                     </td>
                     <td class="">
-                        <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
+                        <h2 class="itemprice"
+                            style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
                             {{ number_format($order->amount_paid - $order->total_price) }}</h2>
                     </td>
                 </tr>
