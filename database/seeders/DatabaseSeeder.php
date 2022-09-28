@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProductSeeder::class,
             PaymentSeeder::class,
+            StockSeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();
 

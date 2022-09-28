@@ -1,3 +1,19 @@
+@push('css')
+    <style>
+        .sidebar-item {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .make-me-sticky {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            padding: 0 15px;
+        }
+    </style>
+@endpush
 @extends('layouts.app')
 @section('content')
     <div class="content-wrapper">
@@ -24,43 +40,48 @@
                         @livewire('cashier.product', ['productCategories' => $productCategories, 'cart' => $cart])
                     </div>
                     <div class="col-lg-3 col-12 bg-white rounded shadow">
-                        <div id="container-cart">
-                            <div class="text-center mt-5">
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="container-input-payment">
-                            <form id="formProceedPayment">
-                                @csrf
-                                <div class="form-group">
-                                    <label>Additional Discount</label>
-                                    <input type="number" name="additional_discount" class="form-control"
-                                        min="0">
-                                </div>
-                                <div class="form-group">
-                                    <label class="required">Pay</label>
-                                    <input type="number" name="amount_paid" class="form-control"
-                                        min="0" required>
-                                </div>
-                                <div class="form-group">
-                                    <label class="required">Payment Type</label>
-                                    <select name="payment_type_id" class="form-control" required>
-                                        @foreach ($paymentTypes as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Proceed Payment</button>
-                            </form>
-
-                            <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
-                                tabindex="-1" aria-labelledby="modalPaymentLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
+                        <div class="sidebar-item">
+                            <div class="make-me-sticky">
+                                <div id="container-cart">
+                                    <div class="text-center mt-5">
+                                        <div class="spinner-border" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
                                     </div>
                                 </div>
+                                <div id="container-input-payment">
+                                    <form id="formProceedPayment">
+                                        @csrf
+                                        <div class="form-group mb-0 ">
+                                            <label class="col-form-label col-form-label-sm">Additional Discount</label>
+                                            <input type="number" name="additional_discount" class="form-control form-control-sm"
+                                                min="0">
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="required col-form-label col-form-label-sm">Pay</label>
+                                            <input type="number" name="amount_paid" class="form-control form-control-sm" min="0"
+                                                required>
+                                        </div>
+                                        <div class="form-group mb-4">
+                                            <label class="required col-form-label col-form-label-sm">Payment Type</label>
+                                            <select name="payment_type_id" class="form-control form-control-sm" required>
+                                                @foreach ($paymentTypes as $id => $name)
+                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Proceed Payment</button>
+                                    </form>
+
+                                    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
+                                        tabindex="-1" aria-labelledby="modalPaymentLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -82,7 +103,10 @@
                     </div>`
                 );
 
-                $(this).css({'opacity': 1, 'pointer-events': 'initial'}).html(html);
+                $(this).css({
+                    'opacity': 1,
+                    'pointer-events': 'initial'
+                }).html(html);
             });
         }
 
@@ -94,7 +118,10 @@
         }
 
         function plusMinus(productId, qty) {
-            $('#container-cart').css({'opacity': 0.4, 'pointer-events': 'none'})
+            $('#container-cart').css({
+                'opacity': 0.4,
+                'pointer-events': 'none'
+            })
             $.post("{{ url('cashier/plus-minus') }}/" + productId + '/' + qty, function(res) {
                 refreshCart();
             })
