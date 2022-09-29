@@ -97,7 +97,7 @@
 
         let table = $('#dttbls').DataTable({
             scrollX: true,
-            scrollY: '50vh',
+            scrollY: '70vh',
             buttons: dtButtons,
             processing: true,
             serverSide: true,
