@@ -42,7 +42,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <form id="formProceedPayment">
+    <form id="orderForm">
         @csrf
         <input type="hidden" name="is_order" value="1">
         <input type="hidden" name="additional_discount" value="{{ $order->additional_discount }}">
@@ -54,7 +54,7 @@
 </div>
 <script>
     $(document).ready(function() {
-        $(document).on('submit', '#formProceedPayment', function(e) {
+        $(document).on('submit', '#orderForm', function(e) {
             e.preventDefault();
             var dataOrder = $(this).serializeArray();
             $.post("{{ route('cashier.proceedPayment') }}", dataOrder, function(res) {

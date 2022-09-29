@@ -72,14 +72,6 @@
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block mb-4">Proceed Payment</button>
                                     </form>
-
-                                    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
-                                        tabindex="-1" aria-labelledby="modalPaymentLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-scrollable">
-                                            <div class="modal-content">
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                             </div>
@@ -88,6 +80,14 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
+        tabindex="-1" aria-labelledby="modalPaymentLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+            </div>
+        </div>
     </div>
 @endsection
 @push('js')
