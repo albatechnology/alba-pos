@@ -58,17 +58,17 @@
                                                 min="0">
                                         </div>
                                         <div class="form-group">
-                                            <label class="required">Pay</label>
-                                            <input type="number" name="amount_paid" class="form-control" min="0"
-                                                required>
-                                        </div>
-                                        <div class="form-group">
                                             <label class="required">Payment Type</label>
                                             <select name="payment_type_id" class="form-control" required>
                                                 @foreach ($paymentTypes as $id => $name)
                                                     <option value="{{ $id }}">{{ $name }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="required">Pay</label>
+                                            <input type="number" name="amount_paid" class="form-control" min="0"
+                                                required>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-block mb-4">Proceed Payment</button>
                                     </form>
