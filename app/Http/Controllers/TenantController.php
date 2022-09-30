@@ -57,7 +57,7 @@ class TenantController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:tenants,name',
+            'name' => 'required',
             'company_id' => 'required|exists:companies,id',
         ]);
 
@@ -76,7 +76,7 @@ class TenantController extends Controller
     public function update(Request $request, Tenant $tenant)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:tenants,name,' . $tenant->id,
+            'name' => 'required',
             'company_id' => 'required|exists:companies,id',
         ]);
         $tenant->update($validated);

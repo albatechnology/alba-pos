@@ -33,6 +33,9 @@ class OrderController extends Controller
                 ->editColumn('invoice_number', function ($row) {
                     return $row->invoice_number ?? '';
                 })
+                ->editColumn('payment_status', function ($row) {
+                    return $row->payment_status->description ?? '';
+                })
                 ->addColumn('company_name', function ($row) {
                     return $row->company?->name ?? '';
                 })

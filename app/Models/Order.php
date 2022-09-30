@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrderPaymentStatus;
 use App\Enums\OrderStatus;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
@@ -38,6 +39,7 @@ class Order extends Model implements TenantedInterface
         'customer_id' => 'integer',
         'discount_id' => 'integer',
         'status' => OrderStatus::class,
+        'payment_status' => OrderPaymentStatus::class,
         'total_discount' => 'integer',
         'total_price' => 'integer',
         'amount_paid' => 'integer',

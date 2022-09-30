@@ -32,10 +32,10 @@ class UpdateProductRequest extends FormRequest
                 if (!$company) $fail('Invalid company');
             }],
             'name' => ['required', function ($attribute, $value, $fail) use ($oldProduct) {
-                if ($oldProduct->name != $value) {
-                    $product = Product::where('company_id', $this->company_id)->where('name', $value)->first();
-                    if ($product) $fail('The product ' . $value . ' is already in company ' . $product->company->name);
-                }
+                // if ($oldProduct->name != $value) {
+                //     $product = Product::where('company_id', $this->company_id)->where('name', $value)->first();
+                //     if ($product) $fail('The product ' . $value . ' is already in company ' . $product->company->name);
+                // }
             }],
             'price' => 'required|integer|min:0',
             'uom' => 'required|integer|min:1',
