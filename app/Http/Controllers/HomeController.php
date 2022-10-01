@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\PermissionsHelper;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class HomeController extends Controller
 {
@@ -19,6 +21,20 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    public function tess($array, $key)
+    {
+        $eek = collect($array)->map(function ($permission, $key) {
+            if (is_array($permission)) {
+                return collect($permission)->collapse()->prepend($key)->all();
+                // return $this->tess($permission, $key);
+            } else {
+                return collect($permission)->collapse()->prepend($key)->all();
+                // return collect($array)->collapse()->prepend($key)->all();
+            }
+        });
+        return $eek;
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -27,9 +43,9 @@ class HomeController extends Controller
     public function index()
     {
         $orderSummary = Order::tenanted()->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
-        $topProduct = Product::tenanted()->whereHas('orders', function($q){
+        $topProduct = Product::tenanted()->whereHas('orders', function ($q) {
             $q->whereOrderDeal();
-        })->withSum('orderDetails','quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
+        })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
 
 
         // $topProduct = OrderDetail::tenanted()->whereHas('order', function($q){

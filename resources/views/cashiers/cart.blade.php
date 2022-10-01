@@ -10,10 +10,10 @@
                 </div>
             </div>
         @empty
-            <div class="alert alert-warning">Cart is empty</div>
+            <div class="alert alert-warning mt-4">Cart is empty</div>
         @endforelse
 @else
-    <div class="alert alert-warning">Cart is empty</div>
+    <div class="alert alert-warning mt-4">Cart is empty</div>
 @endif
 <table class="table table-borderless">
     <tr>
@@ -34,7 +34,6 @@
         buttonsOnly: true
     });
 
-    // $(document).on('mouseleave', '.btn-decrement', function () {
-    //     alert('aw');
-    // });
+    totalPrice = {{ $total_price }};
+    calculatePayment();
 </script>

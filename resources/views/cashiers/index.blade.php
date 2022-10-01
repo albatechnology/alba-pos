@@ -6,6 +6,7 @@
             width: 100%;
             height: 100%;
         }
+
         .make-me-sticky {
             position: -webkit-sticky;
             position: sticky;
@@ -41,8 +42,8 @@
                     </div>
                     <div class="col-lg-3 col-12 bg-white rounded shadow">
                         <div class="sidebar-item">
-                            <div class="make-me-sticky"  style="overflow-y: scroll; height: 100vh">
-                                <div id="container-cart">
+                            <div class="make-me-sticky" style="overflow-y: scroll; height: 100vh">
+                                <div id="container-cart" class="mt-2">
                                     <div class="text-center mt-5">
                                         <div class="spinner-border" role="status">
                                             <span class="sr-only">Loading...</span>
@@ -54,8 +55,8 @@
                                         @csrf
                                         <div class="form-group">
                                             <label>Additional Discount</label>
-                                            <input type="number" name="additional_discount" class="form-control"
-                                                min="0">
+                                            <input type="number" name="additional_discount" id="additional_discount"
+                                                class="form-control" min="0">
                                         </div>
                                         <div class="form-group">
                                             <label class="required">Payment Type</label>
@@ -67,10 +68,11 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="required">Pay</label>
-                                            <input type="number" name="amount_paid" class="form-control" min="0"
-                                                required>
+                                            <input type="number" name="amount_paid" id="amount_paid" class="form-control"
+                                                min="0" required>
                                         </div>
-                                        <button type="submit" class="btn btn-primary btn-block mb-4">Proceed Payment</button>
+                                        <button type="submit" id="btnProceedPayment" class="btn btn-primary btn-block mb-4" disabled>Proceed
+                                            Payment</button>
                                     </form>
                                 </div>
 
@@ -82,8 +84,8 @@
         </section>
     </div>
 
-    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false"
-        tabindex="-1" aria-labelledby="modalPaymentLabel" aria-hidden="true">
+    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false" tabindex="-1"
+        aria-labelledby="modalPaymentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
             </div>
@@ -93,6 +95,10 @@
 @push('js')
     <script src="https://shaack.com/projekte/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
     <script>
+        var totalPrice = 0;
+        var additionalDiscount = 0;
+        var amountPaid = 0;
+
         function refreshCart() {
             $("#container-cart").load("{{ route('cashier.cart') }}", function(html) {
                 $(this).html(
@@ -127,6 +133,21 @@
             })
         }
 
+        function calculatePayment() {
+            var additionalDiscount = parseInt($('#additional_discount').val()) || 0;
+            var amountPaid = parseInt($('#amount_paid').val()) || 0;
+
+            console.log('calculatePayment totalPrice', totalPrice)
+            console.log('additional_discount',additionalDiscount);
+            console.log('amount_paid', amountPaid);
+
+            if((amountPaid + additionalDiscount) >= totalPrice){
+                $('#btnProceedPayment').attr('disabled', false);
+            } else {
+                $('#btnProceedPayment').attr('disabled', true);
+            }
+        }
+
         window.addEventListener('refreshCart', event => {
             refreshCart();
         });
@@ -134,10 +155,19 @@
         $(document).ready(function() {
             refreshCart();
 
+            $('#amount_paid, #additional_discount').on('keyup', function() {
+                calculatePayment();
+            })
+
             $('#formProceedPayment').on('submit', function(e) {
                 e.preventDefault();
-                var data = $(this).serializeArray();
 
+                var additionalDiscount = parseInt($('#additional_discount').val()) || 0;
+                var amountPaid = parseInt($('#amount_paid').val()) || 0;
+
+                console.log('additionalDiscount', additionalDiscount);
+                console.log('amountPaid', amountPaid);
+                var data = $(this).serializeArray();
                 $.post("{{ route('cashier.proceedPayment') }}", data, function(res) {
                     $('#modalPayment .modal-content').html(res)
                     $('#modalPayment').modal('show');

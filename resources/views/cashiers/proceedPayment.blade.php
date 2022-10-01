@@ -18,10 +18,10 @@
             <td>Sub Total</td>
             <td align="right">{{ number_format($order->original_price) }}</td>
         </tr>
-        <tr>
+        {{-- <tr>
             <td>Tax</td>
             <td align="right">{{ number_format($order->total_tax) }}</td>
-        </tr>
+        </tr> --}}
         <tr>
             <td>Additional Discount</td>
             <td align="right">{{ number_format($order->additional_discount) }}</td>
