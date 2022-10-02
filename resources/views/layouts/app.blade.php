@@ -287,8 +287,8 @@
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
-<script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-<script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script>
+{{-- <script src="{{ asset('plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('plugins/pdfmake/pdfmake.min.js') }}"></script> --}}
 <script>
         $('.form-loading').on('submit', function() {
             $(this).find(':submit').attr('disabled', true).text('Loading...');
@@ -318,8 +318,9 @@
                 selector: 'td:first-child'
             },
             lengthMenu: [
-                [10, 25, 50, 100, 500, 1000, 2500, -1],
-                [10, 25, 50, 100, 500, 1000, 2500, "All"]
+                [10, 25, 50, 100, 500, 1000],
+                [10, 25, 50, 100, 500, 1000]
+                // [10, 25, 50, 100, 500, 1000, 2500, "All"]
             ],
             order: [],
             pageLength: 100,
@@ -345,13 +346,13 @@
                         columns: ':visible'
                     }
                 },
-                {
-                    extend: 'copy',
-                    className: 'btn-default',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
+                // {
+                //     extend: 'copy',
+                //     className: 'btn-default',
+                //     exportOptions: {
+                //         columns: ':visible'
+                //     }
+                // },
                 {
                     extend: 'csv',
                     className: 'btn-default',
@@ -359,13 +360,13 @@
                         columns: ':visible'
                     }
                 },
-                {
-                    extend: 'pdf',
-                    className: 'btn-default',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                },
+                // {
+                //     extend: 'pdf',
+                //     className: 'btn-default',
+                //     exportOptions: {
+                //         columns: ':visible'
+                //     }
+                // },
                 {
                     extend: 'print',
                     className: 'btn-default',
@@ -373,13 +374,13 @@
                         columns: ':visible'
                     }
                 },
-                {
-                    extend: 'colvis',
-                    className: 'btn-default',
-                    exportOptions: {
-                        columns: ':visible'
-                    }
-                }
+                // {
+                //     extend: 'colvis',
+                //     className: 'btn-default',
+                //     exportOptions: {
+                //         columns: ':visible'
+                //     }
+                // }
             ]
         });
 

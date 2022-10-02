@@ -80,7 +80,7 @@ trait TenantedTrait
             $companies = tenancy()->getMyAllCompanies();
             return $query->whereIn('company_id', $companies->pluck('id'));
         } elseif (method_exists(static::class, 'tenant')) {
-            return $query->whereIn('id', $tenants->pluck('id'));
+            return $query->whereIn('tenant_id', $tenants->pluck('id'));
         } elseif (method_exists(static::class, 'tenants')) {
             return $query->whereHas('tenants', fn ($q) => $q->whereIn('id', $tenants->pluck('id')));
         } else {

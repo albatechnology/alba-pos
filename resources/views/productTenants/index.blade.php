@@ -46,9 +46,7 @@
         </section>
     </div>
 @endsection
-@section('js')
-    @includeIf('layouts.includes.datatableScript')
-@endsection
+
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
@@ -95,7 +93,7 @@
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route('product-tenants.index') }}',
+            ajax: '{{ route('products.tenants.index', $product->id) }}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'
@@ -170,7 +168,7 @@
 
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('products') }}/` + id, {
+                $.post(`{{ url('products/'.$product->id.'/tenants') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {

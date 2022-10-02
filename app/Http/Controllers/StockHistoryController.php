@@ -10,7 +10,7 @@ class StockHistoryController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:stocks_histories_access', ['only' => 'index']);
+        $this->middleware('permission:stock_histories_access', ['only' => 'index']);
     }
 
     /**
@@ -41,8 +41,8 @@ class StockHistoryController extends Controller
                     return $row->stock?->id ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    // $editGate      = 'stocks-histories-edit';
-                    $crudRoutePart = 'stocks-histories';
+                    // $editGate      = 'stock-histories-edit';
+                    $crudRoutePart = 'stock-histories';
                     return view('layouts.includes.datatablesActions', compact('row', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])

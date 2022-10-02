@@ -66,6 +66,20 @@ class PermissionsHelper
                     'tenants_edit',
                     'tenants_delete',
                 ],
+
+                'payment_categories_access' => [
+                    'payment_categories_view',
+                    'payment_categories_create',
+                    'payment_categories_edit',
+                    'payment_categories_delete',
+                ],
+
+                'payment_types_access' => [
+                    'payment_types_view',
+                    'payment_types_create',
+                    'payment_types_edit',
+                    'payment_types_delete',
+                ],
             ],
 
             'customer_management_access' => [
@@ -99,41 +113,25 @@ class PermissionsHelper
                 ],
                 'product_tenants_access' => [
                     'product_tenants_view',
-                    // 'product_tenants_create',
+                    'product_tenants_create',
                     'product_tenants_edit',
-                    // 'product_tenants_delete',
-                ],
-            ],
-
-            'payment_management_access' => [
-                'payment_categories_access' => [
-                    'payment_categories_view',
-                    'payment_categories_create',
-                    'payment_categories_edit',
-                    'payment_categories_delete',
-                ],
-
-                'payment_types_access' => [
-                    'payment_types_view',
-                    'payment_types_create',
-                    'payment_types_edit',
-                    'payment_types_delete',
+                    'product_tenants_delete',
                 ],
             ],
 
             'warehouse_management_access' => [
                 'stocks_access' => [
                     'stocks_view',
-                    // 'stocks_create',
+                    'stocks_create',
                     'stocks_edit',
-                    // 'stocks_delete',
+                    'stocks_delete',
                 ],
 
-                'stocks_history_access' => [
-                    'stocks_history_view',
-                    // 'stocks_history_create',
-                    'stocks_history_edit',
-                    'stocks_history_delete',
+                'stock_histories_access' => [
+                    'stock_histories_view',
+                    'stock_histories_create',
+                    'stock_histories_edit',
+                    'stock_histories_delete',
                 ]
             ],
 
@@ -162,9 +160,9 @@ class PermissionsHelper
 
             'profiles_access' => [
                 'profiles_view',
-                // 'profiles_create',
+                'profiles_create',
                 'profiles_edit',
-                // 'profiles_delete',
+                'profiles_delete',
             ],
         ];
     }
@@ -272,11 +270,11 @@ class PermissionsHelper
     //         // 'stocks_create',
     //         'stocks_edit',
     //         // 'stocks_delete',
-    //         'stocks_history_access',
-    //         'stocks_history_view',
-    //         // 'stocks_history_create',
-    //         'stocks_history_edit',
-    //         'stocks_history_delete',
+    //         'stock_histories_access',
+    //         'stock_histories_view',
+    //         // 'stock_histories_create',
+    //         'stock_histories_edit',
+    //         'stock_histories_delete',
 
     //         'transaction_management_access',
     //         'orders_access',

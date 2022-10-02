@@ -78,16 +78,14 @@
         </section>
     </div>
 @endsection
-@section('js')
-    @includeIf('layouts.includes.datatableScript')
-@endsection
+
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('stocks-histories_delete')
+        @can('stock-histories_delete')
             let deleteButton = {
                 text: 'Delete selected',
-                url: "{{ route('stocks-histories.massDestroy') }}",
+                url: "{{ route('stock-histories.massDestroy') }}",
                 className: 'btn-danger',
                 action: function(e, dt, node, config) {
                     var ids = $.map(dt.rows({
@@ -126,8 +124,8 @@
             serverSide: true,
             searching: true,
             responsive: true,
-            // ajax: '{{ route('stocks-histories.index') }}',
-            ajax: '{{ route('stocks-histories.index') }}?stock_id={{ $stock->id}}',
+            // ajax: '{{ route('stock-histories.index') }}',
+            ajax: '{{ route('stock-histories.index') }}?stock_id={{ $stock->id}}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'
@@ -210,7 +208,7 @@
 
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('stocks-histories') }}/` + id, {
+                $.post(`{{ url('stock-histories') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {

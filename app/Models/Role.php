@@ -10,18 +10,24 @@ class Role extends ModelsRole implements TenantedInterface
     public $table = 'roles';
     protected $guarded = [];
 
+    protected static function booted()
+    {
+        static::retrieved(function ($model) {
+        });
+    }
+
     public function scopeTenanted($query)
     {
         $hasActiveTenant = tenancy()->getActiveTenant();
-        if ($hasActiveTenant) return $query->where('company_id', $hasActiveTenant->company->id);
+        if ($hasActiveTenant) $query->where('company_id', $hasActiveTenant->company->id);
 
         $hasActiveCompany = tenancy()->getActiveCompany();
-        if ($hasActiveTenant) return $query->where('company_id', $hasActiveCompany->id);
+        if ($hasActiveCompany) $query->where('company_id', $hasActiveCompany->id);
 
         $user = user();
         if ($user->is_super_admin) return $query;
 
-        return $query->whereIn('company_id', tenancy()->getMyAllCompanies()?->pluck('id') ?? []);
+        return $query->wherePublicRole()->whereIn('company_id', tenancy()->getMyAllCompanies()?->pluck('id') ?? []);
     }
 
     public function scopeFindTenanted($query, int $id)
@@ -32,5 +38,10 @@ class Role extends ModelsRole implements TenantedInterface
     public function company()
     {
         return $this->belongsTo(Company::class, 'company_id');
+    }
+
+    public function scopeWherePublicRole($query)
+    {
+        return $query->where('company_id', '!=', 1);
     }
 }

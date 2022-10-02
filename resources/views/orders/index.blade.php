@@ -53,9 +53,7 @@
         </section>
     </div>
 @endsection
-@section('js')
-    @includeIf('layouts.includes.datatableScript')
-@endsection
+
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)

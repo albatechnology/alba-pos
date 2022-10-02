@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Enums\UserLevelEnum;
-use App\Models\Company;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -11,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class UserSeeder extends Seeder
+class UserSeederCopy extends Seeder
 {
     /**
      * Run the database seeds.
@@ -20,14 +19,10 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $albaCompany = Company::create([
-            'name' => 'PT. Alba Digital Teknologi',
-        ]);
-
         $superAdminRole = Role::create([
             'name' => 'super-admin',
             'guard_name' => 'web',
-            'company_id' => $albaCompany->id
+            'company_id' => 1
         ]);
 
         $adminRole = Role::create([
@@ -49,7 +44,7 @@ class UserSeeder extends Seeder
             'role_id' => $superAdminRole->id,
             'model_type' => get_class($superAdmin),
             'model_id' => $superAdmin->id,
-            'company_id' => $albaCompany->id,
+            'company_id' => 1,
         ]);
 
         $admin = User::create([
@@ -63,7 +58,7 @@ class UserSeeder extends Seeder
             'role_id' => $adminRole->id,
             'model_type' => get_class($admin),
             'model_id' => $admin->id,
-            'company_id' => $albaCompany->id,
+            'company_id' => 1,
         ]);
     }
 }

@@ -26,7 +26,14 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
+
+            $user = user();
+            if($user->hasRole(['super-admin', 'admin'])){
+                $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
+            } else {
+                $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
+            }
+
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
@@ -46,12 +53,12 @@ class ProductController extends Controller
                     return $html;
                 })
                 ->addColumn('actions', function ($row) {
-                    $tenantGate    = 'products_tenant';
+                    $extraActions  = '<a class="btn btn-warning btn-sm" href="' . route('products.tenants.index', $row->id) . '">Tenant Product</a>';
                     $viewGate      = 'products_show';
                     $editGate      = 'products_edit';
                     $deleteGate    = 'products_delete';
                     $crudRoutePart = 'products';
-                    return view('layouts.includes.datatablesActions', compact('row', 'tenantGate', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
                 })
                 ->rawColumns(['placeholder', 'actions', 'product_categories'])
                 ->make(true);
@@ -79,9 +86,9 @@ class ProductController extends Controller
 
             if ($file = $request->file('image')) {
                 $product
-                ->addMedia($file)
-                ->usingName(str_replace(' ','-',$request->name))
-                ->toMediaCollection('products');
+                    ->addMedia($file)
+                    ->usingName(str_replace(' ', '-', $request->name))
+                    ->toMediaCollection('products');
             }
         }
         alert()->success('Success', 'Data created successfully');
@@ -109,7 +116,7 @@ class ProductController extends Controller
         if ($file = $request->file('image')) {
             $product
                 ->addMedia($file)
-                ->usingName(str_replace(' ','-',$request->name))
+                ->usingName(str_replace(' ', '-', $request->name))
                 ->toMediaCollection('products');
         }
 

@@ -28,7 +28,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::with(['companies', 'tenants', 'roles']);
+            $query = User::tenanted()->where('id', '!=', user()->id)->with(['companies', 'tenants', 'roles']);
             $table = Datatables::eloquent($query);
             $table->addColumn('companies', function ($row) {
                 $html = '';
@@ -73,7 +73,7 @@ class UserController extends Controller
                 ));
             });
 
-            $table->rawColumns(['placeholder', 'actions', 'companies', 'tenants','roles']);
+            $table->rawColumns(['placeholder', 'actions', 'companies', 'tenants', 'roles']);
 
             return $table->make(true);
         }
@@ -83,7 +83,7 @@ class UserController extends Controller
     public function create()
     {
         $companies = Company::tenanted()->pluck('name', 'id');
-        $roles = Role::pluck('name', 'id')->prepend('- Select Role -', '');
+        $roles = Role::tenanted()->pluck('name', 'id')->prepend('- Select Role -', '');
         return view('users.create', ['companies' => $companies, 'roles' => $roles]);
     }
 
@@ -112,13 +112,13 @@ class UserController extends Controller
         if ($file = $request->file('image')) {
             $user
                 ->addMedia($file)
-                ->usingName(str_replace(' ','-',$request->name))
+                ->usingName(str_replace(' ', '-', $request->name))
                 ->toMediaCollection('users');
         }
 
         $user->companies()->sync($request->company_ids ?? []);
         $user->tenants()->sync($request->tenant_ids ?? []);
-        foreach($request->company_ids as $company_id){
+        foreach ($request->company_ids as $company_id) {
             $user->roles()->syncWithPivotValues($request->role_id, ['company_id' => $company_id]);
         }
 
@@ -139,8 +139,9 @@ class UserController extends Controller
         $tenants = tenancy()->getTenants()->pluck('name', 'id');
         $userTenants = $user->tenants()->pluck('id')->all();
 
-        $roles = Role::pluck('name', 'id')->prepend('- Select Role -', '');
+        $roles = Role::tenanted()->pluck('name', 'id')->prepend('- Select Role -', '');
         $userRole = DB::table('model_has_roles')->where('model_type', 'App\Models\User')->where('model_id', $user->id)->first();
+
         return view('users.edit', ['user' => $user, 'companies' => $companies, 'userCompanies' => $userCompanies, 'tenants' => $tenants, 'userTenants' => $userTenants, 'roles' => $roles, 'userRole' => $userRole]);
     }
 
@@ -162,7 +163,7 @@ class UserController extends Controller
         if ($file = $request->file('image')) {
             $user
                 ->addMedia($file)
-                ->usingName(str_replace(' ','-',$request->name))
+                ->usingName(str_replace(' ', '-', $request->name))
                 ->toMediaCollection('users');
         }
 
@@ -176,7 +177,7 @@ class UserController extends Controller
         $user->tenants()->sync($request->tenant_ids ?? []);
 
         DB::table('model_has_roles')->where('model_type', 'App\Models\User')->where('model_id', $user->id)->delete();
-        foreach($request->company_ids as $company_id){
+        foreach ($request->company_ids as $company_id) {
             $user->roles()->syncWithPivotValues($request->role_id, ['company_id' => $company_id]);
         }
 

@@ -13,15 +13,6 @@ class ProductTenant extends Model implements TenantedInterface
     public $table = 'product_tenants';
     protected $guarded = [];
 
-    public function insertProductTenant(){
-
-    }
-
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
-
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);
@@ -30,5 +21,10 @@ class ProductTenant extends Model implements TenantedInterface
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function scopeWhereProductId($query, $id)
+    {
+        return $query->where('product_id', $id);
     }
 }

@@ -37,7 +37,7 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <div class="form-group @error('permissions') has-error @enderror">
+                                    {{-- <div class="form-group @error('permissions') has-error @enderror">
                                         <label>Permissions</label>
                                         <div class="mb-1">
                                             <button type="button" class="btn btn-success btn-xs" id="btnSelectAll">Select All</button>
@@ -50,6 +50,81 @@
                                         </select>
                                         @error('permissions')
                                         <span class="form-text m-b-none text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div> --}}
+                                    <div class="form-group">
+                                        <label class="required">Permissions</label>
+                                        <div class="row">
+                                            @foreach ($permissions as $permission1)
+                                                <div class="col-md-4">
+                                                    @if ($permission1->childs->count() > 0)
+                                                        <ul style="list-style-type: none; padding: 0;">
+                                                            <li>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input name="permissions[]" class="custom-control-input"
+                                                                        type="checkbox"
+                                                                        id="permission-{{ $permission1->id }}"
+                                                                        value="{{ $permission1->id }}" @if(in_array($permission1->id, $rolePermissions)) checked @endif>
+                                                                    <label for="permission-{{ $permission1->id }}"
+                                                                        class="custom-control-label">{{ str_replace("_", " ", $permission1->name) }}</label>
+                                                                </div>
+                                                                <ul style="list-style-type: none;">
+                                                                    @foreach ($permission1->childs as $permission2)
+                                                                        <li>
+                                                                            <div class="custom-control custom-checkbox">
+                                                                                <input name="permissions[]"
+                                                                                    class="custom-control-input"
+                                                                                    type="checkbox"
+                                                                                    id="permission-{{ $permission2->id }}"
+                                                                                    value="{{ $permission2->id }}" @if(in_array($permission2->id, $rolePermissions)) checked @endif>
+                                                                                <label
+                                                                                    for="permission-{{ $permission2->id }}"
+                                                                                    class="custom-control-label">{{ str_replace("_", " ", $permission2->name) }}</label>
+                                                                            </div>
+
+                                                                            @if ($permission2->childs->count() > 0)
+                                                                                <ul style="list-style-type: none;">
+                                                                                    @foreach ($permission2->childs as $permission3)
+                                                                                        <li>
+                                                                                            <div
+                                                                                                class="custom-control custom-checkbox">
+                                                                                                <input name="permissions[]"
+                                                                                                    class="custom-control-input"
+                                                                                                    type="checkbox"
+                                                                                                    id="permission-{{ $permission3->id }}"
+                                                                                                    value="{{ $permission3->id }}" @if(in_array($permission3->id, $rolePermissions)) checked @endif>
+                                                                                                <label
+                                                                                                    for="permission-{{ $permission3->id }}"
+                                                                                                    class="custom-control-label">{{ str_replace("_", " ", $permission3->name) }}</label>
+                                                                                            </div>
+                                                                                        </li>
+                                                                                    @endforeach
+                                                                                </ul>
+                                                                            @endif
+                                                                        </li>
+                                                                    @endforeach
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    @else
+                                                        <ul style="list-style-type: none; padding: 0;">
+                                                            <li>
+                                                                <div class="custom-control custom-checkbox">
+                                                                    <input name="permissions[]" class="custom-control-input"
+                                                                        type="checkbox"
+                                                                        id="permission-{{ $permission1->id }}"
+                                                                        value="{{ $permission1->id }}" @if(in_array($permission1->id, $rolePermissions)) checked @endif>
+                                                                    <label for="permission-{{ $permission1->id }}"
+                                                                        class="custom-control-label">{{ str_replace("_", " ", $permission1->name) }}</label>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                        @error('permissions')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>

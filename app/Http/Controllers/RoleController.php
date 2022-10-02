@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -57,7 +56,8 @@ class RoleController extends Controller
     public function create()
     {
         $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
-        $permissions = Permission::pluck('name', 'id');
+        $permissions = Permission::whereNull('parent_id')->get();
+
         return view('roles.create', ['companies' => $companies, 'permissions' => $permissions]);
     }
 
@@ -84,7 +84,8 @@ class RoleController extends Controller
     {
         $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
         $rolePermissions = $role->permissions->pluck('id')->all();
-        $permissions = Permission::pluck('name', 'id');
+        $permissions = Permission::whereNull('parent_id')->get();
+
         return view('roles.edit', ['role' => $role, 'companies' => $companies, 'permissions' => $permissions, 'rolePermissions' => $rolePermissions]);
     }
 

@@ -41,18 +41,18 @@ class GeneratePermissions extends Command
 
         $permissions = PermissionsHelper::getAllPermissions();
 
-        $permissions->each(function ($permission, $key) {
+        $permissions->each(function ($permission, $key) use ($guard) {
             if (is_array($permission)) {
                 $headSubPermissions = Permission::firstOrCreate([
                     'name' => $key,
-                    'guard_name' => 'web'
+                    'guard_name' => $guard
                 ]);
 
-                $this->eek($headSubPermissions, $permission);
+                $this->generateChilds($headSubPermissions, $permission);
             } else {
                 Permission::firstOrCreate([
                     'name' => $permission,
-                    'guard_name' => 'web'
+                    'guard_name' => $guard
                 ]);
             }
         });
@@ -62,21 +62,22 @@ class GeneratePermissions extends Command
         $this->info("Successfully generating all permissions");
     }
 
-    public function eek(Permission $headSubPermissions, array $subPermissions)
+    public function generateChilds(Permission $headSubPermissions, array $subPermissions)
     {
-        collect($subPermissions)->each(function ($permission, $key) use ($headSubPermissions) {
+        $guard = $this->argument('guard');
+        collect($subPermissions)->each(function ($permission, $key) use ($headSubPermissions, $guard) {
             if (is_array($permission)) {
                 $hsp = Permission::firstOrCreate([
                     'name' => $key,
-                    'guard_name' => 'web',
+                    'guard_name' => $guard,
                     'parent_id' => $headSubPermissions->id
                 ]);
 
-                $this->eek($hsp, $permission);
+                $this->generateChilds($hsp, $permission);
             } else {
                 $hsp = Permission::firstOrCreate([
                     'name' => $permission,
-                    'guard_name' => 'web',
+                    'guard_name' => $guard,
                     'parent_id' => $headSubPermissions->id
                 ]);
             }

@@ -82,6 +82,10 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('products/massDestroy', [ProductController::class, 'massDestroy'])->name('products.massDestroy');
     $route->resource('products', ProductController::class);
 
+    $route->group(['prefix' => 'products/{product}', 'as' => 'products.'], function ($route) {
+        $route->resource('tenants', ProductTenantController::class)->only(['index', 'edit', 'update']);
+    });
+
     $route->patch('product-categories/restore', [ProductCategoryController::class, 'restore'])->name('product-categories.restore');
     $route->delete('product-categories/forceDestroy', [ProductCategoryController::class, 'forceDestroy'])->name('product-categories.forceDestroy');
     $route->delete('product-categories/massDestroy', [ProductCategoryController::class, 'massDestroy'])->name('product-categories.massDestroy');
@@ -120,12 +124,10 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('stocks/massDestroy', [StockController::class, 'massDestroy'])->name('stocks.massDestroy');
     $route->resource('stocks', StockController::class)->only(['index', 'show', 'edit', 'update']);
 
-    $route->delete('stocks-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stocks-histories.massDestroy');
-    $route->resource('stocks-histories', StockHistoryController::class)->only(['index']);
+    $route->delete('stock-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stock-histories.massDestroy');
+    $route->resource('stock-histories', StockHistoryController::class)->only(['index']);
 
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
 
     $route->resource('reports', ReportController::class)->only(['index']);
-
-    $route->resource('product-tenants', ProductTenantController::class)->only(['index', 'edit', 'update']);
 });

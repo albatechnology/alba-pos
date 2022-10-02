@@ -50,6 +50,18 @@ class User extends Authenticatable implements TenantedInterface, HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    public function scopeTenanted($query)
+    {
+        $hasActiveTenant = tenancy()->getActiveTenant();
+        if ($hasActiveTenant) return $query->whereHas('tenants', fn ($q) => $q->where('tenant_id', $hasActiveTenant->id));
+
+        $hasActiveCompany = tenancy()->getActiveCompany();
+        if ($hasActiveCompany) return $query->whereHas('companies', fn ($q) => $q->where('company_id', $hasActiveCompany->id));
+
+        $user = user();
+        return $user->is_super_admin ? $query : $query->whereHas('tenants', fn ($q) => $q->whereIn('tenant_id', tenancy()->getTenants()->pluck('id')));
+    }
+
     protected function photo(): Attribute
     {
         return Attribute::make(

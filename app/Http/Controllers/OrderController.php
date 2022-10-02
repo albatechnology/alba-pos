@@ -49,11 +49,12 @@ class OrderController extends Controller
                     return $row->customer?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
+                    $extraActions  = '<a class="btn btn-warning btn-sm" href="' . url('cashier/invoice/' . $row->id) . '" target="_blank">Print Invoice</a>';
                     $viewGate      = 'orders_show';
                     $editGate      = 'orders_edit';
                     $deleteGate    = 'orders_delete';
                     $crudRoutePart = 'orders';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -79,7 +80,8 @@ class OrderController extends Controller
         return redirect('orders');
     }
 
-    public function show(Order $order){
+    public function show(Order $order)
+    {
 
         return view('orders.show', ['order' => $order]);
     }

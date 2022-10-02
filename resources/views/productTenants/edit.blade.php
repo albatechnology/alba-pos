@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('product-tenants.index') }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="{{ route('products.tenants.index', $product->id) }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-primary">
-                            <form method="post" action="{{ route('product-tenants.update', $productTenant->id) }}" enctype="multipart/form-data" class="form-loading">
+                            <form method="post" action="{{ route('products.tenants.update', [$product->id, $productTenant->id]) }}" enctype="multipart/form-data" class="form-loading">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="product_id" value="{{ $productTenant->product_id }}">
@@ -56,6 +56,7 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                </div>
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Save</button>
                                 </div>
