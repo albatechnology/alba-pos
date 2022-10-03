@@ -39,11 +39,13 @@
                             <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid">
                             {{-- <img src="https://asset.kompas.com/crops/-f5twHSFFkYYRxy3Cg9VytJ1i5M=/0x298:750x798/375x240/data/photo/2020/09/25/5f6da653c1860.jpg" class="card-img-top" alt="..."> --}}
                             <div class="card-body p-2">
-                                <h5 class="card-title font-weight-bold", style="font-size: 14px">{{ $product->name }}</h5>
+                                <h5 class="card-title font-weight-bold" style="font-size: 14px">{{ $product->name }}</h5>
+                                <h5 class="card-title" style="font-size: 14px">{{ implode(', ', $product->productCategories->pluck('name')->all()) }}</h5>
+                                <br>
                                 <br>
                                 <p style="font-size: 14px" class="p-0 m-0">Rp. {{ number_format($product->price) }}</p>
                                 {{-- <h5>ID: {{ $product->id }}</h5> --}}
-                                <p style="font-size: 14px" wire:ignore class="p-0 m-0">Stock: {{ $product->stock }}</p>
+                                <p style="font-size: 14px" class="p-0 m-0">Stock: {{ $product->stock }}</p>
                             </div>
                         </div>
                     </div>

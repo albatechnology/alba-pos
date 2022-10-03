@@ -49,18 +49,22 @@ class Product extends Component
     public function getProduct()
     {
         $tenant = activeTenant();
+        $tenantId = $tenant->id;
         // $products = ModelsProduct::where('name', 'like', '%' . $this->search . '%');
         $products = ModelsProduct::select('products.id', 'products.name', 'product_tenants.price', 'stocks.stock')
             ->join('product_tenants', 'product_tenants.product_id', '=', 'products.id')
-            ->join('stocks', 'stocks.product_id', '=', 'products.id')
+            // ->join('stocks', 'stocks.product_id', '=', 'products.id')
+            ->join('stocks', function ($join) use ($tenantId) {
+                $join->on('stocks.product_id', '=', 'products.id')
+                    ->where('stocks.tenant_id', $tenantId);
+            })
             ->where('name', 'like', '%' . $this->search . '%')
-            ->where('product_tenants.tenant_id', $tenant->id)
-            ->where('stocks.tenant_id', $tenant->id);
+            ->where('product_tenants.tenant_id', $tenantId)
+            ->where('stocks.tenant_id', $tenantId);
 
         if (!is_null($this->selectedProductCategoryId)) {
             $products = $products->whereHas('productCategories', fn ($q) => $q->where('product_category_id', $this->selectedProductCategoryId));
         }
-        // dd($products);
         $this->products = $products->orderBy('products.id')->get();
     }
 
