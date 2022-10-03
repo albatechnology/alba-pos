@@ -1,7 +1,7 @@
 @push('css')
     <style>
         .sidebar-item {
-            position: absolute;
+            position: relative;
             top: 0;
             width: 100%;
             height: 100%;

@@ -80,6 +80,16 @@ class Product extends Model implements TenantedInterface, HasMedia
             ->sharpen(10);
     }
 
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function stock()
+    {
+        return $this->hasOne(Stock::class)->where('tenant_id', activeTenant()->id);
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);
@@ -90,15 +100,18 @@ class Product extends Model implements TenantedInterface, HasMedia
         return $this->belongsTo(ProductBrand::class);
     }
 
-    public function productCategories(){
+    public function productCategories()
+    {
         return $this->belongsToMany(ProductCategory::class, 'product_product_categories');
     }
 
-    public function orderDetails(){
+    public function orderDetails()
+    {
         return $this->hasMany(OrderDetail::class);
     }
 
-    public function orders(){
+    public function orders()
+    {
         return $this->belongsToMany(Order::class, 'order_details');
     }
 }
