@@ -16,7 +16,7 @@ class CashierController extends Controller
     {
         if (!activeTenant()) {
             alert()->warning('Warning', 'Please choose a tenant');
-            return redirect()->back();
+            return redirect('/');
         }
         $productCategories = ProductCategory::tenanted()->get();
         $cart = CartService::getMyCart() ?? new Cart();

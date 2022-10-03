@@ -61,7 +61,7 @@ class Product extends Component
             $products = $products->whereHas('productCategories', fn ($q) => $q->where('product_category_id', $this->selectedProductCategoryId));
         }
         // dd($products);
-        $this->products = $products->orderByDesc('products.id')->get();
+        $this->products = $products->orderBy('products.id')->get();
     }
 
     public function updatedSearch($value)

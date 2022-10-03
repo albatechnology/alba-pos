@@ -40,11 +40,14 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orderSummary = Order::tenanted()->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
-        $topProduct = Product::tenanted()->whereHas('orders', function ($q) {
-            $q->whereOrderDeal();
+        $startDate = $request->start_date ?? date('Y-m-d');
+        $endDate = $request->end_date ?? date('Y-m-d');
+        $orderSummary = Order::tenanted()->whereDate('created_at','>=', $startDate)->whereDate('created_at','<=', $endDate)->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
+
+        $topProduct = Product::tenanted()->whereHas('orders', function ($q) use($startDate, $endDate) {
+            $q->whereDate('orders.created_at','>=', $startDate)->whereDate('orders.created_at','<=', $endDate)->whereOrderDeal();
         })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
 
 
@@ -53,6 +56,6 @@ class HomeController extends Controller
         // })->selectRaw('product_id, SUM(quantity) as quantity')->groupBy('product_id')->Limit(10)->orderBy('quantity', 'DESC')->get();
 
         // dd($topProduct);
-        return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct]);
+        return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct, 'startDate' => $startDate, 'endDate' => $endDate]);
     }
 }

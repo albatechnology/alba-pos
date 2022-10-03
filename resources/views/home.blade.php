@@ -1,14 +1,29 @@
 @extends('layouts.app')
+@push('css')
+    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+@endpush
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
+                    <div class="col-sm-2">
                         <h1 class="m-0">Dashboard</h1>
                     </div><!-- /.col -->
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="far fa-clock"></i></span>
+                                </div>
+                                <input type="text" class="form-control float-right" value="{{ $startDate. ' - ' . $endDate}}"
+                                    id="reservation">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
                             <li class="breadcrumb-item active">Dashboard v1</li>
@@ -639,3 +654,23 @@
         <!-- /.content -->
     </div>
 @endsection
+@push('js')
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
+
+    <script>
+        $('#reservation').daterangepicker({
+            locale: {
+                format: 'YYYY/MM/DD'
+            }
+        })
+
+        $('#reservation').on('apply.daterangepicker', function(ev, picker) {
+            var startDate = picker.startDate.format('YYYY-MM-DD');
+            var endDate = picker.endDate.format('YYYY-MM-DD');
+            console.log(picker.startDate.format('YYYY-MM-DD'));
+            console.log(picker.endDate.format('YYYY-MM-DD'));
+            window.location.replace('{{ url('/') }}?start_date=' + startDate + '&end_date=' + endDate);
+        });
+    </script>
+@endpush

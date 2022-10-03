@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('order-details.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        {{-- <a href="{{ route('order-details.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a> --}}
                     </div>
                 </div>
             </div>
