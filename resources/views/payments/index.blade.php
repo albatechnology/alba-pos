@@ -5,6 +5,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
+
                         {{-- <a href="{{ route('payments.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a> --}}
                     </div>
                 </div>
