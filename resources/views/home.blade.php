@@ -17,8 +17,8 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-clock"></i></span>
                                 </div>
-                                <input type="text" class="form-control float-right" value="{{ $startDate. ' - ' . $endDate}}"
-                                    id="reservation">
+                                <input type="text" class="form-control float-right"
+                                    value="{{ $startDate . ' - ' . $endDate }}" id="reservation">
                             </div>
 
                         </div>
@@ -59,7 +59,7 @@
                         <!-- small box -->
                         <div class="small-box bg-success">
                             <div class="inner">
-                                <h4>Top Product</h4>
+                                <h4>Product Report</h4>
 
                                 {{-- <ul>
                                         <p>{{ $products->name }}</p>
@@ -80,7 +80,7 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="order-details" class="small-box-footer">More info <i
+                            <a href="{{ url('/product-report') }}?start_date={{$startDate}}&end_date={{$endDate}}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -671,6 +671,10 @@
             console.log(picker.startDate.format('YYYY-MM-DD'));
             console.log(picker.endDate.format('YYYY-MM-DD'));
             window.location.replace('{{ url('/') }}?start_date=' + startDate + '&end_date=' + endDate);
+        });
+
+        $("#reservation").keydown(function(event) {
+            return false;
         });
     </script>
 @endpush

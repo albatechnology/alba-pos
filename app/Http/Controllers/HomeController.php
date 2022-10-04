@@ -58,4 +58,14 @@ class HomeController extends Controller
         // dd($topProduct);
         return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct, 'startDate' => $startDate, 'endDate' => $endDate]);
     }
+
+    public function productReport(Request $request){
+        $startDate = $request->start_date ?? date('Y-m-d');
+        $endDate = $request->end_date ?? date('Y-m-d');
+        $productReport = Product::tenanted()->whereHas('orders', function($q) use($startDate, $endDate){
+            $q->whereDate('orders.created_at','>=', $startDate)->whereDate('orders.created_at','<=', $endDate)->whereOrderDeal();
+        })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->get();
+
+        return view('report', ['productReport' => $productReport, 'startDate' => $startDate, 'endDate' => $endDate]);
+    }
 }
