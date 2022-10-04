@@ -80,8 +80,8 @@
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="{{ url('/product-report') }}?start_date={{$startDate}}&end_date={{$endDate}}" class="small-box-footer">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                            <a href="{{ url('/product-report') }}?start_date={{ $startDate }}&end_date={{ $endDate }}"
+                                class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
                     <!-- ./col -->
@@ -673,8 +673,12 @@
             window.location.replace('{{ url('/') }}?start_date=' + startDate + '&end_date=' + endDate);
         });
 
-        $("#reservation").keydown(function(event) {
+        // $("#reservation").keydown(function(event) {
+        //     return false;
+        // });
+
+        document.onkeydown = function(e) {
             return false;
-        });
+        }
     </script>
 @endpush
