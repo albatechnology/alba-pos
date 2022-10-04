@@ -17,7 +17,7 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-clock"></i></span>
                                 </div>
-                                <input type="text" class="form-control float-right"
+                                <input onfocus="blur();" type="text" class="form-control float-right"
                                     value="{{ $startDate . ' - ' . $endDate }}" id="reservation">
                             </div>
 
