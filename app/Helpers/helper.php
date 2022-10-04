@@ -30,3 +30,19 @@ if (!function_exists('arrayFilterAndReindex')) {
         return array_values(array_filter($values)) ?? [];
     }
 }
+
+if (!function_exists('rupiah')) {
+    function rupiah(int|string $number): string
+    {
+        return "Rp " . number_format((float)$number, 0, ',', '.');
+    }
+}
+
+if (!function_exists('filterPrice')) {
+    function filterPrice($number)
+    {
+        $number = str_replace(',', '', $number);
+        $number = str_replace('.', '', $number);
+        return intval($number);
+    }
+}
