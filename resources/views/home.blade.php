@@ -672,13 +672,5 @@
             console.log(picker.endDate.format('YYYY-MM-DD'));
             window.location.replace('{{ url('/') }}?start_date=' + startDate + '&end_date=' + endDate);
         });
-
-        // $("#reservation").keydown(function(event) {
-        //     return false;
-        // });
-
-        document.onkeydown = function(e) {
-            return false;
-        }
     </script>
 @endpush

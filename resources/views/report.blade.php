@@ -27,7 +27,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-clock"></i></span>
                                     </div>
-                                    <input type="text" class="form-control float-right"
+                                    <input onfocus="blur();" type="text" class="form-control float-right"
                                         value="{{ $startDate . ' - ' . $endDate }}" id="reservation">
                                 </div>
                                 <div class="table-responsive">
@@ -92,10 +92,6 @@
             console.log(picker.startDate.format('YYYY-MM-DD'));
             console.log(picker.endDate.format('YYYY-MM-DD'));
             window.location.replace('{{ url('/product-report') }}?start_date=' + startDate + '&end_date=' + endDate);
-        });
-
-        $("#reservation").keydown(function(event) {
-            return false;
         });
     </script>
 @endpush
