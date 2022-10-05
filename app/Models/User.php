@@ -50,6 +50,25 @@ class User extends Authenticatable implements TenantedInterface, HasMedia
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Create a new personal access token for the user.
+     *
+     * @param  string  $name
+     * @param  array  $abilities
+     * @return \Laravel\Sanctum\NewAccessToken
+     */
+    public function createToken(string $name, array $abilities = ['*'])
+    {
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken = \Illuminate\Support\Str::random(40)),
+            'plain_text_token' => $plainTextToken,
+            'abilities' => $abilities,
+        ]);
+
+        return new \Laravel\Sanctum\NewAccessToken($token, $token->getKey() . '|' . $plainTextToken);
+    }
+
     public function scopeTenanted($query)
     {
         $hasActiveTenant = tenancy()->getActiveTenant();
