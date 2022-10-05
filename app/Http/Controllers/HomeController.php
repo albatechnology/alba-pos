@@ -8,6 +8,7 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Yajra\DataTables\Facades\DataTables;
 
 class HomeController extends Controller
 {
@@ -44,10 +45,10 @@ class HomeController extends Controller
     {
         $startDate = $request->start_date ?? date('Y-m-d');
         $endDate = $request->end_date ?? date('Y-m-d');
-        $orderSummary = Order::tenanted()->whereDate('created_at','>=', $startDate)->whereDate('created_at','<=', $endDate)->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
+        $orderSummary = Order::tenanted()->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;
 
-        $topProduct = Product::tenanted()->whereHas('orders', function ($q) use($startDate, $endDate) {
-            $q->whereDate('orders.created_at','>=', $startDate)->whereDate('orders.created_at','<=', $endDate)->whereOrderDeal();
+        $topProduct = Product::tenanted()->whereHas('orders', function ($q) use ($startDate, $endDate) {
+            $q->whereDate('orders.created_at', '>=', $startDate)->whereDate('orders.created_at', '<=', $endDate)->whereOrderDeal();
         })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
 
 
@@ -59,13 +60,37 @@ class HomeController extends Controller
         return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct, 'startDate' => $startDate, 'endDate' => $endDate]);
     }
 
-    public function productReport(Request $request){
+    public function productReport(Request $request)
+    {
+        // $startDate = $request->start_date ?? date('Y-m-d');
+        // $endDate = $request->end_date ?? date('Y-m-d');
+        // $productReport = Product::tenanted()->whereHas('orders', function($q) use($startDate, $endDate){
+        //     $q->whereDate('orders.created_at','>=', $startDate)->whereDate('orders.created_at','<=', $endDate)->whereOrderDeal();
+        // })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->get();
+
+        // return view('report', ['productReport' => $productReport, 'startDate' => $startDate, 'endDate' => $endDate]);
+
+        $tenant = activeTenant();
+        $company = $tenant ? $tenant->company : activeCompany();
+
         $startDate = $request->start_date ?? date('Y-m-d');
         $endDate = $request->end_date ?? date('Y-m-d');
-        $productReport = Product::tenanted()->whereHas('orders', function($q) use($startDate, $endDate){
-            $q->whereDate('orders.created_at','>=', $startDate)->whereDate('orders.created_at','<=', $endDate)->whereOrderDeal();
-        })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->get();
+        if ($request->ajax()) {
 
-        return view('report', ['productReport' => $productReport, 'startDate' => $startDate, 'endDate' => $endDate]);
+            $productReport = Product::tenanted()->whereHas('orders', function ($q) use ($startDate, $endDate) {
+                $q->whereDate('orders.created_at', '>=', $startDate)->whereDate('orders.created_at', '<=', $endDate)->whereOrderDeal();
+            })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc');
+
+            return DataTables::of($productReport)->addIndexColumn()
+                ->addColumn('placeholder', '')
+                ->addColumn('total', function ($row) {
+                    return number_format($row->order_details_sum_quantity * $row->price);
+                })
+                ->editColumn('price', function ($row) {
+                    return number_format($row->price);
+                })
+                ->make(true);
+        }
+        return view('report', ['startDate' => $startDate, 'endDate' => $endDate, 'tenant' => $tenant, 'company' => $company]);
     }
 }

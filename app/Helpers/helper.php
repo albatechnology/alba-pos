@@ -7,6 +7,13 @@ if (!function_exists('tenancy')) {
     }
 }
 
+if (!function_exists('activeCompany')) {
+    function activeCompany(): ?\App\Models\Company
+    {
+        return app(\App\Services\TenancyService::class)->getActiveCompany();
+    }
+}
+
 if (!function_exists('activeTenant')) {
     function activeTenant(): ?\App\Models\Tenant
     {

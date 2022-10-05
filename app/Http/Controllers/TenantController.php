@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Company;
+use App\Models\Product;
+use App\Models\ProductTenant;
+use App\Models\Stock;
 use App\Models\Tenant;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -61,7 +64,29 @@ class TenantController extends Controller
             'company_id' => 'required|exists:companies,id',
         ]);
 
-        Tenant::create($validated);
+        $tenant = Tenant::create($validated);
+
+        $products = Product::where('company_id', $tenant->company_id)->get();
+        foreach ($products as $product) {
+            ProductTenant::create([
+                'tenant_id' => $tenant->id,
+                'product_id' => $product->id,
+                'uom' => $product->uom,
+                'price' => $product->price,
+            ]);
+
+            Stock::firstOrCreate(
+                [
+                    'tenant_id' => $tenant->id,
+                    'product_id' => $product->id
+                ],
+                [
+                    'company_id' => $product->company_id,
+                    'stock' => 0
+                ]
+            );
+        }
+
         alert()->success('Success', 'Data created successfully');
         return redirect('tenants')->withStatus($this->flash_data('success', __('global.created_successfully')));
     }

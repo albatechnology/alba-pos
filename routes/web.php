@@ -37,7 +37,7 @@ Auth::routes();
 
 Route::group(['middleware' => 'auth'], function ($route) {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/product-report', [App\Http\Controllers\HomeController::class, 'productReport']);
+    Route::get('/product-report', [App\Http\Controllers\HomeController::class, 'productReport'])->name('productReport');
 
     $route->group(['prefix' => 'cashier', 'as' => 'cashier.'], function ($route) {
         $route->get('/', [CashierController::class, 'index']);
