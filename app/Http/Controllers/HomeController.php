@@ -9,6 +9,8 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class HomeController extends Controller
 {
@@ -43,6 +45,13 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+
+        $data = ['name' => 'difa','email' => 'aa@assa.com'];
+        $pdf = Pdf::loadView('pdf.invoice', $data);
+        return $pdf->download('invoice.pdf');
+
+
+
         $startDate = $request->start_date ?? date('Y-m-d');
         $endDate = $request->end_date ?? date('Y-m-d');
         $orderSummary = Order::tenanted()->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate)->whereOrderDeal()->selectRaw('SUM(total_price) as total_price')->first()->total_price ?? 0;

@@ -164,6 +164,16 @@ class PermissionsHelper
                 'profiles_edit',
                 'profiles_delete',
             ],
+
+            'marketing_management_access' => [
+
+                'discounts_access' => [
+                    'discounts_view',
+                    'discounts_create',
+                    'discounts_edit',
+                    'discounts_delete',
+                ]
+            ]
         ];
     }
 

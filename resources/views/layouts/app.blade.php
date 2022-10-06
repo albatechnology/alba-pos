@@ -213,7 +213,7 @@
             @foreach (\App\Services\MenuService::menu() as $menu)
                 @can($menu->permission)
                     @if(count($menu->submenus) > 1)
-                    <li class="nav-item {{ request()->is($menu->getAllSubmenuRoutes()) ? 'menu-open' : '' }}">
+                    <li class="nav-item has-treeview {{ request()->is($menu->getAllSubmenuRoutes()) ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is($menu->getAllSubmenuRoutes()) ? 'active' : '' }}"><i class="nav-icon {{ $menu->icon }}"></i><p>{{ $menu->title }}<i class="right fas fa-angle-left"></i></p></a>
                         <ul class="nav nav-treeview">
                             @foreach ($menu->submenus as $submenu)

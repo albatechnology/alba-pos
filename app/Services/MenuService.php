@@ -13,6 +13,7 @@ class MenuService
             self::userManagement(),
             self::corporateManagement(),
             self::productManagement(),
+            self::marketingManagement(),
             self::customerManagement(),
             self::transactionManagement(),
             self::warehouseManagement(),
@@ -35,6 +36,13 @@ class MenuService
         $product_brands = new Submenu('product_brands_access', 'product-brands', 'fa fa-users', 'Product Brand');
 
         return new Menu('product_management_access', 'fa fa-shopping-cart', 'Product Management', ...[$products, $product_categories, $product_brands]);
+    }
+
+    protected static function marketingManagement()
+    {
+        $discounts = new Submenu('discounts_access', 'discounts', 'fa fa-dollar-sign', 'Discounts');
+
+        return new Menu('marketing_management_access', 'fa fa-dollar-sign', 'Marketing', ...[$discounts]);
     }
 
     protected static function corporateManagement()
@@ -78,4 +86,5 @@ class MenuService
 
         return new Menu('warehouse_management_access', 'fa fa-warehouse', 'Warehouse', ...[$stocks, $stocksHistories]);
     }
+
 }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\PaymentCategoryController;
@@ -131,4 +132,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
 
     $route->resource('reports', ReportController::class)->only(['index']);
+
+    $route->resource('discounts', DiscountController::class);
 });
