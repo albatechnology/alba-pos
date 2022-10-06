@@ -46,9 +46,9 @@ class HomeController extends Controller
     public function index(Request $request)
     {
 
-        $data = ['name' => 'difa','email' => 'aa@assa.com'];
-        $pdf = Pdf::loadView('pdf.invoice', $data);
-        return $pdf->download('invoice.pdf');
+        // $data = ['name' => 'difa','email' => 'aa@assa.com'];
+        // $pdf = Pdf::loadView('pdf.invoice', $data);
+        // return $pdf->download('invoice.pdf');
 
 
 

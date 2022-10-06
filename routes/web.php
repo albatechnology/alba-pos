@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('payments/massDestroy', [PaymentController::class, 'massDestroy'])->name('payments.massDestroy');
     $route->resource('payments', PaymentController::class);
 
+    $route->get('orders/invoice/{order}', [OrderController::class, 'invoice'])->name('orders.invoice');
     $route->patch('orders/restore', [OrderController::class, 'restore'])->name('orders.restore');
     $route->delete('orders/forceDestroy', [OrderController::class, 'forceDestroy'])->name('orders.forceDestroy');
     $route->delete('orders/massDestroy', [OrderController::class, 'massDestroy'])->name('orders.massDestroy');

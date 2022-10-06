@@ -83,6 +83,11 @@ class Order extends Model implements TenantedInterface
         return $this->belongsTo(Customer::class);
     }
 
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
     public function orderDetails()
     {
         return $this->hasMany(OrderDetail::class);

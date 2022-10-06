@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -50,6 +51,7 @@ class OrderController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $extraActions  = '<a class="btn btn-warning btn-sm" href="' . url('cashier/invoice/' . $row->id) . '" target="_blank">Print Invoice</a>';
+                    $extraActions  .= '<a class="btn btn-info btn-sm" href="' . url('orders/invoice/' . $row->id) . '">PDF</a>';
                     $viewGate      = 'orders_show';
                     $editGate      = 'orders_edit';
                     $deleteGate    = 'orders_delete';
@@ -132,5 +134,14 @@ class OrderController extends Controller
             }
             return $orders->get(['id', 'name']);
         }
+    }
+
+    public function invoice(Order $order)
+    {
+        $data['order'] = $order;
+        // $data = $order->load('orderDetails', 'payment', 'customer')->toArray();
+        // $pdf = \PDF::loadView('orders.invoice', $data);
+        // return $pdf->download('invoice.pdf');
+        return view('orders.invoice', ['data' => $data]);
     }
 }
