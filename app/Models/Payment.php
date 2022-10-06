@@ -34,6 +34,11 @@ class Payment extends Model implements TenantedInterface
         return $this->belongsTo(Order::class);
     }
 
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentType::class);
+    }
+
     public function addedBy()
     {
         return $this->belongsTo(User::class, 'added_by_id');

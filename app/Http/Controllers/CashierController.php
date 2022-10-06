@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Discount;
 use App\Models\Order;
 use App\Models\PaymentType;
 use App\Models\ProductCategory;
 use App\Services\CartService;
 use App\Services\OrderService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CashierController extends Controller
@@ -21,8 +23,9 @@ class CashierController extends Controller
         $productCategories = ProductCategory::tenanted()->get();
         $cart = CartService::getMyCart() ?? new Cart();
         $paymentTypes = PaymentType::tenanted()->pluck('name', 'id')->prepend('- Select Payment -', '');
+        $discounts = Discount::tenanted()->where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->pluck('name', 'id')->prepend('- Select Discount -', '');
 
-        return view('cashiers.index', ['productCategories' => $productCategories, 'paymentTypes' => $paymentTypes, 'cart' => $cart]);
+        return view('cashiers.index', ['productCategories' => $productCategories, 'paymentTypes' => $paymentTypes, 'cart' => $cart, 'discounts' => $discounts]);
     }
 
     public function cart()
@@ -47,6 +50,7 @@ class CashierController extends Controller
             'items' => $data,
             'additional_discount' => (int) $request->additional_discount ?? 0,
             'amount_paid' => (int) $request->amount_paid ?? 0,
+            'discount_id' => $request->discount_id,
             'payment_type_id' => $request->payment_type_id,
         ];
         // dump($request->all());

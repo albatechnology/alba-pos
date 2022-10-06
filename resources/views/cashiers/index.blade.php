@@ -54,6 +54,14 @@
                                     <form id="formProceedPayment">
                                         @csrf
                                         <div class="form-group">
+                                            <label>Discount</label>
+                                            <select name="discount_id" class="form-control">
+                                                @foreach ($discounts as $id => $name)
+                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Additional Discount</label>
                                             <input type="number" name="additional_discount" id="additional_discount"
                                                 class="form-control" min="0">

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Order;
 use App\Pipes\Order\ApplyAdditionalDiscount;
+use App\Pipes\Order\ApplyDiscount;
 use App\Pipes\Order\FillOrderAtributes;
 use App\Pipes\Order\MakeOrderDetails;
 use App\Pipes\Order\ProcessAmoutPaid;
@@ -20,7 +21,7 @@ class OrderService
             ->through([
                 FillOrderAtributes::class,
                 MakeOrderDetails::class,
-                // ApplyDiscount::class,
+                ApplyDiscount::class,
                 ApplyAdditionalDiscount::class,
                 ProcessAmoutPaid::class,
                 SetPaymentType::class,
@@ -38,7 +39,7 @@ class OrderService
             ->through([
                 FillOrderAtributes::class,
                 MakeOrderDetails::class,
-                // ApplyDiscount::class,
+                ApplyDiscount::class,
                 ApplyAdditionalDiscount::class,
                 ProcessAmoutPaid::class,
                 SetPaymentType::class,
