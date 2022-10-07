@@ -31,12 +31,12 @@
     <div class="tab-content">
         <div id="allCategories" class=" tabcontent col-12 tab-pane active">
 
-            <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 mt-2">
+            <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-4 mt-2">
                 @foreach ($products as $product)
                     <div class="col mb-4">
                         <div wire:click="setSelectedProductIds({{ $product->id }})"
                             class="card pb-0 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
-                            <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid" style="width: 150px; height: 150px">
+                            <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid">
                             <div class="card-body p-2">
                                 <h5 class="card-title font-weight-bold" style="font-size: 14px">{{ $product->name }}</h5>
                                 <br>
