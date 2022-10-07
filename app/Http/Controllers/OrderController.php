@@ -139,8 +139,8 @@ class OrderController extends Controller
     public function invoice(Order $order)
     {
         $data['order'] = $order;
-        $pdf = \PDF::loadView('orders.invoice', ['data' => $data])->setPaper('a4', 'potrait');
-        return $pdf->download($order->invoice_number.'.pdf');
-        // return view('orders.invoice', ['data' => $data]);
+        // $pdf = \PDF::loadView('orders.invoice', ['data' => $data])->setPaper('a4', 'potrait');
+        // return $pdf->download($order->invoice_number.'.pdf');
+        return view('orders.invoice', ['data' => $data]);
     }
 }
