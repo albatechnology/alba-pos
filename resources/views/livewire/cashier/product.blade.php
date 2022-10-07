@@ -36,7 +36,7 @@
                     <div class="col mb-4">
                         <div wire:click="setSelectedProductIds({{ $product->id }})"
                             class="card pb-0 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
-                            <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid">
+                            <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid" style="width: 150px; height: 150px">
                             <div class="card-body p-2">
                                 <h5 class="card-title font-weight-bold" style="font-size: 14px">{{ $product->name }}</h5>
                                 <br>
