@@ -176,7 +176,7 @@
                     </td>
                 </tr>
 
-                {{-- Total Discount --}}
+                {{-- Discount --}}
                 <tr class="tabletitle">
                     <td></td>
                     <td></td>
@@ -188,6 +188,22 @@
                             - {{ rupiah($order->total_discount) }}</p>
                     </td>
                 </tr>
+
+                {{-- Additional Discount --}}
+                @if ( $order->additional_discount!=0 )
+                    <tr class="tabletitle">
+                        <td></td>
+                        <td></td>
+                        <td class="payment table-check">
+                            <p style="font-size: 16px; margin: 0; margin-left: 30px">Add Discount</p>
+                        </td>
+                        <td class=" table-check">
+                            <p class="itemprice" style="font-size: 16px; margin: 0; text-align:right">
+                                - {{ rupiah($order->additional_discount) }}</p>
+                        </td>
+                    </tr>
+                @endif
+
 
                 <!-- Tax -->
                 {{-- <tr class="tabletitle ">
