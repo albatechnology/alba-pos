@@ -42,7 +42,7 @@
                                 <br>
                                 <h5 class="card-title" style="font-size: 14px">{{ implode(', ', $product->productCategories->pluck('name')->all()) }}</h5>
                                 <br>
-                                <p style="font-size: 14px" class="p-0 m-0">Rp. {{ number_format($product->price) }}</p>
+                                <p wire:ignore style="font-size: 14px" class="p-0 m-0">Rp. {{ number_format($product->price) }}</p>
                                 <p style="font-size: 14px" class="p-0 m-0">Stock: {{ $product->stock->stock }}</p>
                             </div>
                         </div>
