@@ -98,14 +98,14 @@
                             </dl> --}}
                         </td>
                         <td class="tableitem">
-                            <p class="itemtext item-price">{{ rupiah($orders->unit_price) }}</p>
+                            <p class="itemtext item-price">{{ number_format($orders->unit_price) }}</p>
                             {{-- <dl>
                                 <dt>&nbsp;</dt>
                                 <dd>&nbsp;</dd>
                             </dl> --}}
                         </td>
                         <td class="tableitem">
-                            <p class="itemtext item-subtotal">{{ rupiah($orders->original_price) }}</p>
+                            <p class="itemtext item-subtotal">{{ number_format($orders->original_price) }}</p>
                             {{-- <dl>
                                 <dt>&nbsp;</dt>
                                 <dd>&nbsp;</dd>
@@ -168,11 +168,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment table-check">
-                        <p style="font-size: 16px; margin: 0; margin-top: 5px; margin-left: 30px">Sub Total</p>
+                        <p style="font-size: 16px; margin: 0; margin-top: 5px; margin-left: 20px">Sub Total</p>
                     </td>
                     <td class=" table-check">
                         <p class="itemprice" style="font-size: 16px; margin: 0; margin-top: 5px; text-align:right">
-                            {{ rupiah($order->original_price) }}</p>
+                            {{ number_format($order->original_price) }}</p>
                     </td>
                 </tr>
 
@@ -181,11 +181,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment table-check">
-                        <p style="font-size: 16px; margin: 0; margin-left: 30px">Discount</p>
+                        <p style="font-size: 16px; margin: 0; margin-left: 20px">Discount</p>
                     </td>
                     <td class=" table-check">
                         <p class="itemprice" style="font-size: 16px; margin: 0; text-align:right">
-                            - {{ rupiah($order->total_discount) }}</p>
+                            - {{ number_format($order->total_discount) }}</p>
                     </td>
                 </tr>
 
@@ -195,11 +195,11 @@
                         <td></td>
                         <td></td>
                         <td class="payment table-check">
-                            <p style="font-size: 16px; margin: 0; margin-left: 30px">Add Discount</p>
+                            <p style="font-size: 16px; margin: 0; margin-left: 20px">Add Discount</p>
                         </td>
                         <td class=" table-check">
                             <p class="itemprice" style="font-size: 16px; margin: 0; text-align:right">
-                                - {{ rupiah($order->additional_discount) }}</p>
+                                - {{ number_format($order->additional_discount) }}</p>
                         </td>
                     </tr>
                 @endif
@@ -210,11 +210,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment ">
-                        <p class="payment-test" style="font-size: 16px; margin:0; margin-left: 30px;">Tax</p>
+                        <p class="payment-test" style="font-size: 16px; margin:0; margin-left: 20px;">Tax</p>
                     </td>
                     <td class=" ">
                         <p class="itemprice" style="font-size: 16px; margin: 0; text-align:right">
-                            {{ rupiah($order->total_tax) }}</p>
+                            {{ number_format($order->total_tax) }}</p>
                     </td>
                 </tr> --}}
 
@@ -224,11 +224,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment">
-                        <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 30px">Grand Total</h2>
+                        <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 20px">Grand Total</h2>
                     </td>
                     <td class="">
                         <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
-                            {{ rupiah($order->total_price) }}</h2>
+                            {{ number_format($order->total_price) }}</h2>
                     </td>
                 </tr>
 
@@ -237,11 +237,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment table-payment">
-                        <h2 style="font-size: 16px; margin: 0; margin-top: 5px; margin-left: 30px">Tunai</h2>
+                        <h2 style="font-size: 16px; margin: 0; margin-top: 5px; margin-left: 20px">Tunai</h2>
                     </td>
                     <td class=" table-payment">
                         <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-top: 5px; margin-right: 8px; text-align:right">
-                            {{ rupiah($order->amount_paid) }}</h2>
+                            {{ number_format($order->amount_paid) }}</h2>
                     </td>
                 </tr>
 
@@ -250,11 +250,11 @@
                     <td></td>
                     <td></td>
                     <td class="payment">
-                        <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 30px">Change</h2>
+                        <h2 style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-left: 20px">Change</h2>
                     </td>
                     <td class="">
                         <h2 class="itemprice" style="font-size: 16px; margin: 0; margin-bottom: 5px; margin-right: 8px; text-align:right">
-                            {{ rupiah($order->amount_paid - $order->total_price) }}</h2>
+                            {{ number_format($order->amount_paid - $order->total_price) }}</h2>
                     </td>
                 </tr>
             </table>
