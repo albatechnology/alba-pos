@@ -152,7 +152,7 @@
         <div id="logo">
             <img src="images/logo-pempek.jpg">
         </div>
-        <h1>INVOICE 3-2-1</h1>
+        <h1>INVOICE</h1>
         <div id="company" class="clearfix">
             <div>{{ $data['order']->customer?->name ?? 'No Customer' }}</div>
             <div>{{ $data['order']->company?->name ?? 'No Company' }}</div>
@@ -213,9 +213,6 @@
             <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
         </div> --}}
     </main>
-    <footer>
-        Invoice was created on a computer and is valid without the signature and seal.
-    </footer>
 </body>
 
 </html>

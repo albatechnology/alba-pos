@@ -1,3 +1,5 @@
+<form id="orderForm">
+    @csrf
 <div class="modal-header">
     <h5 class="modal-title" id="modalPaymentLabel">Payment Confirmation</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -47,20 +49,21 @@
             <td align="right">{{ rupiah($kembali) }}</td>
         </tr>
     </table>
+    <input type="number" name="customer_phone" placeholder="Customer Phone" class="form-control mb-2 @error('phone') is-invalid @enderror">
+    <input type="text" name="customer_name" placeholder="Customer Name" class="form-control mb-2 @error('name') is-invalid @enderror">
+    <input type="email" name="customer_email" placeholder="Customer Email" class="form-control mb-2 @error('email') is-invalid @enderror">
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-    <form id="orderForm">
-        @csrf
         <input type="hidden" name="is_order" value="1">
         <input type="hidden" name="discount_id" value="{{ $order->discount_id }}">
         <input type="hidden" name="additional_discount" value="{{ $order->additional_discount }}">
         <input type="hidden" name="amount_paid" value="{{ $order->amount_paid }}">
         <input type="hidden" name="payment_type_id" value="{{ $order->payment_type_id }}">
         <button wire:click="processOrder" type="submit" class="btn btn-success"><i
-                class="fa fa-paper-plane"></i>Order</button>
+            class="fa fa-paper-plane"></i>Order</button>
+        </div>
     </form>
-</div>
 <script>
     $(document).ready(function() {
         $(document).on('submit', '#orderForm', function(e) {

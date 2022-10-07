@@ -5,7 +5,7 @@ namespace App\Pipes\Order;
 use App\Models\Order;
 use Closure;
 
-class ProcessAmoutPaid
+class ProcessAmountPaid
 {
     public function handle(Order $order, Closure $next)
     {

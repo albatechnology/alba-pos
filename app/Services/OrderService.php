@@ -7,7 +7,8 @@ use App\Pipes\Order\ApplyAdditionalDiscount;
 use App\Pipes\Order\ApplyDiscount;
 use App\Pipes\Order\FillOrderAtributes;
 use App\Pipes\Order\MakeOrderDetails;
-use App\Pipes\Order\ProcessAmoutPaid;
+use App\Pipes\Order\ProcessAmountPaid;
+use App\Pipes\Order\SaveCustomer;
 use App\Pipes\Order\SaveOrder;
 use App\Pipes\Order\SetPaymentType;
 use Illuminate\Pipeline\Pipeline;
@@ -23,7 +24,7 @@ class OrderService
                 MakeOrderDetails::class,
                 ApplyDiscount::class,
                 ApplyAdditionalDiscount::class,
-                ProcessAmoutPaid::class,
+                ProcessAmountPaid::class,
                 SetPaymentType::class,
                 // CalculateShipment::class,
                 // CheckExpectedOrderPrice::class,
@@ -41,10 +42,11 @@ class OrderService
                 MakeOrderDetails::class,
                 ApplyDiscount::class,
                 ApplyAdditionalDiscount::class,
-                ProcessAmoutPaid::class,
+                ProcessAmountPaid::class,
                 SetPaymentType::class,
                 // CalculateShipment::class,
                 // CheckExpectedOrderPrice::class,
+                SaveCustomer::class,
                 SaveOrder::class,
                 // CreatePayment::class,
                 // UpdateDiscountUse::class,
