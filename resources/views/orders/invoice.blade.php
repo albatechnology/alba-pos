@@ -155,8 +155,9 @@
         <h1>INVOICE</h1>
         <div id="company" class="clearfix">
             <div>{{ $data['order']->customer?->name ?? 'No Customer' }}</div>
-            <div>{{ $data['order']->company?->name ?? 'No Company' }}</div>
-            <div>{{ $data['order']->tenant->name ?? 'No Tenant' }}</div>
+            <div>{{ $data['order']->customer?->email ?? '' }}</div>
+            <div>{{ $data['order']->customer?->phone ?? '' }}</div>
+            <div>{{ $data['order']->customer?->address ?? '' }}</div>
         </div>
         <div id="project">
             <div><span>INVOICE NUMBER</span> {{ $data['order']->invoice_number }}</div>
@@ -196,11 +197,11 @@
                 </tr>
                 <tr>
                     <td colspan="4">DISCOUNT</td>
-                    <td class="total">{{ rupiah($data['order']->total_discount) }}</td>
+                    <td class="total">- {{ rupiah($data['order']->total_discount) }}</td>
                 </tr>
                 <tr>
                     <td colspan="4">ADDITIONAL DISCOUNT</td>
-                    <td class="total">{{ rupiah($data['order']->additional_discount) }}</td>
+                    <td class="total">- {{ rupiah($data['order']->additional_discount) }}</td>
                 </tr>
                 <tr>
                     <td colspan="4" class="grand total">TOTAL</td>
