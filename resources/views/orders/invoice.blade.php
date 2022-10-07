@@ -3,8 +3,10 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Example 1</title>
+    <title>Invoice</title>
     <style>
+        /* @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"); */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;1,900&display=swap');
         .clearfix:after {
             content: "";
             display: table;
@@ -17,15 +19,14 @@
         }
 
         body {
+            font-family: 'Poppins', sans-serif;
             position: relative;
             /* width: 21cm; */
             /* height: 29.7cm; */
             margin: 0 auto;
             color: #001028;
             background: #FFFFFF;
-            font-family: Arial, sans-serif;
             font-size: 12px;
-            font-family: Arial;
         }
 
         header {
