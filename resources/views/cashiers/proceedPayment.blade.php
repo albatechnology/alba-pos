@@ -6,7 +6,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="overflow-auto" style="height:85vh">
+    <div class="overflow-auto" style="height:80vh">
         <div class="modal-body">
             <table class="table">
                 @foreach ($order?->order_details as $detail)
