@@ -83,10 +83,11 @@ class CashierController extends Controller
         $cart = CartService::syncCart($data);
     }
 
-    // public function setDiscount($discount_id)
     public function setDiscount(Discount $discount)
     {
         $cart = CartService::getMyCart();
+        if(!$cart) return response()->noContent();
+
         $cart->discount_id = $discount->id ?? null;
         $cart->save();
         $cart->refreshTotalPrice();

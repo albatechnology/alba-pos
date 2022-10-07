@@ -57,7 +57,9 @@
                                             <label>Discount</label>
                                             <select name="discount_id" id="discount_id" class="form-control">
                                                 @foreach ($discounts as $id => $name)
-                                                    <option value="{{ $id }}" {{ $cart?->discount_id == $id ? 'selected' : '' }}>{{ $name }}</option>
+                                                    <option value="{{ $id }}"
+                                                        {{ $cart?->discount_id == $id ? 'selected' : '' }}>
+                                                        {{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -189,7 +191,14 @@
                     'pointer-events': 'none'
                 })
                 $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
-                    refreshCart();
+                    if (typeof res !== 'undefined') {
+                        refreshCart();
+                    } else {
+                        $('#container-cart').css({
+                            'opacity': 1,
+                            'pointer-events': 'initial'
+                        });
+                    }
                 })
             });
         })
