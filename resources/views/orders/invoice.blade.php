@@ -166,6 +166,9 @@
             <div><span>PAYMENT TYPE</span> {{ $data['order']->payment->paymentType->name }}</div>
         </div>
     </header>
+    <br>
+    <br>
+    <br>
     <main>
         <table>
             <thead>
