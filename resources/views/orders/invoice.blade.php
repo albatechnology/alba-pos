@@ -2,313 +2,220 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PDF</title>
+    <meta charset="utf-8">
+    <title>Example 1</title>
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap");
-
-        @media print {
-            footer {
-                break-before: page;
-            }
-
-            tr {
-                page-break-inside: avoid !important;
-                -webkit-column-break-inside: avoid;
-                break-inside: avoid;
-                -webkit-region-break-inside: avoid;
-            }
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
         }
 
-        tr {
-            page-break-inside: avoid !important;
-            page-break-after: auto !important;
-        }
-
-        html {
-            background-color: white;
+        a {
+            color: #5D6975;
+            text-decoration: underline;
         }
 
         body {
+            position: relative;
+            /* width: 21cm; */
+            /* height: 29.7cm; */
+            margin: 0 auto;
+            color: #001028;
+            background: #FFFFFF;
+            font-family: Arial, sans-serif;
             font-size: 12px;
-            min-height: 100%;
-            font-family: Open Sans, Arial, Helvetica, sans-serif;
-            margin: 2, 5%;
-            padding: 20px 60px;
+            font-family: Arial;
         }
 
-        footer {
-            font-size: 12px;
-            font-family: Open Sans, Arial, Helvetica, sans-serif;
+        header {
+            padding: 10px 0;
+            margin-bottom: 30px;
+        }
+
+        #logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #logo img {
+            width: 90px;
         }
 
         h1 {
+            border-top: 1px solid #5D6975;
+            border-bottom: 1px solid #5D6975;
+            color: #5D6975;
+            font-size: 2.4em;
+            line-height: 1.4em;
+            font-weight: normal;
             text-align: center;
+            margin: 0 0 20px 0;
+            background: url(dimension.png);
         }
 
-        hr {
-            height: 2px;
-            border-width: 0;
-            color: #313132;
-            background-color: #313132;
-            margin-top: 24px;
+        #project {
+            float: left;
         }
 
-        .italic {
-            font-style: italic;
+        #project span {
+            color: #5D6975;
+            text-align: right;
+            width: 100px;
+            margin-right: 10px;
+            display: inline-block;
+            font-size: 0.8em;
         }
 
-        .topContainer {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin-top: 12px;
-            margin-bottom: 24px;
+        #company {
+            float: right;
+            text-align: right;
         }
 
-        .logo {
-            width: 10%;
-            height: 10%;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
+        #project div,
+        #company div {
+            white-space: nowrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
             margin-bottom: 20px;
         }
 
-        .quotationTitle {
-            font-size: 26px;
-            font-weight: bold;
+        table tr:nth-child(2n-1) td {
+            background: #F5F5F5;
+        }
+
+        table th,
+        table td {
             text-align: center;
         }
 
-        .metadata {
-            display: flex;
-            flex-direction: row;
-            margin-top: 4px;
+        table th {
+            padding: 5px 20px;
+            color: #5D6975;
+            border-bottom: 1px solid #C1CED9;
+            white-space: nowrap;
+            font-weight: normal;
         }
 
-        .metadata-title {
-            width: 120px;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .table {
-            width: 100%;
-            margin-top: 32px;
-            border-spacing: 0;
-
-        }
-
-        th {
-            padding: 8px;
-            /* border-top: 1px solid #313132; */
-            border-bottom: 1px solid #313132;
+        table .service,
+        table .service,
+        table .service,
+        table .desc {
             text-align: left;
-            background-color: black;
-            color: white;
         }
 
-        td {
-            padding: 8px;
-            text-align: left;
-            vertical-align: middle;
-            border-bottom: 1px solid #ddd
-        }
-
-        table tr:first-child th:first-child {
-            /* border-left: 1px solid #313132; */
-        }
-
-        table tr:first-child th:last-child {
-            /* border-right: 1px solid #313132; */
-        }
-
-        .info-row-left {
-            /* border-left: 1px solid #313132; */
+        table td {
+            padding: 20px;
             text-align: right;
         }
 
-        .info-row-right {
-            /* border-right: 1px solid #313132; */
-            text-align: right;
+        table td.service,
+        table td.desc {
+            vertical-align: top;
         }
 
-        .items-table tr td:first-child {
-            /* border-left: 1px solid #313132; */
-        }
-
-        .items-table tr td:last-child {
-            /* border-right: 1px solid #313132; */
-        }
-
-        .items-table tr td:nth-child(n + 4) {
+        table td.unit,
+        table td.qty,
+        table td.total {
+            font-size: 1.2em;
             text-align: left;
         }
 
-        .items-table tr:last-child td {
-            /* border-bottom: 1px solid #313132; */
+        table td.grand {
+            border-top: 1px solid #5D6975;
         }
 
-        .alt-table {
+        #notices .notice {
+            color: #5D6975;
+            font-size: 1.2em;
+        }
+
+        footer {
+            color: #5D6975;
             width: 100%;
-            margin-top: 32px;
-            border-spacing: 0;
-        }
-
-        .alt-table td {
-            background-color: #ef633f;
-            color: white;
-            padding: 8px;
-            border-top: 1px solid #313132;
-            border-bottom: 1px solid #313132;
-        }
-
-        .alt-table tr:first-child td:first-child {
-            border-left: 1px solid #313132;
-            border-top-left-radius: 8px;
-            border-bottom-left-radius: 8px;
-        }
-
-        .alt-table tr:first-child td:last-child {
-            border-right: 1px solid #313132;
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .footer-section {
-            display: flex;
-            flex: 1;
-            flex-direction: row;
-            justify-content: space-between;
-            margin-top: 50px;
+            height: 30px;
+            position: absolute;
+            bottom: 0;
+            border-top: 1px solid #C1CED9;
+            padding: 8px 0;
+            text-align: center;
         }
     </style>
 </head>
 
 <body>
-    <table style="width: 100%; border: 0; margin-top: 12px; margin-bottom: 24px;">
-        <tr>
-            <td style="text-align: left; padding: 0;">
-                <img src="{{ asset('images/logo-pempek.jpg') }}" class="logo" alt="Logo" />
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: right; padding: 0; width: 30%; vertical-align: top;">
-                <table style="width: 100%; border: 0;">
-                    <tr>
-                        <div style="text-align: center; font-weight: bold; font-size: 26px;">
-                            INVOICE
-                        </div>
-                    </tr>
-                    <tr>
-                        <td style="width:50% border: 0; padding: 0;">
-                            <table>
-                                <tr>
-                                    <td style="text-align: left; border: 0; padding: 0;">
-                                        {{ $data['order']->customer?->name ?? 'No Customer' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; border: 0; padding: 0;">
-                                        {{ $data['order']->company->name }}</td>
-                                </tr>
-                                <tr>
-                                    <td style="text-align: left; border: 0; padding: 0;">
-                                        {{ $data['order']->tenant->name }}
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td style="width:50%; border: 0; padding: 0;">
-                            <table style="width: 100%; display: flex; justify-content: flex-end">
-                                <tbody>
-                                    <tr>
-                                        <td style="text-align: left; border: 0; padding: 0; font-weight: bold;">
-                                            Invoice Number</td>
-                                        <td style="text-align: left; border: 0; padding: 0; padding-left: 10px">
-                                            : {{ $data['order']->invoice_number }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: left; border: 0; padding: 0; font-weight: bold;">
-                                            Invoice Date</td>
-                                        <td style="text-align: left; border: 0; padding: 0; padding-left: 10px">
-                                            : {{ $data['order']->created_at }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="text-align: left; border: 0; padding: 0; font-weight: bold;">
-                                            Payment Type</td>
-                                        <td style="text-align: left; border: 0; padding: 0;  padding-left: 10px">
-                                            : {{ $data['order']->payment->paymentType->name }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-
-    <div>
-
-        <table class="table items-table">
-            <tr>
-                <th>No.</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total Price</th>
-            </tr>
-            @php
-                $no = 1;
-                $subTotal = 0;
-            @endphp
-            @foreach ($data['order']->orderDetails as $item)
+    <header class="clearfix">
+        <div id="logo">
+            <img src="images/logo-pempek.jpg">
+        </div>
+        <h1>INVOICE 3-2-1</h1>
+        <div id="company" class="clearfix">
+            <div>{{ $data['order']->customer?->name ?? 'No Customer' }}</div>
+            <div>{{ $data['order']->company?->name ?? 'No Company' }}</div>
+            <div>{{ $data['order']->tenant->name ?? 'No Tenant' }}</div>
+        </div>
+        <div id="project">
+            <div><span>INVOICE NUMBER</span> {{ $data['order']->invoice_number }}</div>
+            <div><span>INVOICE DATE</span> {{ $data['order']->created_at }}</div>
+            <div><span>PAYMENT TYPE</span> {{ $data['order']->payment->paymentType->name }}</div>
+        </div>
+    </header>
+    <main>
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $item->product?->name }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ rupiah($item->unit_price) }}</td>
-                    <td>{{ rupiah($item->original_price) }}</td>
+                    <th class="service">NO</th>
+                    <th class="desc">PRODUCT</th>
+                    <th class="service">QUANTITY</th>
+                    <th class="service">PRICE</th>
+                    <th class="service">TOTAL PRICE</th>
                 </tr>
-                @php $subTotal += $item->original_price @endphp
-            @endforeach
+            </thead>
+            <tbody>
+                @php
+                    $no = 1;
+                    $subTotal = 0;
+                @endphp
+                @foreach ($data['order']->orderDetails as $item)
+                    <tr>
+                        <td class="service">{{ $no++ }}</td>
+                        <td class="desc">{{ $item->product?->name }}</td>
+                        <td class="unit">{{ $item->quantity }}</td>
+                        <td class="qty">{{ rupiah($item->unit_price) }}</td>
+                        <td class="total">{{ rupiah($item->original_price) }}</td>
+                    </tr>
+                    @php $subTotal += $item->original_price @endphp
+                @endforeach
+                <tr>
+                    <td colspan="4">SUBTOTAL</td>
+                    <td class="total">{{ rupiah($subTotal) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">DISCOUNT</td>
+                    <td class="total">{{ rupiah($data['order']->total_discount) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">ADDITIONAL DISCOUNT</td>
+                    <td class="total">{{ rupiah($data['order']->additional_discount) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4" class="grand total">TOTAL</td>
+                    <td class="grand total">{{ rupiah($subTotal - $data['order']->additional_discount - $data['order']->total_discount) }}</td>
+                </tr>
+            </tbody>
         </table>
-    </div>
-    <div>
-        <table class="table items-table">
-            <tr>
-                <td colspan="6" style="font-weight: bold">Sub Total</td>
-                <td class="info-row-right">
-                    {{ rupiah($subTotal) }}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6" style="font-weight: bold">Discount</td>
-                <td class="info-row-right">
-                    {{ rupiah($data['order']->total_discount) }}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="6" style="font-weight: bold">Additional Discount</td>
-                <td class="info-row-right">
-                    {{ rupiah($data['order']->additional_discount) }}
-                </td>
-            </tr>
-            <tr style="margin-bottom: 10px;">
-                <td colspan="6" style="border-bottom: 3px solid #000000; font-weight: bold">Total</td>
-                <td class="info-row-right" style="border-bottom: 3px solid #000000;">
-                    {{ rupiah($subTotal - $data['order']->additional_discount - $data['order']->total_discount) }}
-                </td>
-            </tr>
-        </table>
-
-    </div>
-    </table>
+        {{-- <div id="notices">
+            <div>NOTICE:</div>
+            <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+        </div> --}}
+    </main>
+    <footer>
+        Invoice was created on a computer and is valid without the signature and seal.
+    </footer>
 </body>
 
 </html>
