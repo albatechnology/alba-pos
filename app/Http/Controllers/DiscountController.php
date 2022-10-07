@@ -13,11 +13,11 @@ class DiscountController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:discount_access', ['only' => 'index']);
-        $this->middleware('permission:discount_view', ['only' => 'show']);
-        $this->middleware('permission:discount_create', ['only' => ['create', 'store']]);
-        $this->middleware('permission:discount_edit', ['only' => ['edit', 'update']]);
-        $this->middleware('permission:discount_delete', ['only' => ['destroy', 'massDestroy']]);
+        $this->middleware('permission:discounts_access', ['only' => 'index']);
+        $this->middleware('permission:discounts_view', ['only' => 'show']);
+        $this->middleware('permission:discounts_create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:discounts_edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:discounts_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
 
