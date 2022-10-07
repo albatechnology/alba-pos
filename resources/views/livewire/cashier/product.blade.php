@@ -17,14 +17,14 @@
     </div>
     <div class="col-12">
         <ul wire:ignore class="nav nav-tabs" role="tablist">
-            <li class="nav-item">
-                <a wire:click="changeProductCategory()" class="nav-link active" role="tab" aria-controls="allCategories" data-toggle="tab" aria-selected="true" href="#allCategories">All Categories</a>
-            </li>
             @foreach ($productCategories as $category)
             <li class="nav-item">
                 <a wire:click="changeProductCategory({{ $category->id }})" class="nav-link" role="tab" aria-controls="{{ $category->id }}" data-toggle="tab" aria-selected="false" href="#{{ $category->id }}">{{ $category->name }}</a>
             </li>
             @endforeach
+            <li class="nav-item">
+                <a wire:click="changeProductCategory()" class="nav-link active" role="tab" aria-controls="allCategories" data-toggle="tab" aria-selected="true" href="#allCategories">All Categories</a>
+            </li>
         </ul>
     </div>
 
