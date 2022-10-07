@@ -46,7 +46,10 @@ class TenancyService
         if (!$allowedTenantsIds->contains($tenant->id)) return new Exception('No tenants allowed');
 
         $user = $this->getUser();
-        $user->update(['tenant_id' => $tenant->id]);
+        $user->update([
+            'company_id' => $tenant->company->id,
+            'tenant_id' => $tenant->id,
+        ]);
 
         return session(['active-tenant' => $tenant]);
     }

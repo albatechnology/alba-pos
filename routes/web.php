@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function ($route) {
         $route->get('/', [CashierController::class, 'index']);
         $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
         $route->get('/cart', [CashierController::class, 'cart'])->name('cart');
+        $route->post('/setDiscount/{discount?}', [CashierController::class, 'setDiscount']);
         $route->post('/proceed-payment', [CashierController::class, 'proceedPayment'])->name('proceedPayment');
         $route->post('/delete-cart-detail/{id}', [CashierController::class, 'deleteCartDetail']);
         $route->post('/plus-minus/{product_id}/{qty}', [CashierController::class, 'plusMinus']);

@@ -55,9 +55,9 @@
                                         @csrf
                                         <div class="form-group">
                                             <label>Discount</label>
-                                            <select name="discount_id" class="form-control">
+                                            <select name="discount_id" id="discount_id" class="form-control">
                                                 @foreach ($discounts as $id => $name)
-                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                    <option value="{{ $id }}" {{ $cart?->discount_id == $id ? 'selected' : '' }}>{{ $name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -79,7 +79,8 @@
                                             <input type="number" name="amount_paid" id="amount_paid" class="form-control"
                                                 min="0" required>
                                         </div>
-                                        <button type="submit" id="btnProceedPayment" class="btn btn-primary btn-block mb-4" disabled>Proceed
+                                        <button type="submit" id="btnProceedPayment" class="btn btn-primary btn-block mb-4"
+                                            disabled>Proceed
                                             Payment</button>
                                     </form>
                                 </div>
@@ -146,10 +147,10 @@
             var amountPaid = parseInt($('#amount_paid').val()) || 0;
 
             console.log('calculatePayment totalPrice', totalPrice)
-            console.log('additional_discount',additionalDiscount);
+            console.log('additional_discount', additionalDiscount);
             console.log('amount_paid', amountPaid);
 
-            if((amountPaid + additionalDiscount) >= totalPrice){
+            if ((amountPaid + additionalDiscount) >= totalPrice) {
                 $('#btnProceedPayment').attr('disabled', false);
             } else {
                 $('#btnProceedPayment').attr('disabled', true);
@@ -180,7 +181,17 @@
                     $('#modalPayment .modal-content').html(res)
                     $('#modalPayment').modal('show');
                 });
-            })
+            });
+
+            $('#discount_id').on('change', function() {
+                $('#container-cart').css({
+                    'opacity': 0.4,
+                    'pointer-events': 'none'
+                })
+                $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
+                    refreshCart();
+                })
+            });
         })
     </script>
 @endpush

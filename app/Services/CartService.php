@@ -94,7 +94,6 @@ class CartService
         $tenant = activeTenant();
 
         if (!$tenant) throw new Exception('No tenant active selected');
-
         $cart = Cart::firstOrCreate(
             [
                 'user_id' => $user->id,

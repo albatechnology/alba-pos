@@ -10,17 +10,18 @@ class SaveCustomer
 {
     public function handle(Order $order, Closure $next)
     {
-        if (empty($order->raw_source['customer_phone'])) return $next($order);
+        if (empty($order->raw_source['customer_name'])) return $next($order);
 
         $customer = Customer::firstorCreate(
             [
                 'company_id' =>  $order->company_id,
                 'tenant_id' => $order->tenant_id,
-                'phone' => $order->raw_source['customer_phone'],
-                'email' => $order->raw_source['customer_email'],
+                'name' => $order->raw_source['customer_name']
             ],
             [
-                'name' => $order->raw_source['customer_name'],
+                'phone' => $order->raw_source['customer_phone'] ?? null,
+                'email' => $order->raw_source['customer_email'] ?? null,
+                'address' => $order->raw_source['customer_address'] ?? null,
             ]
         );
         $order->customer_id = $customer->id;

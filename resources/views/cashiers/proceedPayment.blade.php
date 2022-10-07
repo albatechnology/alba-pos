@@ -27,35 +27,38 @@
             </tr> --}}
                 <tr>
                     <td>Discount</td>
-                    <td align="right">- {{ rupiah($order->total_discount) }}</td>
+                    <td align="right">- {{ rupiah($order->total_discount ?? 0) }}</td>
                 </tr>
                 <tr>
                     <td>Additional Discount</td>
-                    <td align="right">- {{ rupiah($order->additional_discount) }}</td>
+                    <td align="right">- {{ rupiah($order->additional_discount ?? 0) }}</td>
                 </tr>
                 <tr>
                     <td>Total Discount</td>
-                    <td align="right">- {{ rupiah($order->total_discount + $order->additional_discount) }}</td>
+                    <td align="right">-
+                        {{ rupiah(($order->total_discount ?? 0) + ($order->additional_discount ?? 0)) }}</td>
                 </tr>
                 <tr>
                     <td>Total Price</td>
-                    <td align="right">{{ rupiah($order->total_price) }}</td>
+                    <td align="right">{{ rupiah($order->total_price ?? 0) }}</td>
                 </tr>
                 <tr>
                     <td>Amount Paid</td>
-                    <td align="right">{{ rupiah($order->amount_paid) }}</td>
+                    <td align="right">{{ rupiah($order->amount_paid ?? 0) }}</td>
                 </tr>
                 <tr>
                     <td>Kembali</td>
-                    <td align="right">{{ rupiah($kembali) }}</td>
+                    <td align="right">{{ rupiah($kembali ?? 0) }}</td>
                 </tr>
             </table>
+            <input type="text" name="customer_name" placeholder="Customer Name"
+                class="form-control mb-2 @error('name') is-invalid @enderror" required>
             <input type="number" name="customer_phone" placeholder="Customer Phone"
                 class="form-control mb-2 @error('phone') is-invalid @enderror">
-            <input type="text" name="customer_name" placeholder="Customer Name"
-                class="form-control mb-2 @error('name') is-invalid @enderror">
             <input type="email" name="customer_email" placeholder="Customer Email"
                 class="form-control mb-2 @error('email') is-invalid @enderror">
+            <textarea name="customer_address" placeholder="Customer Address"
+                class="form-control mb-2 @error('customer_address') is-invalid @enderror" rows="4"></textarea>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -75,8 +78,8 @@
             e.preventDefault();
             var dataOrder = $(this).serializeArray();
             $.post("{{ route('cashier.proceedPayment') }}", dataOrder, function(res) {
-                // window.open("{{ url('cashier/invoice') }}/" + res.order_id);
-                window.open("{{ url('orders/invoice') }}/" + res.order_id);
+                window.open("{{ url('cashier/invoice') }}/" + res.order_id);
+                // window.open("{{ url('orders/invoice') }}/" + res.order_id);
                 window.location.replace("{{ url('cashier') }}");
             })
         })

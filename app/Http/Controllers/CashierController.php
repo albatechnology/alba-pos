@@ -32,11 +32,11 @@ class CashierController extends Controller
     {
         $cart = CartService::getMyCart()?->load('cartDetails');
 
-        $sub_total_price = $cart?->total_price ?? 0;
+        $sub_total_price = $cart?->cartDetails->sum('total_price') ?? 0;
         $total_tax = $cart?->cartDetails?->sum(function ($q) {
             return $q->product->tax * $q->quantity;
         }) ?? 0;
-        $total_price = $sub_total_price + $total_tax;
+        $total_price = ($cart?->total_price ?? 0) + $total_tax;
 
         return view('cashiers.cart', ['cart' => $cart, 'sub_total_price' => $sub_total_price, 'total_tax' => $total_tax, 'total_price' => $total_price]);
     }
@@ -55,6 +55,7 @@ class CashierController extends Controller
             'customer_name' => $request->customer_name,
             'customer_phone' => $request->customer_phone,
             'customer_email' => $request->customer_email,
+            'customer_address' => $request->customer_address,
         ];
         if ($request->is_order) {
             $order = OrderService::processOrder(Order::make(['raw_source' => $raw_source]));
@@ -80,6 +81,15 @@ class CashierController extends Controller
             ['product_id' => $product_id, 'quantity' => $qty]
         ];
         $cart = CartService::syncCart($data);
+    }
+
+    // public function setDiscount($discount_id)
+    public function setDiscount(Discount $discount)
+    {
+        $cart = CartService::getMyCart();
+        $cart->discount_id = $discount->id ?? null;
+        $cart->save();
+        $cart->refreshTotalPrice();
     }
 
     public function invoice(Order $order)

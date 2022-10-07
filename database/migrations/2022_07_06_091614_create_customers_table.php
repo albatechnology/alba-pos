@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('tenant_id')->constrained()->nullable();
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->text('description')->nullable();
             $table->text('address')->nullable();
             $table->timestamps();
