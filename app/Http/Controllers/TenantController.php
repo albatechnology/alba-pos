@@ -39,8 +39,8 @@ class TenantController extends Controller
                     return $row->company?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    $editGate      = 'tenant-edit';
-                    $deleteGate    = 'tenant-delete';
+                    $editGate      = 'tenants_edit';
+                    $deleteGate    = 'tenants_delete';
                     $crudRoutePart = 'tenants';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })

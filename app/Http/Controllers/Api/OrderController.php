@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\ProductResource;
-use App\Models\Product;
+use App\Http\Resources\OrderResource;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
-class ProductController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,13 +17,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::simplePaginate();
-        $products = QueryBuilder::for(Product::class)
+        $orders = QueryBuilder::for(Order::class)
+            ->allowedIncludes(['orderDetails'])
+            // ->with('orderDetails')
+            ->allowedFilters(['invoice_number'])
             ->simplePaginate();
-        // $products = Product::simplePaginate(10);
-        return ProductResource::collection($products);
-        // return $this->ajaxSuccess(ProductResource::collection($products));
-        return $this->ajaxSuccess($products);
+
+        return OrderResource::collection($orders);
+        // return response()->json($orders);
     }
 
     /**
@@ -53,9 +54,9 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Order $order)
     {
-        return new ProductResource($product);
+        return new OrderResource($order);
     }
 
     /**

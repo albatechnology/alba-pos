@@ -20,7 +20,6 @@ class StockHistoryController extends Controller
      */
     public function index(Request $request)
     {
-
         if ($request->ajax()) {
             $data = StockHistory::with(['stock']);
             if ($stock_id = $request->stock_id) $data = $data->where('stock_id', $stock_id);
@@ -41,7 +40,6 @@ class StockHistoryController extends Controller
                     return $row->stock?->id ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    // $editGate      = 'stock-histories-edit';
                     $crudRoutePart = 'stock-histories';
                     return view('layouts.includes.datatablesActions', compact('row', 'crudRoutePart'));
                 })

@@ -48,9 +48,9 @@ class DiscountController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('actions', function ($row) {
-                    $viewGate      = 'discount-show';
-                    $editGate      = 'discount-edit';
-                    $deleteGate    = 'discount-delete';
+                    $viewGate      = 'discounts_show';
+                    $editGate      = 'discounts_edit';
+                    $deleteGate    = 'discounts_delete';
                     $crudRoutePart = 'discounts';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })

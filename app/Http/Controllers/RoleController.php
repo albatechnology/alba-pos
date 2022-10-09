@@ -42,10 +42,11 @@ class RoleController extends Controller
                     return implode(' ', $permissions);
                 })
                 ->addColumn('actions', function ($row) {
-                    $editGate      = 'role-edit';
-                    $deleteGate    = 'role-delete';
+                    $viewGate      = 'roles_view';
+                    $editGate      = 'roles_edit';
+                    $deleteGate    = 'roles_delete';
                     $crudRoutePart = 'roles';
-                    return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions', 'permissions'])
                 ->make(true);

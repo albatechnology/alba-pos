@@ -8,7 +8,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
+                        @can('users_create')
                         <a href="{{ route('users.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        @endcan
                     </div>
                 </div>
             </div>

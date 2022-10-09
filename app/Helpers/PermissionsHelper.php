@@ -44,7 +44,7 @@ class PermissionsHelper
 
             'user_management_access' => [
                 'roles_access' => [
-                    'roles_view',
+                    // 'roles_view',
                     'roles_create',
                     'roles_edit',
                     'roles_delete',
@@ -129,9 +129,9 @@ class PermissionsHelper
 
                 'stock_histories_access' => [
                     'stock_histories_view',
-                    'stock_histories_create',
-                    'stock_histories_edit',
-                    'stock_histories_delete',
+                    // 'stock_histories_create',
+                    // 'stock_histories_edit',
+                    // 'stock_histories_delete',
                 ]
             ],
 

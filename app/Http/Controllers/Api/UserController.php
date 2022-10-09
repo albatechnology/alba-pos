@@ -13,7 +13,6 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        $user->tokens()->delete();
         return $user;
     }
 }

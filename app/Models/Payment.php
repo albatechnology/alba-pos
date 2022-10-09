@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PaymentStatus;
 use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,9 @@ class Payment extends Model implements TenantedInterface
     use SoftDeletes, TenantedTrait;
     public $table = 'payments';
     protected $guarded = [];
+    protected $casts = [
+        'status' => PaymentStatus::class,
+    ];
 
     protected static function booted()
     {

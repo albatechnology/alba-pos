@@ -5,7 +5,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        {{-- <a href="{{ route('payments.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a> --}}
+                        {{-- @can('payments_create')
+                        <a href="{{ route('payments.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        @endcan --}}
                     </div>
                 </div>
             </div>
@@ -53,41 +55,41 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('payments_delete')
-            let deleteButton = {
-                text: 'Delete selected',
-                url: "{{ route('payments.massDestroy') }}",
-                className: 'btn-danger',
-                action: function(e, dt, node, config) {
-                    var ids = $.map(dt.rows({
-                        selected: true
-                    }).data(), function(entry) {
-                        return entry.id
-                    });
-                    if (ids.length === 0) {
-                        alert('No data selected')
-                        return
-                    }
+        // @can('payments_delete')
+        //     let deleteButton = {
+        //         text: 'Delete selected',
+        //         url: "{{ route('payments.massDestroy') }}",
+        //         className: 'btn-danger',
+        //         action: function(e, dt, node, config) {
+        //             var ids = $.map(dt.rows({
+        //                 selected: true
+        //             }).data(), function(entry) {
+        //                 return entry.id
+        //             });
+        //             if (ids.length === 0) {
+        //                 alert('No data selected')
+        //                 return
+        //             }
 
-                    if (confirm('Delete selected data?')) {
-                        console.log('config', config.url);
-                        console.log('ids', ids);
-                        $.ajax({
-                                method: 'POST',
-                                url: config.url,
-                                data: {
-                                    ids: ids,
-                                    _method: 'DELETE'
-                                }
-                            })
-                            .done(function() {
-                                location.reload()
-                            })
-                    }
-                }
-            }
-            dtButtons.push(deleteButton)
-        @endcan
+        //             if (confirm('Delete selected data?')) {
+        //                 console.log('config', config.url);
+        //                 console.log('ids', ids);
+        //                 $.ajax({
+        //                         method: 'POST',
+        //                         url: config.url,
+        //                         data: {
+        //                             ids: ids,
+        //                             _method: 'DELETE'
+        //                         }
+        //                     })
+        //                     .done(function() {
+        //                         location.reload()
+        //                     })
+        //             }
+        //         }
+        //     }
+        //     dtButtons.push(deleteButton)
+        // @endcan
 
         let table = $('#dttbls').DataTable({
             scrollY: '50vh',

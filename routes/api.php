@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\OrderController;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,6 @@ Route::post('auth/token', [AuthController::class, 'token']);
 // });
 Route::group(['middleware' => 'auth:sanctum'], function ($route) {
     $route->get('users/me', [UserController::class, 'me']);
+    $route->resource('products', ProductController::class);
+    Route::resource('orders', OrderController::class);
 });
-
-Route::get('products', [ProductController::class, 'index']);

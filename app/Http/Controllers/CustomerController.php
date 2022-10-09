@@ -39,9 +39,9 @@ class CustomerController extends Controller
                     return $row->tenant?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    $viewGate      = 'customer-show';
-                    $editGate      = 'customer-edit';
-                    $deleteGate    = 'customer-delete';
+                    $viewGate      = 'customers_show';
+                    $editGate      = 'customers_edit';
+                    $deleteGate    = 'customers_delete';
                     $crudRoutePart = 'customers';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })

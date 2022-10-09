@@ -33,8 +33,8 @@ class PermissionController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('actions', function ($row) {
-                    $editGate      = 'permission-edit';
-                    $deleteGate    = 'permission-delete';
+                    $editGate      = 'permissions_edit';
+                    $deleteGate    = 'permissions_delete';
                     $crudRoutePart = 'permissions';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })

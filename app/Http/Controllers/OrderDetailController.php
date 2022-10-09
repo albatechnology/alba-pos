@@ -44,10 +44,10 @@ class OrderDetailController extends Controller
                 })
                 ->addColumn('actions', function ($row) {
                     $viewGate      = 'order_details_show';
-                    $editGate      = 'order_details_edit';
+                    // $editGate      = 'order_details_edit';
                     $deleteGate    = 'order_details_delete';
                     $crudRoutePart = 'order-details';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);

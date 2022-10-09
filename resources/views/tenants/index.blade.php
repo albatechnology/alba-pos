@@ -8,7 +8,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
+                        @can('tenants_create')
                         <a href="{{ route('tenants.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -44,7 +46,6 @@
         </section>
     </div>
 @endsection
-
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)

@@ -18,6 +18,7 @@ class StockController extends Controller
     function __construct()
     {
         $this->middleware('permission:stocks_access', ['only' => 'index']);
+        $this->middleware('permission:stocks_view', ['only' => 'show']);
         $this->middleware('permission:stocks_edit', ['only' => ['edit', 'update']]);
     }
 
@@ -43,8 +44,8 @@ class StockController extends Controller
                     return $row->tenant?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    $viewGate      = 'stock-show';
-                    $editGate      = 'stock-edit';
+                    $viewGate      = 'stocks_view';
+                    $editGate      = 'stocks_edit';
                     $crudRoutePart = 'stocks';
                     return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'crudRoutePart'));
                 })

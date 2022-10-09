@@ -31,8 +31,8 @@ class CompanyController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('actions', function ($row) {
-                    $editGate      = 'company-edit';
-                    $deleteGate    = 'company-delete';
+                    $editGate      = 'companies_edit';
+                    $deleteGate    = 'companies_delete';
                     $crudRoutePart = 'companies';
                     return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })

@@ -59,13 +59,13 @@ class UserController extends Controller
                 return $html;
             });
             $table->addColumn('placeholder', '&nbsp;')->editColumn('actions', function ($row) {
-                $viewGate      = true;
-                $editGate      = true;
-                $deleteGate    = true;
+                $viewGate      = 'users_view';
+                $editGate      = 'users_edit';
+                $deleteGate    = 'users_delete';
                 $crudRoutePart = 'users';
 
-
                 return view('layouts.includes.datatablesActions', compact(
+                    'viewGate',
                     'editGate',
                     'deleteGate',
                     'crudRoutePart',

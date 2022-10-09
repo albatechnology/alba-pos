@@ -5,7 +5,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
+                        @can('product_brands_create')
                         <a href="{{ route('product-brands.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        @endcan
                     </div>
                 </div>
             </div>

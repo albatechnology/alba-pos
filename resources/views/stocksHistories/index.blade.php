@@ -51,7 +51,7 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('stock-histories_delete')
+        @can('stock_histories_delete')
             let deleteButton = {
                 text: 'Delete selected',
                 url: "{{ route('stock-histories.massDestroy') }}",

@@ -27,6 +27,9 @@ class PaymentController extends Controller
             $data = Payment::tenanted()->with(['company', 'tenant', 'addedBy', 'approvedBy'])->select(sprintf('%s.*', (new Payment)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
+                ->editColumn('status', function ($row) {
+                    return $row->status->description;
+                })
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
@@ -49,11 +52,11 @@ class PaymentController extends Controller
                     return $row->approvedBy?->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
-                    $viewGate      = 'payments_show';
-                    $editGate      = 'payments_edit';
-                    $deleteGate    = 'payments_delete';
+                    // $viewGate      = 'payments_show';
+                    // $editGate      = 'payments_edit';
+                    // $deleteGate    = 'payments_delete';
                     $crudRoutePart = 'payments';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -61,59 +64,59 @@ class PaymentController extends Controller
         return view('payments.index');
     }
 
-    public function create()
-    {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
+    // public function create()
+    // {
+    //     $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
 
-        return view('payments.create', ['companies' => $companies]);
-    }
+    //     return view('payments.create', ['companies' => $companies]);
+    // }
 
-    public function store(StorePaymentRequest $request)
-    {
-        foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
-            $data = $request->safe()->except(['company_ids']);
-            $data['company_id'] = $company_id;
-            Payment::create($data);
-        }
-        alert()->success('Success', 'Data created successfully');
-        return redirect('payments');
-    }
+    // public function store(StorePaymentRequest $request)
+    // {
+    //     foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
+    //         $data = $request->safe()->except(['company_ids']);
+    //         $data['company_id'] = $company_id;
+    //         Payment::create($data);
+    //     }
+    //     alert()->success('Success', 'Data created successfully');
+    //     return redirect('payments');
+    // }
 
-    public function edit(Payment $payment)
-    {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
-        return view('payments.edit', ['Payment' => $payment, 'companies' => $companies]);
-    }
+    // public function edit(Payment $payment)
+    // {
+    //     $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');
+    //     return view('payments.edit', ['Payment' => $payment, 'companies' => $companies]);
+    // }
 
-    public function update(UpdatePaymentRequest $request, Payment $payment)
-    {
-        $payment->update($request->validated());
+    // public function update(UpdatePaymentRequest $request, Payment $payment)
+    // {
+    //     $payment->update($request->validated());
 
-        alert()->success('Success', 'Data updated successfully');
-        return redirect('payments');
-    }
+    //     alert()->success('Success', 'Data updated successfully');
+    //     return redirect('payments');
+    // }
 
-    public function destroy(Payment $payment)
-    {
-        try {
-            $payment->delete();
-        } catch (\Exception $e) {
-            return $this->ajaxError($e->getMessage());
-        }
-        return $this->ajaxSuccess('Data deleted successfully');
-    }
+    // public function destroy(Payment $payment)
+    // {
+    //     try {
+    //         $payment->delete();
+    //     } catch (\Exception $e) {
+    //         return $this->ajaxError($e->getMessage());
+    //     }
+    //     return $this->ajaxSuccess('Data deleted successfully');
+    // }
 
-    public function massDestroy(Request $request)
-    {
-        $request->validate([
-            'ids'   => 'required|array',
-            'ids.*' => 'exists:payments,id',
-        ]);
+    // public function massDestroy(Request $request)
+    // {
+    //     $request->validate([
+    //         'ids'   => 'required|array',
+    //         'ids.*' => 'exists:payments,id',
+    //     ]);
 
-        Payment::tenanted()->whereIn('id', $request->ids)->delete();
-        alert()->success('Success', 'Data deleted successfully');
-        return response(null, 204);
-    }
+    //     Payment::tenanted()->whereIn('id', $request->ids)->delete();
+    //     alert()->success('Success', 'Data deleted successfully');
+    //     return response(null, 204);
+    // }
 
     public function ajaxGetPayments(Request $request)
     {
