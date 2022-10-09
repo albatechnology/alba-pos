@@ -52,9 +52,9 @@ class ProductTenantController extends Controller
                 ->addColumn('actions', function ($row) use ($product) {
                     $prefixRoute      = $product->id;
                     $editGate      = 'product_tenants_edit';
-                    $deleteGate      = 'product_tenants_delete';
+                    // $deleteGate      = 'product_tenants_delete';
                     $crudRoutePart = 'products.tenants';
-                    return view('layouts.includes.nestedDatatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart', 'prefixRoute'));
+                    return view('layouts.includes.nestedDatatablesActions', compact('row', 'editGate', 'crudRoutePart', 'prefixRoute'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);

@@ -110,8 +110,32 @@ class Product extends Model implements TenantedInterface, HasMedia
         return $this->hasMany(OrderDetail::class);
     }
 
+    public function productTenants()
+    {
+        return $this->hasMany(ProductTenant::class);
+    }
+
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_details');
+    }
+
+    public function getMaxPriceRange()
+    {
+        return $this->productTenants?->max('price') ?? 0;
+    }
+
+    public function getMinPriceRange()
+    {
+        return $this->productTenants?->min('price') ?? 0;
+    }
+
+    public function getPriceRange($formated = true)
+    {
+        $productTenants = $this->productTenants;
+        if ($formated) {
+            return rupiah($productTenants?->min('price') ?? 0) . ' - ' . rupiah($productTenants?->max('price') ?? 0);
+        }
+        return ($productTenants?->min('price') ?? 0) . ' - ' . ($productTenants?->max('price') ?? 0);
     }
 }

@@ -28,6 +28,8 @@
                                                 <th width="10"></th>
                                                 <th>ID</th>
                                                 <th>Name</th>
+                                                <th>Price</th>
+                                                <th>Price Range</th>
                                                 <th>Company</th>
                                                 <th>Product Categories</th>
                                                 <th>Created At</th>
@@ -104,6 +106,14 @@
                 {
                     data: 'name',
                     name: 'name'
+                },
+                {
+                    data: 'price',
+                    name: 'price'
+                },
+                {
+                    data: 'price_range',
+                    name: 'price_range'
                 },
                 {
                     data: 'company_name',

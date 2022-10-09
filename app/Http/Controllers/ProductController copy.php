@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
+use App\Models\ProductTenant;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,48 +26,84 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
+        if (activeTenant()) {
+            if ($request->ajax()) {
+                $data = ProductTenant::tenanted()->with(['product.productCategories', 'tenant'])->select(sprintf('%s.*', (new ProductTenant)->table));
 
-            return DataTables::of($data)->addIndexColumn()
-                ->addColumn('placeholder', '&nbsp;')
-                ->editColumn('created_at', function ($row) {
-                    return date('d-m-Y H:i', strtotime($row->created_at));
-                })
-                ->editColumn('price', function ($row) {
-                    return rupiah($row->price ?? 0);
-                })
-                ->addColumn('price_range', function ($row) {
-                    return $row->getPriceRange();
-                })
-                ->addColumn('company_name', function ($row) {
-                    return $row->company?->name ?? '';
-                })
-                ->addColumn('product_categories', function ($row) {
-                    $html = '';
-                    $productCategories = $row->productCategories;
-                    if ($productCategories->count() > 0) {
-                        foreach ($productCategories as $category) {
-                            $html .= '<div class="badge badge-info">' . $category->name . '</div><br>';
+                return DataTables::of($data)->addIndexColumn()
+                    ->addColumn('placeholder', '&nbsp;')
+                    ->editColumn('created_at', function ($row) {
+                        return date('d-m-Y H:i', strtotime($row->created_at));
+                    })
+                    ->editColumn('price', function ($row) {
+                        return rupiah($row->price ?? 0);
+                    })
+                    ->addColumn('name', function ($row) {
+                        return $row->product?->name ?? '';
+                    })
+                    ->addColumn('tenant', function ($row) {
+                        return $row->tenant?->name ?? '';
+                    })
+                    ->addColumn('product_categories', function ($row) {
+                        $html = '';
+                        $productCategories = $row->product->productCategories;
+                        if ($productCategories->count() > 0) {
+                            foreach ($productCategories as $category) {
+                                $html .= '<div class="badge badge-info">' . $category->name . '</div><br>';
+                            }
                         }
-                    }
-                    return $html;
-                })
-                ->addColumn('actions', function ($row) {
-                    $extraActions  = '';
-                    if (user()->can('product_tenants_access')) {
-                        $extraActions .= '<a class="btn btn-warning btn-sm" href="' . route('products.tenants.index', $row->id) . '">Tenant Product</a>';
-                    }
-                    $viewGate      = 'products_show';
-                    $editGate      = 'products_edit';
-                    $deleteGate    = 'products_delete';
-                    $crudRoutePart = 'products';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
-                })
-                ->rawColumns(['placeholder', 'actions', 'product_categories'])
-                ->make(true);
+                        return $html;
+                    })
+                    ->addColumn('actions', function ($row) {
+                        $extraActions  = '<a class="btn btn-warning btn-sm" href="' . route('products.tenants.index', $row->id) . '">Tenant Product</a>';
+                        $viewGate      = 'products_show';
+                        $editGate      = 'products_edit';
+                        $deleteGate    = 'products_delete';
+                        $crudRoutePart = 'products';
+                        return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
+                    })
+                    ->rawColumns(['placeholder', 'actions', 'product_categories'])
+                    ->make(true);
+            }
+            return view('products.index-tenanted');
+        } else {
+            if ($request->ajax()) {
+                $data = Product::tenanted()->with(['company', 'productCategories'])->select(sprintf('%s.*', (new Product)->table));
+
+                return DataTables::of($data)->addIndexColumn()
+                    ->addColumn('placeholder', '&nbsp;')
+                    ->editColumn('created_at', function ($row) {
+                        return date('d-m-Y H:i', strtotime($row->created_at));
+                    })
+                    ->editColumn('price', function ($row) {
+                        return rupiah($row->price ?? 0);
+                    })
+                    ->addColumn('company_name', function ($row) {
+                        return $row->company?->name ?? '';
+                    })
+                    ->addColumn('product_categories', function ($row) {
+                        $html = '';
+                        $productCategories = $row->productCategories;
+                        if ($productCategories->count() > 0) {
+                            foreach ($productCategories as $category) {
+                                $html .= '<div class="badge badge-info">' . $category->name . '</div><br>';
+                            }
+                        }
+                        return $html;
+                    })
+                    ->addColumn('actions', function ($row) {
+                        $extraActions  = '<a class="btn btn-warning btn-sm" href="' . route('products.tenants.index', $row->id) . '">Tenant Product</a>';
+                        $viewGate      = 'products_show';
+                        $editGate      = 'products_edit';
+                        $deleteGate    = 'products_delete';
+                        $crudRoutePart = 'products';
+                        return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
+                    })
+                    ->rawColumns(['placeholder', 'actions', 'product_categories'])
+                    ->make(true);
+            }
+            return view('products.index');
         }
-        return view('products.index');
     }
 
     public function create()

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Cashier;
 
 use App\Models\Cart;
 use App\Models\Product as ModelsProduct;
+use App\Models\ProductTenant;
 use App\Services\CartService;
 use Illuminate\Support\Collection;
 use Livewire\Component;

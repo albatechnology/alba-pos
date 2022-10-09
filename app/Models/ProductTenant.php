@@ -13,6 +13,15 @@ class ProductTenant extends Model implements TenantedInterface
     public $table = 'product_tenants';
     protected $guarded = [];
 
+    public function scopeTenanted($query)
+    {
+        $hasActiveTenant = tenancy()->getActiveTenant();
+        if ($hasActiveTenant) return $query->tenantedActiveTenant($hasActiveTenant);
+
+        $user = user();
+        return $user->is_super_admin ? $query : $query->whereIn('tenant_id', tenancy()->getTenants()->pluck('id'));
+    }
+
     public function tenant()
     {
         return $this->belongsTo(Tenant::class);

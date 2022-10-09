@@ -97,6 +97,7 @@ class PermissionsHelper
                     'products_create',
                     'products_edit',
                     'products_delete',
+                    'products_tenant',
                 ],
 
                 'product_categories_access' => [

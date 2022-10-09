@@ -5,8 +5,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('products.index') }}" class="btn btn-success" title="Back"><i
-                                class="fa fa-arrow-left"></i> Back</a>
+                        @can('products_create')
+                        <a href="{{ route('products.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        @endcan
                     </div>
                 </div>
             </div>
@@ -17,7 +18,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Tenant's Products List</h3>
+                                <h3 class="card-title">Products List</h3>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -27,10 +28,9 @@
                                                 <th width="10"></th>
                                                 <th>ID</th>
                                                 <th>Name</th>
-                                                <th>Tenant</th>
-                                                <th>Company</th>
-                                                <th>UOM</th>
                                                 <th>Price</th>
+                                                <th>Tenant</th>
+                                                <th>Product Categories</th>
                                                 <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
@@ -50,7 +50,7 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
-        @can('product_tenants_delete')
+        @can('products_delete')
             let deleteButton = {
                 text: 'Delete selected',
                 url: "{{ route('products.massDestroy') }}",
@@ -93,7 +93,7 @@
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route('products.tenants.index', $product->id) }}',
+            ajax: '{{ route('products.index') }}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'
@@ -103,24 +103,20 @@
                     name: 'id',
                 },
                 {
-                    data: 'product_name',
-                    name: 'product.name'
-                },
-                {
-                    data: 'tenant_name',
-                    name: 'tenant.name'
-                },
-                {
-                    data: 'company_name',
-                    name: 'company.name'
-                },
-                {
-                    data: 'uom',
-                    name: 'uom'
+                    data: 'name',
+                    name: 'name'
                 },
                 {
                     data: 'price',
                     name: 'price'
+                },
+                {
+                    data: 'tenant',
+                    name: 'tenant.name'
+                },
+                {
+                    data: 'product_categories',
+                    name: 'product_categories'
                 },
                 {
                     data: 'created_at',
@@ -168,7 +164,7 @@
 
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('products/'.$product->id.'/tenants') }}/` + id, {
+                $.post(`{{ url('products') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {
