@@ -57,7 +57,10 @@ class CartService
                 ]
             );
 
-            $product = DB::table('products')->select('price')->where('id', $data['product_id'])->whereNull('deleted_at')->first();
+            $product = DB::table('product_tenants')->select('price')
+                ->where('product_id', $data['product_id'])
+                ->where('tenant_id', $tenant->id)
+                ->first();
 
             $detail->quantity = $detail->quantity + ($data['quantity'] ?? 1);
             $detail->total_price = $product->price * $detail->quantity;
@@ -111,7 +114,10 @@ class CartService
                     ]
                 );
 
-                $product = DB::table('products')->select('price')->where('id', $data['product_id'])->whereNull('deleted_at')->first();
+                $product = DB::table('product_tenants')->select('price')
+                ->where('product_id', $data['product_id'])
+                ->where('tenant_id', $tenant->id)
+                ->first();
 
                 $detail->quantity = $data['quantity'] ?? 1;
                 $detail->total_price = $product->price * $detail->quantity;

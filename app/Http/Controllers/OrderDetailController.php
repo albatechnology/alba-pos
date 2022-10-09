@@ -24,7 +24,7 @@ class OrderDetailController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = OrderDetail::tenanted()->with(['company', 'tenant', 'product'])->select(sprintf('%s.*', (new OrderDetail)->table));
+            $data = OrderDetail::tenanted()->with(['order','company', 'tenant', 'product'])->select(sprintf('%s.*', (new OrderDetail)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {

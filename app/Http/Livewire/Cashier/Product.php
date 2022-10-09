@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Cashier;
 
 use App\Models\Cart;
-use App\Models\Product as ModelsProduct;
 use App\Models\ProductTenant;
 use App\Services\CartService;
 use Illuminate\Support\Collection;
@@ -52,18 +51,23 @@ class Product extends Component
         $tenant = activeTenant();
         $tenantId = $tenant->id;
 
-        $products = ModelsProduct::select('products.id', 'products.name', 'product_tenants.price')
-            ->with(['stock' => function ($stock) use ($tenantId) {
-                $stock->where('tenant_id', $tenantId);
-            }])
-            ->join('product_tenants', 'product_tenants.product_id', '=', 'products.id')
-            ->where('name', 'like', '%' . $this->search . '%')
-            ->where('product_tenants.tenant_id', $tenantId);
+        $products = ProductTenant::with(['product', 'stock'])
+            ->where('product_tenants.tenant_id', $tenantId)
+            ->whereHas('product', fn ($q) => $q->where('name', 'like', '%' . $this->search . '%'));
+
+        // $products = ModelsProduct::select('products.id', 'products.name', 'product_tenants.price')
+        //     ->with(['stock' => function ($stock) use ($tenantId) {
+        //         $stock->where('tenant_id', $tenantId);
+        //     }])
+        //     ->join('product_tenants', 'product_tenants.product_id', '=', 'products.id')
+        //     ->where('name', 'like', '%' . $this->search . '%')
+        //     ->where('product_tenants.tenant_id', $tenantId);
 
         if (!is_null($this->selectedProductCategoryId)) {
-            $products = $products->whereHas('productCategories', fn ($q) => $q->where('product_category_id', $this->selectedProductCategoryId));
+            $products = $products->whereHas('product.productCategories', fn ($q) => $q->where('product_category_id', $this->selectedProductCategoryId));
         }
-        $this->products = $products->orderBy('products.id')->get();
+        $this->products = $products->get();
+        // $this->products = $products->orderBy('products.id')->get();
     }
 
     public function updatedSearch($value)

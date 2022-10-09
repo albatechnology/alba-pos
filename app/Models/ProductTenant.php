@@ -32,6 +32,14 @@ class ProductTenant extends Model implements TenantedInterface
         return $this->belongsTo(Product::class);
     }
 
+    public function stocks(){
+        return $this->hasMany(Stock::class, 'product_id', 'product_id');
+    }
+
+    public function stock(){
+        return $this->stocks()->where('tenant_id', activeTenant()->id);
+    }
+
     public function scopeWhereProductId($query, $id)
     {
         return $query->where('product_id', $id);

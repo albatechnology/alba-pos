@@ -17,7 +17,13 @@ class MakeOrderDetails
         $tenant_id = $order->tenant_id;
 
         $orderDetails = collect($items)->map(function ($item) use ($company_id, $tenant_id) {
-            $product = DB::table('products')->select('price', 'tax')->where('id', $item['product_id'])->first();
+            // $product = DB::table('products')->select('price', 'tax')->where('id', $item['product_id'])->first();
+
+            $product = DB::table('product_tenants')->selectRaw('product_tenants.price, products.tax')
+                ->join('products', 'products.id', '=', 'product_tenants.product_id')
+                ->where('product_id', $item['product_id'])
+                ->where('tenant_id', $tenant_id)
+                ->first();
 
             $detail = new OrderDetail();
             $detail->company_id = $company_id;

@@ -34,16 +34,16 @@
             <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-4 mt-2">
                 @foreach ($products as $product)
                     <div class="col mb-4">
-                        <div wire:click="setSelectedProductIds({{ $product->id }})"
-                            class="card pb-0 {{ in_array($product->id, $selectedProductIds) ? 'bg-success' : '' }}">
-                            <img src="{{ $product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid">
+                        <div wire:click="setSelectedProductIds({{ $product->product_id }})"
+                            class="card pb-0 {{ in_array($product->product_id, $selectedProductIds) ? 'bg-success' : '' }}">
+                            <img src="{{ $product->product->getFirstMediaUrl('products','thumb') }}" class="card-img-top img-fluid">
                             <div class="card-body p-2">
-                                <h5 class="card-title font-weight-bold" style="font-size: 14px">{{ $product->name }}</h5>
+                                <h5 class="card-title font-weight-bold" style="font-size: 14px">{{ $product->product->name }}</h5>
                                 <br>
-                                <h5 class="card-title" style="font-size: 14px">{{ implode(', ', $product->productCategories->pluck('name')->all()) }}</h5>
+                                <h5 class="card-title" style="font-size: 14px">{{ implode(', ', $product->product->productCategories->pluck('name')->all()) }}</h5>
                                 <br>
                                 <p style="font-size: 14px" class="p-0 m-0">Rp. {{ number_format($product->price) }}</p>
-                                <p style="font-size: 14px" class="p-0 m-0">Stock: {{ $product->stock->stock }}</p>
+                                <p style="font-size: 14px" class="p-0 m-0">Stock: {{ $product->stock[0]->stock }}</p>
                             </div>
                         </div>
                     </div>
