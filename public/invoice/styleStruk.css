@@ -4,7 +4,7 @@
     margin: 0 auto;
     width: 100mm;
     background: #FFF;
-
+    font-size: 14px;
 }
 
 p{
@@ -37,8 +37,8 @@ width: 100%;
 border-collapse: collapse;
 }
 
-.tabletitle {
-font-size: .5em;
+.tabletitle, .tabletitle td h2 {
+font-size: 14px;
 }
 
 .table-header{
