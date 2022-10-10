@@ -106,7 +106,12 @@ class TenancyService
     {
         if (!$user) $user = $this->checkUserLogin();
 
-        if ($activeCompany = $this->getActiveCompany()) return Tenant::where('company_id', $activeCompany->id)->whereIn('id', $user->tenants->pluck('id'))->get();
+        if ($activeCompany = $this->getActiveCompany()){
+            if ($user->is_super_admin){
+                return Tenant::where('company_id', $activeCompany->id)->get();
+            }
+            return Tenant::where('company_id', $activeCompany->id)->whereIn('id', $user->tenants->pluck('id'))->get();
+        }
 
         if ($user->is_super_admin) return Tenant::all();
         // if ($user->is_admin) return Tenant::whereIn('company_id', $this->getMyAllCompanies($user)->pluck('id'))->get();
