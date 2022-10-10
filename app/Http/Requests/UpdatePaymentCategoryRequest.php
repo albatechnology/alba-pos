@@ -36,7 +36,8 @@ class UpdatePaymentCategoryRequest extends FormRequest
                     $paymentCategory = PaymentCategory::where('company_id', $this->company_id)->where('name', $value)->first();
                     if ($paymentCategory) $fail('The payment category ' . $value . ' is already in company ' . $paymentCategory->company->name);
                 }
-            }]
+            }],
+            'is_exact_change' => 'nullable',
         ];
     }
 }

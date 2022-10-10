@@ -34,6 +34,16 @@
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    <div class="form-group form-check form-check-inline">
+                                        <input name="is_exact_change" type="checkbox"
+                                            {{ $paymentCategory->is_exact_change == 1 ? 'checked="checked"' : '' }} value="1"
+                                            class="form-check-input @error('is_exact_change') is-invalid @enderror"
+                                            placeholder="Is_exact_change">
+                                        @error('is_exact_change')
+                                            <span class="error invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                        <label class="required form-check-label font-weight-bold">Is Exact Change</label>
+                                    </div>
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Save</button>

@@ -31,6 +31,9 @@ class PaymentCategoryController extends Controller
             $data = PaymentCategory::tenanted()->with('company')->select(sprintf('%s.*', (new PaymentCategory)->table));
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
+                ->editColumn('is_exact_change', function ($row) {
+                    return $row->is_exact_change?"Yes":"No";
+                })
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
