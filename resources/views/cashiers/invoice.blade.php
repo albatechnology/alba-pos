@@ -15,7 +15,7 @@
 
     <!-- <button onclick="generatePDF()">Print</button> -->
     <div id="invoice-POS">
-        <div id="top" style="padding: 0 50px;">
+        <div id="top">
             <div class="header">
                 <div class="info-header">
                     <h2>{{ $order->company->name }}</h2>
