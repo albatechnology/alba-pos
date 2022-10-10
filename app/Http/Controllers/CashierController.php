@@ -44,6 +44,8 @@ class CashierController extends Controller
     public function proceedPayment(Request $request)
     {
         $cart = CartService::getMyCart();
+        if(!$cart || $cart?->cartDetails?->count() <= 0) return response()->json(['success' => false]);
+
         $data = $cart->cartDetails->map->only('product_id', 'quantity')->all();
 
         $raw_source = [
@@ -86,7 +88,7 @@ class CashierController extends Controller
     public function setDiscount(Discount $discount)
     {
         $cart = CartService::getMyCart();
-        if(!$cart) return response()->noContent();
+        if (!$cart) return response()->noContent();
 
         $cart->discount_id = $discount->id ?? null;
         $cart->save();
@@ -96,5 +98,41 @@ class CashierController extends Controller
     public function invoice(Order $order)
     {
         return view('cashiers.invoice', ['order' => $order]);
+    }
+
+    public function cartList()
+    {
+        $cart = CartService::getMyCart()?->load('cartDetails.product');
+
+        $sub_total_price = $cart?->cartDetails->sum('total_price') ?? 0;
+        $total_tax = $cart?->cartDetails?->sum(function ($q) {
+            return $q->product->tax * $q->quantity;
+        }) ?? 0;
+        $total_price = ($cart?->total_price ?? 0) + $total_tax;
+
+        return response()->json([
+            'cart' => $cart,
+            'sub_total_price' => $sub_total_price,
+            'total_price' => $total_price,
+        ]);
+    }
+
+    public function payment()
+    {
+        $cart = CartService::getMyCart()?->load('cartDetails.product');
+
+        if(!$cart || $cart?->cartDetails?->count() <= 0) return redirect('cashier');
+
+        $discounts = Discount::tenanted()->where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->pluck('name', 'id')->prepend('- Select Discount -', '');
+        $paymentTypes = PaymentType::tenanted()->get();
+
+
+        $sub_total_price = $cart?->cartDetails->sum('total_price') ?? 0;
+        $total_tax = $cart?->cartDetails?->sum(function ($q) {
+            return $q->product->tax * $q->quantity;
+        }) ?? 0;
+        $total_price = ($cart?->total_price ?? 0) + $total_tax;
+
+        return view('cashiers.payment', ['paymentTypes' => $paymentTypes, 'discounts' => $discounts, 'cart' => $cart, 'total_price' => $total_price, 'sub_total_price' => $sub_total_price]);
     }
 }

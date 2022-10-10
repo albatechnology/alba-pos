@@ -18,6 +18,7 @@ class CartService
     public static function getMyCart()
     {
         $tenant = activeTenant();
+        if(!$tenant) return;
         return Cart::myCart()->WhereTenantId($tenant->id)->first();
     }
 
@@ -115,9 +116,9 @@ class CartService
                 );
 
                 $product = DB::table('product_tenants')->select('price')
-                ->where('product_id', $data['product_id'])
-                ->where('tenant_id', $tenant->id)
-                ->first();
+                    ->where('product_id', $data['product_id'])
+                    ->where('tenant_id', $tenant->id)
+                    ->first();
 
                 $detail->quantity = $data['quantity'] ?? 1;
                 $detail->total_price = $product->price * $detail->quantity;
@@ -192,13 +193,17 @@ class CartService
         $user = user();
         $tenant = activeTenant();
 
-        $cartDetail = $user->carts()
+        $cart = $user->carts()
             ->where('tenant_id', $tenant->id)
-            ->first()
-            ->cartDetails?->filter(function (CartDetail $cartDetail) use ($product_id) {
-                return $cartDetail->product_id === $product_id;
-            })->first();
+            ->first();
+
+        $cartDetail = $cart->cartDetails?->filter(function (CartDetail $cartDetail) use ($product_id) {
+            return $cartDetail->product_id === $product_id;
+        })->first();
 
         if ($cartDetail) $cartDetail->delete();
+
+        // $cart->refresh();
+        // if ($cart?->cartDetails?->count() <= 0) $cart->delete();
     }
 }

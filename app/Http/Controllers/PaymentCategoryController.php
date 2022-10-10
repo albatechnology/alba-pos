@@ -32,7 +32,7 @@ class PaymentCategoryController extends Controller
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('is_exact_change', function ($row) {
-                    return $row->is_exact_change?"Yes":"No";
+                    return $row->is_exact_change ? "Yes" : "No";
                 })
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
@@ -116,7 +116,8 @@ class PaymentCategoryController extends Controller
      */
     public function update(UpdatePaymentCategoryRequest $request, PaymentCategory $paymentCategory)
     {
-        $paymentCategory->update($request->validated());
+        $data = array_merge($request->validated(), ['is_exact_change' => $request->is_exact_change ?? 0]);
+        $paymentCategory->update($data);
 
         alert()->success('Success', 'Data updated successfully');
         return redirect('payment-categories');

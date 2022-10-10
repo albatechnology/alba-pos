@@ -1,4 +1,3 @@
-@extends('layouts.app')
 @push('css')
     <style>
         .sidebar-item {
@@ -16,6 +15,7 @@
         }
     </style>
 @endpush
+@extends('layouts.app')
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
@@ -50,19 +50,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Discount</label>
-                                    <select name="discount_id" id="discount_id" class="form-control">
-                                        @foreach ($discounts as $id => $name)
-                                            <option value="{{ $id }}"
-                                                {{ $cart?->discount_id == $id ? 'selected' : '' }}>
-                                                {{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <a href="{{ route('cashier.payment') }}" class="btn btn-primary btn-block">Payment</a>
-                                {{-- <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalPay">Payment</button> --}}
-                                {{-- <div id="container-input-payment">
+                                <div id="container-input-payment">
                                     <form id="formProceedPayment">
                                         @csrf
                                         <div class="form-group">
@@ -97,7 +85,7 @@
                                             disabled>Proceed
                                             Payment</button>
                                     </form>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,80 +93,13 @@
             </div>
         </section>
     </div>
-    <div class="modal fade" id="modalPay" tabindex="-1" aria-labelledby="modalPayLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content" style="height: 100vh">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalPayLabel">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-5">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Cart</h3>
-                                    </div>
-                                    <div class="card-body" id="cart-list">
-                                        <ul class="list-unstyled">
-                                            <li class="media">
-                                                <img src="..." class="mr-3" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1">Product Name</h5>
-                                                    <p>Rp. 15.000</p>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <img src="..." class="mr-3" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1">Product Name</h5>
-                                                    <p>Rp. 15.000</p>
-                                                </div>
-                                            </li>
-                                            <li class="media">
-                                                <img src="..." class="mr-3" alt="...">
-                                                <div class="media-body">
-                                                    <h5 class="mt-0 mb-1">Product Name</h5>
-                                                    <p>Rp. 15.000</p>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div>
-                                            <ul>
-                                                <li>Sub Total : 10000</li>
-                                                <li>Discount : 10000</li>
-                                                <li>Total : 10000</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, doloribus pariatur.
-                                    Reiciendis asperiores quisquam accusantium obcaecati? Aperiam, ab praesentium distinctio
-                                    facilis iure vitae vel, ex sit expedita veniam, repellendus tenetur.</h1>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    {{-- <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false" tabindex="-1"
         aria-labelledby="modalPaymentLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable">
             <div class="modal-content">
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection
 @push('js')
     <script src="https://shaack.com/projekte/bootstrap-input-spinner/src/bootstrap-input-spinner.js"></script>
@@ -241,8 +162,6 @@
         });
 
         $(document).ready(function() {
-            $('body').addClass('sidebar-collapse');
-
             refreshCart();
 
             $('#amount_paid, #additional_discount').on('keyup', function() {
@@ -279,34 +198,6 @@
                         });
                     }
                 })
-            });
-
-            // new
-            $('#modalPay').on('shown.bs.modal', function(e) {
-                $.get("{{ url('cashier/cart-list') }}", function(res){
-                    console.log('res',res)
-
-                    var html = '';
-                    res.cart.cart_details.forEach(detail => {
-                        html += '<li class="media">';
-                            // html += '<img src="..." class="mr-3" alt="...">';
-                            html += '<div class="media-body">';
-                                html += '<h5 class="mt-0 mb-1">'+detail.product.name+'e</h5>';
-                                html += '<p>'+detail.total_price+'</p>';
-                            html += '</div>';
-                        html += '</li>';
-                    });
-
-                    html += '<div>';
-                        html += '<ul>';
-                            html += '<li>Sub Total : '+res.sub_total_price+'</li>';
-                            html += '<li>Discount : '+res.cart.total_discount+'</li>';
-                            html += '<li>Total : '+res.total_price+'</li>';
-                        html += '</ul>';
-                    html += '</div>';
-
-                    $('#cart-list').html(html);
-                });
             });
         })
     </script>

@@ -43,7 +43,7 @@ class Cart extends Model
 
     public function refreshTotalPrice()
     {
-        $total_price = $this->cartDetails->sum('total_price');
+        $total_price = $this->cartDetails?->sum('total_price') ?? 0;
         $total_discount = 0;
 
         if ($this->discount_id) {
@@ -60,8 +60,8 @@ class Cart extends Model
         $total_price = $total_price - $total_discount;
 
         $this->update([
-            'total_price' => $total_price ?? 0,
-            'total_discount' => $total_discount ?? 0,
+            'total_price' => $total_price > 0 ? $total_price : 0,
+            'total_discount' => $total_price > 0 ? ($total_discount ?? 0) : 0,
         ]);
     }
 

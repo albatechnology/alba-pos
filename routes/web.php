@@ -48,6 +48,10 @@ Route::group(['middleware' => 'auth'], function ($route) {
         $route->post('/proceed-payment', [CashierController::class, 'proceedPayment'])->name('proceedPayment');
         $route->post('/delete-cart-detail/{id}', [CashierController::class, 'deleteCartDetail']);
         $route->post('/plus-minus/{product_id}/{qty}', [CashierController::class, 'plusMinus']);
+
+
+        $route->get('/payment', [CashierController::class, 'payment'])->name('payment');
+        $route->get('/cart-list', [CashierController::class, 'cartList'])->name('cartList');
     });
 
     $route->patch('users/restore', [UserController::class, 'restore'])->name('users.restore');
