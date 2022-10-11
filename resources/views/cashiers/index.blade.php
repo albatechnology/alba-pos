@@ -199,7 +199,9 @@
                     'opacity': 0.4,
                     'pointer-events': 'none'
                 })
-                $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
+                var discountId = $(this).val() ? '/' + $(this).val() : '';
+                alert(discountId)
+                $.post("{{ url('cashier/setDiscount') }}" + discountId, function(res) {
                     console.log('res setDiscount', res)
                     if (typeof res !== 'undefined') {
                         refreshCart();
