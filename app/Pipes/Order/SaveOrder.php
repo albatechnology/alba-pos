@@ -13,15 +13,15 @@ class SaveOrder
 {
     public function handle(Order $order, Closure $next)
     {
-        // dump('SaveOrder');
-        // dd($order);
         $order = DB::transaction(function () use ($order) {
             $orderDetails = $order->order_details;
 
+            $cartId = $order->cart_id;
             $paymentTypeId = $order->payment_type_id ?? null;
             $amountPaid = $order->amount_paid ?? null;
             // $orderShipment = $order->order_shipment;
 
+            unset($order->cart_id);
             unset($order->payment_type_id);
             unset($order->raw_source);
             unset($order->request);
@@ -36,7 +36,7 @@ class SaveOrder
                 $payment = $this->createPayment($order, $paymentTypeId);
             }
 
-            Cart::where('user_id', $order->user_id)->where('tenant_id', $order->tenant_id)->delete();
+            if (!is_null($cartId)) Cart::destroy($cartId);
 
             return $order;
         });
