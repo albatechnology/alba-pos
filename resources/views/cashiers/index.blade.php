@@ -55,7 +55,7 @@
                                     </select>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <button id="btnSaveCart" class="btn btn-success w-50 mx-1">Save</button>
+                                    <button id="btnSaveCart" class="btn btn-outline-primary w-50 mx-1">Save</button>
                                     <a href="{{ route('cashier.payment') }}" class="btn btn-primary w-50 mx-1">Payment</a>
                                 </div>
                                 {{-- <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalOrderList">Payment</button> --}}
