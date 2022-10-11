@@ -5,6 +5,7 @@
     </button>
 </div>
 <div class="modal-body">
+    @if(is_null($carts) || count($carts) > 0)
     <div class="row">
         <div class="col-3">
             <div class="list-group" id="list-tab" role="tablist">
@@ -47,4 +48,7 @@
             </div>
         </div>
     </div>
+    @else
+    <div class="alert alert-info">Tidak ada order tersimpan!</div>
+    @endif
 </div>

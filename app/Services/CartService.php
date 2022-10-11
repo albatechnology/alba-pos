@@ -31,7 +31,6 @@ class CartService
                 }
             })
             ->first();
-            // dd($cart);
         return $cart;
     }
 

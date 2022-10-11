@@ -50,6 +50,7 @@ class CashierController extends Controller
 
         $raw_source = [
             'items' => $data,
+            'cart_id' => $cart->id,
             'additional_discount' => (int) $request->additional_discount ?? 0,
             'amount_paid' => (int) $request->amount_paid ?? 0,
             'discount_id' => $request->discount_id,
@@ -62,6 +63,7 @@ class CashierController extends Controller
         if ($request->is_order) {
             $order = OrderService::processOrder(Order::make(['raw_source' => $raw_source]));
             if ($order) {
+                session()->forget('cart_code');
                 return response()->json(['order_id' => $order->id]);
             }
         } else {
