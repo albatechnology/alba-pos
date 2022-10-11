@@ -44,7 +44,7 @@ class CashierController extends Controller
     public function proceedPayment(Request $request)
     {
         $cart = CartService::getMyCart();
-        if(!$cart || $cart?->cartDetails?->count() <= 0) return response()->json(['success' => false]);
+        if (!$cart || $cart?->cartDetails?->count() <= 0) return response()->json(['success' => false]);
 
         $data = $cart->cartDetails->map->only('product_id', 'quantity')->all();
 
@@ -121,7 +121,7 @@ class CashierController extends Controller
     {
         $cart = CartService::getMyCart()?->load('cartDetails.product');
 
-        if(!$cart || $cart?->cartDetails?->count() <= 0) return redirect('cashier');
+        if (!$cart || $cart?->cartDetails?->count() <= 0) return redirect('cashier');
 
         $discounts = Discount::tenanted()->where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->pluck('name', 'id')->prepend('- Select Discount -', '');
         $paymentTypes = PaymentType::tenanted()->get();
@@ -134,5 +134,30 @@ class CashierController extends Controller
         $total_price = ($cart?->total_price ?? 0) + $total_tax;
 
         return view('cashiers.payment', ['paymentTypes' => $paymentTypes, 'discounts' => $discounts, 'cart' => $cart, 'total_price' => $total_price, 'sub_total_price' => $sub_total_price]);
+    }
+
+    public function saveCart(Request $request)
+    {
+        $cart = CartService::saveCart();
+        if ($cart) {
+            return response()->json(['success' => true, 'cart' => $cart]);
+        }
+        return response()->json(['success' => false]);
+    }
+
+    public function orderList()
+    {
+        $user = user();
+        $carts = Cart::myCart()->WhereTenantId($user->tenant_id)->whereNotNull('code')->get();
+        return view('cashiers.orderList', ['carts' => $carts]);
+    }
+
+    public function setOrder($code){
+        $type = $_GET['type'] ?? 'order';
+        session(['cart_code' => $code]);
+        if($type == 'order') {
+            return redirect('cashier');
+        }
+        return redirect('cashier/payment');
     }
 }

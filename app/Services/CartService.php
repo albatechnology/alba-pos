@@ -18,8 +18,32 @@ class CartService
     public static function getMyCart()
     {
         $tenant = activeTenant();
-        if(!$tenant) return;
-        return Cart::myCart()->WhereTenantId($tenant->id)->first();
+        if (!$tenant) return;
+
+        $code = session('cart_code', null);
+
+        $cart = Cart::myCart()->WhereTenantId($tenant->id)
+            ->where(function ($q) use ($code) {
+                if (!is_null($code)) {
+                    $q->where('code', $code);
+                } else {
+                    $q->whereNull('code');
+                }
+            })
+            ->first();
+            // dd($cart);
+        return $cart;
+    }
+
+    public static function saveCart()
+    {
+        $cart = self::getMyCart();
+        if (!$cart) return;
+
+        if (is_null($cart?->code)) $cart->code = $cart->generateCode();
+        $cart->save();
+        session()->forget('cart_code');
+        return $cart;
     }
 
     /**
@@ -48,6 +72,7 @@ class CartService
                 [
                     'user_id' => $user->id,
                     'tenant_id' => $tenant->id,
+                    'code' => session('cart_code', null),
                 ]
             );
 
@@ -102,6 +127,7 @@ class CartService
             [
                 'user_id' => $user->id,
                 'tenant_id' => $tenant->id,
+                'code' => session('cart_code', null),
             ]
         );
 
@@ -111,7 +137,7 @@ class CartService
                 $detail = $cart->cartDetails()->firstOrCreate(
                     [
                         'cart_id' => $cart->id,
-                        'product_id' => $data['product_id']
+                        'product_id' => $data['product_id'],
                     ]
                 );
 

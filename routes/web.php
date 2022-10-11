@@ -42,8 +42,11 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->group(['prefix' => 'cashier', 'as' => 'cashier.'], function ($route) {
         $route->get('/', [CashierController::class, 'index']);
-        $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
         $route->get('/cart', [CashierController::class, 'cart'])->name('cart');
+        $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
+        $route->get('/order-list', [CashierController::class, 'orderList']);
+        $route->get('/set-order/{code}', [CashierController::class, 'setOrder']);
+        $route->post('/save-cart', [CashierController::class, 'saveCart'])->name('saveCart');
         $route->post('/setDiscount/{discount?}', [CashierController::class, 'setDiscount']);
         $route->post('/proceed-payment', [CashierController::class, 'proceedPayment'])->name('proceedPayment');
         $route->post('/delete-cart-detail/{id}', [CashierController::class, 'deleteCartDetail']);
