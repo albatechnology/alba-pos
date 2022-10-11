@@ -90,7 +90,7 @@ class CashierController extends Controller
     public function setDiscount(Discount $discount)
     {
         $cart = CartService::getMyCart();
-        if (!$cart) return response()->json(['success' => false]);
+        if (!$cart) return response()->noContent();
 
         $cart->discount_id = $discount->id ?? null;
         $cart->save();
