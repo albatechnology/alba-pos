@@ -267,9 +267,9 @@
 
             $(".select-payment").change(function() {
                 if ($(this).data('is_exact_change') == 1) {
-                    $('#amount_paid').val(0)
-                } else {
                     $('#amount_paid').val(totalPrice ?? 0)
+                } else {
+                    $('#amount_paid').val(0)
                 }
                 calculatePayment();
             });
