@@ -42,8 +42,9 @@ class SupplierController extends Controller
                 ->addColumn('actions', function ($row) {
                     $viewGate      = 'suppliers_view';
                     $editGate      = 'suppliers_edit';
+                    $deleteGate    = 'suppliers_delete';
                     $crudRoutePart = 'suppliers';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -121,6 +122,11 @@ class SupplierController extends Controller
      */
     public function destroy(Supplier $supplier)
     {
-        //
+        try {
+            $supplier->delete();
+        } catch (\Exception $e) {
+            return $this->ajaxError($e->getMessage());
+        }
+        return $this->ajaxSuccess('Data deleted successfully');
     }
 }

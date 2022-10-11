@@ -73,7 +73,8 @@ class HomeController extends Controller
                     });
             })
             ->join('order_details', function ($join) {
-                $join->on('product_tenants.product_id', '=', 'order_details.product_id')
+                $join->on('product_tenants.product_id', '=', 'order_details.product_id');
+                $join->on('product_tenants.tenant_id','=','order_details.tenant_id')
                     ->where(function ($q) {
                         if ($activeTenant = activeTenant()) {
                             $q->where('order_details.tenant_id', $activeTenant->id);
