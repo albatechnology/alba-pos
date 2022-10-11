@@ -200,6 +200,7 @@
                     'pointer-events': 'none'
                 })
                 $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
+                    console.log('res setDiscount', res)
                     if (typeof res !== 'undefined') {
                         refreshCart();
                     } else {
