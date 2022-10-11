@@ -120,7 +120,7 @@ class PermissionsHelper
                 ],
             ],
 
-            'warehouse_management_access' => [
+            'inventory_management_access' => [
                 'stocks_access' => [
                     'stocks_view',
                     'stocks_create',

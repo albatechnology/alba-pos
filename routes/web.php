@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockHistoryController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -140,4 +141,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('reports', ReportController::class)->only(['index']);
 
     $route->resource('discounts', DiscountController::class);
+
+    $route->resource('suppliers', SupplierController::class);
 });

@@ -16,7 +16,7 @@ class MenuService
             self::marketingManagement(),
             self::customerManagement(),
             self::transactionManagement(),
-            self::warehouseManagement(),
+            self::inventoryManagement(),
         ];
     }
 
@@ -79,12 +79,13 @@ class MenuService
         return new Menu('transaction_management_access', 'fa fa-shopping-cart', 'Transaction', ...[$orders, $orderDetails, $payments]);
     }
 
-    protected static function warehouseManagement()
+    protected static function inventoryManagement()
     {
         $stocks = new Submenu('stocks_access', 'stocks', 'fa fa-warehouse', 'Stocks');
         $stocksHistories = new Submenu('stock_histories_access', 'stock-histories', 'fa fa-warehouse', 'Stock Histories');
+        $suppliers = new Submenu ('suppliers_access', 'suppliers', 'fa fa-warehouse', 'Suppliers');
 
-        return new Menu('warehouse_management_access', 'fa fa-warehouse', 'Warehouse', ...[$stocks, $stocksHistories]);
+        return new Menu('inventory_management_access', 'fa fa-warehouse', 'Inventory', ...[$stocks, $stocksHistories, $suppliers]);
     }
 
 }
