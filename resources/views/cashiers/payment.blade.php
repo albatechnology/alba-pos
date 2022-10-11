@@ -229,8 +229,11 @@
                     'opacity': 0.4,
                     'pointer-events': 'none'
                 })
-                $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
+                var discountId = $(this).val() ? '/' + $(this).val() : '';
+
+                $.post("{{ url('cashier/setDiscount') }}" + discountId, function(res) {
                     if (typeof res !== 'undefined') {
+                    console.log('res setDiscount refreshCart', res)
                         refreshCart();
                     } else {
                         $('#container-cart').css({
