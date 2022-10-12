@@ -19,7 +19,7 @@
 
 <body>
     <!-- <button onclick="generatePDF()">Print</button> -->
-    <div class="container" style="padding-right: 25px;">
+    <div class="container">
         <div class="row">
             <div class="col-12 text-center">
                 <h3>{{ $order->company->name }}</h3>
