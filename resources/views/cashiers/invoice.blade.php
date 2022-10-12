@@ -16,7 +16,7 @@
 
 <body>
     <!-- <button onclick="generatePDF()">Print</button> -->
-    <div class="container w-25 border">
+    <div class="container border">
         <div class="row">
             <div class="col-12 text-center">
                 <h3>{{ $order->company->name }}</h3>
