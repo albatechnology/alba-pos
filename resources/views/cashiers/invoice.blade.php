@@ -60,18 +60,10 @@
                     <!-- Isi Menu -->
                     @foreach ($order->orderDetails as $orders)
                         <tr>
-                            <td class="text-left">
-                                <p>{{ $orders->product->name }}</p>
-                            </td>
-                            <td class="text-center">
-                                <p>{{ $orders->quantity }}</p>
-                            </td>
-                            <td class="text-center">
-                                <p>{{ number_format($orders->unit_price) }}</p>
-                            </td>
-                            <td class="text-start">
-                                <p>{{ number_format($orders->original_price) }}</p>
-                            </td>
+                            <td class="text-left">{{ $orders->product->name }}</td>
+                            <td class="text-center">{{ $orders->quantity }}</td>
+                            <td class="text-center">{{ number_format($orders->unit_price) }}</td>
+                            <td class="text-start">{{ number_format($orders->original_price) }}</td>
                         </tr>
                     @endforeach
 
