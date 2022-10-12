@@ -45,18 +45,16 @@
             <div class="col-12">
                 <table class="w-100">
                     <tr>
-                        <td colspan="6"><hr class="m-0"></td>
+                        <td colspan="4"><hr class="m-0"></td>
                     </tr>
                     <tr>
                         <th class="text-start">Items</th>
                         <th class="text-center">Qty</th>
                         <th class="text-center">Price</th>
-                        <th class="text-end">Subtotal</th>
-                        <th></th>
-                        <th></th>
+                        <th class="text-start">Subtotal</th>
                     </tr>
                     <tr>
-                        <td colspan="6"><hr class="m-0"></td>
+                        <td colspan="4"><hr class="m-0"></td>
                     </tr>
 
                     <!-- Isi Menu -->
@@ -71,7 +69,7 @@
                             <td class="text-center">
                                 <p>{{ number_format($orders->unit_price) }}</p>
                             </td>
-                            <td class="text-end">
+                            <td class="text-start">
                                 <p>{{ number_format($orders->original_price) }}</p>
                             </td>
                         </tr>
@@ -82,7 +80,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-start fw-bold">Sub Total</td>
-                        <td class="text-end">{{ number_format($order->original_price) }}</td>
+                        <td class="text-start">{{ number_format($order->original_price) }}</td>
                     </tr>
 
                     {{-- Discount --}}
@@ -90,7 +88,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-start fw-bold">Discount</td>
-                        <td class="text-end">{{ number_format($order->total_discount) }}</td>
+                        <td class="text-start">{{ number_format($order->total_discount) }}</td>
                     </tr>
 
                     {{-- Additional Discount --}}
@@ -99,7 +97,7 @@
                             <td></td>
                             <td></td>
                             <td class="text-start fw-bold">Add. Discount</td>
-                            <td class="text-end">{{ number_format($order->additional_discount) }}</td>
+                            <td class="text-start">{{ number_format($order->additional_discount) }}</td>
                         </tr>
                     @endif
 
@@ -108,7 +106,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-start fw-bold">Grand Total</td>
-                        <td class="text-end">{{ number_format($order->total_price) }}</td>
+                        <td class="text-start">{{ number_format($order->total_price) }}</td>
                     </tr>
 
                     <!-- Type Payment -->
@@ -122,7 +120,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-start fw-bold">Tunai</td>
-                        <td class="text-end">{{ number_format($order->amount_paid) }}</td>
+                        <td class="text-start">{{ number_format($order->amount_paid) }}</td>
                     </tr>
 
                     <!-- Change / Kembalian -->
@@ -130,7 +128,7 @@
                         <td></td>
                         <td></td>
                         <td class="text-start fw-bold">Change</td>
-                        <td class="text-end">{{ number_format($order->amount_paid - $order->total_price) }}</td>
+                        <td class="text-start">{{ number_format($order->amount_paid - $order->total_price) }}</td>
                     </tr>
                 </table>
                 <div class="text-center">
