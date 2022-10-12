@@ -45,7 +45,7 @@
             <div class="col-12">
                 <table class="w-100">
                     <tr>
-                        <td colspan="5"><hr class="m-0"></td>
+                        <td colspan="6"><hr class="m-0"></td>
                     </tr>
                     <tr>
                         <th class="text-start">Items</th>
@@ -56,7 +56,7 @@
                         <th></th>
                     </tr>
                     <tr>
-                        <td colspan="5"><hr class="m-0"></td>
+                        <td colspan="6"><hr class="m-0"></td>
                     </tr>
 
                     <!-- Isi Menu -->
