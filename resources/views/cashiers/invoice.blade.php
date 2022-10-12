@@ -22,7 +22,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h3>{{ $order->company->name }}</h3>
+                <h4>{{ $order->company->name }}</h4>
                 <p class="my-1">{{ $order->tenant->name }}</p>
                 <p class="my-1">Jl. Jend. Sudirman Kav. 52-53 Lot 22, Sudirman Jl.
                     Scbd No.5, RT.5/RW.1, Senayan, Kota Jakarta Selatan, DKI Jakarta</p>
@@ -52,6 +52,7 @@
                         <th class="text-center">Qty</th>
                         <th class="text-center">Price</th>
                         <th class="text-end">Subtotal</th>
+                        <th></th>
                     </tr>
                     <tr>
                         <td colspan="4"><hr class="m-0"></td>
