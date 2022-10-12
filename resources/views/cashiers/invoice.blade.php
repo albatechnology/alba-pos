@@ -9,14 +9,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"  integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <style>
         body{
-            font-size: 13px;
+            font-size: 12px;
+        }
+        hr{
+            color: #000000 !important;
         }
     </style>
 </head>
 
 <body>
     <!-- <button onclick="generatePDF()">Print</button> -->
-    <div class="container border">
+    <div class="container" style="padding-right: 25px;">
         <div class="row">
             <div class="col-12 text-center">
                 <h3>{{ $order->company->name }}</h3>
@@ -129,8 +132,8 @@
                     </tr>
                 </table>
                 <div class="text-center">
-                    <hr>
-                    <p class="fw-bold">Terima kasih telah berbelanja</p>
+                    <hr class="my-2">
+                    <p class="fw-bold mb-0">Terima kasih telah berbelanja</p>
                 </div>
             </div>
         </div>
