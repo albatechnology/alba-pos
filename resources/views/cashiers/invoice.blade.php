@@ -45,7 +45,7 @@
             <div class="col-12">
                 <table class="w-100">
                     <tr>
-                        <td colspan="4"><hr class="m-0"></td>
+                        <td colspan="5"><hr class="m-0"></td>
                     </tr>
                     <tr>
                         <th class="text-start">Items</th>
@@ -53,9 +53,10 @@
                         <th class="text-center">Price</th>
                         <th class="text-end">Subtotal</th>
                         <th></th>
+                        <th></th>
                     </tr>
                     <tr>
-                        <td colspan="4"><hr class="m-0"></td>
+                        <td colspan="5"><hr class="m-0"></td>
                     </tr>
 
                     <!-- Isi Menu -->
