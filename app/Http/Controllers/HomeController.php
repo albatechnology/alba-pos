@@ -72,7 +72,7 @@ class HomeController extends Controller
                         }
                     });
             })
-            ->join('order_details', function ($join) {
+            ->join('order_details', function ($join) use ($startDate, $endDate){
                 $join->on('product_tenants.product_id', '=', 'order_details.product_id');
                 $join->on('product_tenants.tenant_id','=','order_details.tenant_id')
                     ->where(function ($q) {
@@ -81,7 +81,10 @@ class HomeController extends Controller
                         } elseif ($activeCompany = activeCompany()) {
                             $q->where('order_details.company_id', $activeCompany->id);
                         }
-                    });
+                    })
+                    ->whereDate('order_details.created_at', '>=', $startDate)
+                    ->whereDate('order_details.created_at', '<=', $endDate);
+                    // ->whereOrderDeal();
             })
             ->groupByRaw('products.name')
             ->orderBy('order_details_sum_quantity', 'desc')

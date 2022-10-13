@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StockTypeEnum;
 use App\Models\Cart;
 use App\Models\Discount;
 use App\Models\Order;
 use App\Models\PaymentType;
 use App\Models\ProductCategory;
+use App\Models\Stock;
+use App\Models\StockHistory;
 use App\Services\CartService;
 use App\Services\OrderService;
+use App\Services\StockService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CashierController extends Controller
 {
@@ -22,6 +27,10 @@ class CashierController extends Controller
         }
         $productCategories = ProductCategory::tenanted()->get();
         $cart = CartService::getMyCart() ?? new Cart();
+        if($cart->code){
+            $stocks = StockHistory::where('user_id', $cart->id)->get();
+            StockService::revertStock($stocks);
+        }
         $paymentTypes = PaymentType::tenanted()->pluck('name', 'id')->prepend('- Select Payment -', '');
         $discounts = Discount::tenanted()->where('is_active', 1)->whereDate('start_date', '<=', Carbon::now())->whereDate('end_date', '>=', Carbon::now())->pluck('name', 'id')->prepend('- Select Discount -', '');
 
@@ -142,6 +151,25 @@ class CashierController extends Controller
     {
         $cart = CartService::saveCart();
         if ($cart) {
+            $stock = Stock::where('tenant_id',Auth::user()->tenant_id);
+            foreach($cart->cartDetails as $product){
+                $stock = $stock->where('product_id', $product->product_id)->first();
+                $stock->stock = $stock->stock - $product->quantity;
+                $stock->save();
+
+                StockHistory::create(
+                    [
+                        'stock_id' => $stock->id,
+                        'user_id' => $cart->id,
+                        'type' => StockTypeEnum::DECREASE,
+                        'changes' => $product->quantity,
+                        'old_amount' => $stock->stock + $product->quantity,
+                        'new_amount' => $stock->stock,
+                        'source' => 'Cart'
+                        ]
+                    );
+
+            }
             return response()->json(['success' => true, 'cart' => $cart]);
         }
         return response()->json(['success' => false]);
