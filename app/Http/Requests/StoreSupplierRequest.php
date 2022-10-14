@@ -23,6 +23,7 @@ class StoreSupplierRequest extends FormRequest
      */
     public function rules()
     {
+        dd($this->request);
         return [
             'company_id' => 'required|exists:companies,id',
             'code' => 'required',

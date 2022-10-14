@@ -41,8 +41,9 @@ class MenuService
     protected static function marketingManagement()
     {
         $discounts = new Submenu('discounts_access', 'discounts', 'fa fa-dollar-sign', 'Discounts');
+        $bank_accounts = new Submenu('bank_accounts_access', 'bank-accounts', 'fa fa-dollar-sign', 'Bank Accounts');
 
-        return new Menu('marketing_management_access', 'fa fa-dollar-sign', 'Marketing', ...[$discounts]);
+        return new Menu('marketing_management_access', 'fa fa-dollar-sign', 'Marketing', ...[$discounts, $bank_accounts]);
     }
 
     protected static function corporateManagement()

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
@@ -146,4 +147,18 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->resource('discounts', DiscountController::class);
 
     $route->resource('suppliers', SupplierController::class);
+
+    $route->resource('bank-accounts', BankAccountController::class);
+
+    $route->get('get-regions/kabupaten/{id}', function($id){
+        return response()->file(public_path('regions/kabupaten/'.$id));
+    });
+
+    $route->get('get-regions/kecamatan/{id}', function($id){
+        return response()->file(public_path('regions/kecamatan/'.$id));
+    });
+
+    $route->get('get-regions/kelurahan/{id}', function($id){
+        return response()->file(public_path('regions/kelurahan/'.$id));
+    });
 });
