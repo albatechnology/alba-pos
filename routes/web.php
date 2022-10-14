@@ -142,5 +142,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->resource('reports', ReportController::class)->only(['index']);
 
+    $route->delete('discounts/massDestroy', [DiscountyController::class, 'massDestroy'])->name('discounts.massDestroy');
     $route->resource('discounts', DiscountController::class);
 });
