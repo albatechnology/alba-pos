@@ -80,33 +80,33 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="required">Province</label>
-                                        <select id="select2-provinsi" name="province" class="form-control select2-data-array @error('province') is-invalid @enderror" required>
+                                        <select id="province_id" name="province_id" class="form-control select2-data-array @error('province_id') is-invalid @enderror" required>
                                         </select>
-                                        @error('province')
+                                        @error('province_id')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label class="required">City / Regencies</label>
-                                        <select id="select2-kabupaten" name="city" class="form-control select2-data-array @error('city') is-invalid @enderror" required>
+                                        <select id="city_id" name="city_id" class="form-control select2-data-array @error('city_id') is-invalid @enderror" required>
                                         </select>
-                                        @error('city')
+                                        @error('city_id')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label class="required">District</label>
-                                        <select id="select2-kecamatan" name="district" class="form-control select2-data-array @error('district') is-invalid @enderror" required>
+                                        <select id="district_id" name="district_id" class="form-control select2-data-array @error('district_id') is-invalid @enderror" required>
                                         </select>
-                                        @error('district')
+                                        @error('district_id')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group">
                                         <label class="required">Village</label>
-                                        <select id="select2-kelurahan" name="village" class="form-control select2-data-array @error('village') is-invalid @enderror" required>
+                                        <select id="village_id" name="village_id" class="form-control select2-data-array @error('village_id') is-invalid @enderror" required>
                                         </select>
-                                        @error('village')
+                                        @error('village_id')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -145,10 +145,10 @@
             });
         });
         {{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}
-        var urlProvinsi = "{{ asset('regions/provinsi.json')}}";
-        var urlKabupaten = "{{ url('get-regions/kabupaten')}}/";
-        var urlKecamatan = "{{ url('get-regions/kecamatan')}}/";
-        var urlKelurahan = "{{ url('get-regions/kelurahan')}}/";
+        var urlProvince = "{{ asset('regions/province.json')}}";
+        var urlCity = "{{ url('get-regions/city')}}/";
+        var urlDistrict = "{{ url('get-regions/district')}}/";
+        var urlVillage = "{{ url('get-regions/village')}}/";
 
         function clearOptions(id) {
             console.log("on clearOptions :" + id);
@@ -157,8 +157,8 @@
             $('#' + id).empty().trigger('change');
         }
 
-        console.log('Load Provinsi...');
-        $.getJSON(urlProvinsi, function (res) {
+        console.log('Load Province...');
+        $.getJSON(urlProvince, function (res) {
 
             res = $.map(res, function (obj) {
                 obj.text = obj.nama
@@ -167,31 +167,31 @@
 
             data = [{
                 id: "",
-                nama: "- Pilih Provinsi -",
-                text: "- Pilih Provinsi -"
+                nama: "- Choose Province -",
+                text: "- Choose Province -"
             }].concat(res);
 
-            //implemen data ke select provinsi
-            $("#select2-provinsi").select2({
+            //implemen data ke select province
+            $("#province_id").select2({
                 dropdownAutoWidth: true,
                 width: '100%',
                 data: data
             })
         });
 
-        var selectProv = $('#select2-provinsi');
+        var selectProv = $('#province_id');
         $(selectProv).change(function () {
             var value = $(selectProv).val();
-            clearOptions('select2-kabupaten');
+            clearOptions('city_id');
 
             if (value) {
                 console.log("on change selectProv");
 
-                var text = $('#select2-provinsi :selected').text();
+                var text = $('#province_id :selected').text();
                 console.log("value = " + value + " / " + "text = " + text);
 
-                console.log('Load Kabupaten di '+text+'...')
-                $.getJSON(urlKabupaten + value + ".json", function(res) {
+                console.log('Load City di '+text+'...')
+                $.getJSON(urlCity + value + ".json", function(res) {
 
                     res = $.map(res, function (obj) {
                         obj.text = obj.nama
@@ -200,12 +200,12 @@
 
                     data = [{
                         id: "",
-                        nama: "- Pilih Kabupaten -",
-                        text: "- Pilih Kabupaten -"
+                        nama: "- Choose City -",
+                        text: "- Choose City -"
                     }].concat(res);
 
-                    //implemen data ke select provinsi
-                    $("#select2-kabupaten").select2({
+                    //implemen data ke select province
+                    $("#city_id").select2({
                         dropdownAutoWidth: true,
                         width: '100%',
                         data: data
@@ -214,19 +214,19 @@
             }
         });
 
-        var selectKab = $('#select2-kabupaten');
+        var selectKab = $('#city_id');
         $(selectKab).change(function () {
             var value = $(selectKab).val();
-            clearOptions('select2-kecamatan');
+            clearOptions('district_id');
 
             if (value) {
                 console.log("on change selectKab");
 
-                var text = $('#select2-kabupaten :selected').text();
+                var text = $('#city_id :selected').text();
                 console.log("value = " + value + " / " + "text = " + text);
 
-                console.log('Load Kecamatan di '+text+'...')
-                $.getJSON(urlKecamatan + value + ".json", function(res) {
+                console.log('Load District di '+text+'...')
+                $.getJSON(urlDistrict + value + ".json", function(res) {
 
                     res = $.map(res, function (obj) {
                         obj.text = obj.nama
@@ -235,12 +235,12 @@
 
                     data = [{
                         id: "",
-                        nama: "- Pilih Kecamatan -",
-                        text: "- Pilih Kecamatan -"
+                        nama: "- Choose District -",
+                        text: "- Choose District -"
                     }].concat(res);
 
-                    //implemen data ke select provinsi
-                    $("#select2-kecamatan").select2({
+                    //implemen data ke select province
+                    $("#district_id").select2({
                         dropdownAutoWidth: true,
                         width: '100%',
                         data: data
@@ -249,19 +249,19 @@
             }
         });
 
-        var selectKec = $('#select2-kecamatan');
+        var selectKec = $('#district_id');
         $(selectKec).change(function () {
             var value = $(selectKec).val();
-            clearOptions('select2-kelurahan');
+            clearOptions('village_id');
 
             if (value) {
                 console.log("on change selectKec");
 
-                var text = $('#select2-kecamatan :selected').text();
+                var text = $('#district_id :selected').text();
                 console.log("value = " + value + " / " + "text = " + text);
 
-                console.log('Load Kelurahan di '+text+'...')
-                $.getJSON(urlKelurahan + value + ".json", function(res) {
+                console.log('Load Village di '+text+'...')
+                $.getJSON(urlVillage + value + ".json", function(res) {
 
                     res = $.map(res, function (obj) {
                         obj.text = obj.nama
@@ -270,12 +270,12 @@
 
                     data = [{
                         id: "",
-                        nama: "- Pilih Kelurahan -",
-                        text: "- Pilih Kelurahan -"
+                        nama: "- Choose Village -",
+                        text: "- Choose Village -"
                     }].concat(res);
 
-                    //implemen data ke select provinsi
-                    $("#select2-kelurahan").select2({
+                    //implemen data ke select province
+                    $("#village_id").select2({
                         dropdownAutoWidth: true,
                         width: '100%',
                         data: data
@@ -284,14 +284,14 @@
             }
         });
 
-        var selectKel = $('#select2-kelurahan');
+        var selectKel = $('#village_id');
         $(selectKel).change(function () {
             var value = $(selectKel).val();
 
             if (value) {
                 console.log("on change selectKel");
 
-                var text = $('#select2-kelurahan :selected').text();
+                var text = $('#village_id :selected').text();
                 console.log("value = " + value + " / " + "text = " + text);
             }
         });

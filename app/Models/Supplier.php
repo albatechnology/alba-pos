@@ -18,4 +18,9 @@ class Supplier extends Model implements TenantedInterface
 
         return $this->belongsTo(Company::class);
     }
+
+    public function bankAccounts()
+    {
+        return $this->morphMany(BankAccount::class, 'bank_accountable');
+    }
 }

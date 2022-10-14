@@ -23,16 +23,17 @@ class StoreSupplierRequest extends FormRequest
      */
     public function rules()
     {
-        dd($this->request);
         return [
             'company_id' => 'required|exists:companies,id',
-            'code' => 'required',
+            'code' => 'required|unique:suppliers,code',
             'name' => 'required',
             'email' => 'required|unique:suppliers,email|email',
             'phone' => 'required|unique:suppliers,phone|numeric',
             'address' => 'required',
-            'province' => 'required',
-            'city' => 'required',
+            'province_id' => 'nullable',
+            'city_id' => 'nullable',
+            'district_id' => 'nullable',
+            'village_id' => 'nullable',
             'description' => 'nullable',
         ];
     }

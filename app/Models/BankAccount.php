@@ -14,4 +14,9 @@ class BankAccount extends Model implements TenantedInterface
 
     public $table = 'bank_accounts';
     protected $guarded = [];
+
+    public function bankAccountable()
+    {
+        return $this->morphTo();
+    }
 }

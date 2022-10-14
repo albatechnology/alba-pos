@@ -21,8 +21,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone');
             $table->string('address');
-            $table->string('province')->nullable();
-            $table->string('city')->nullable();
+            $table->unsignedSmallInteger('province_id')->nullable();
+            $table->unsignedMediumInteger('city_id')->nullable();
+            $table->unsignedInteger('district_id')->nullable();
+            $table->unsignedBigInteger('village_id')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });

@@ -31,8 +31,10 @@ class UpdateSupplierRequest extends FormRequest
             'email' => 'required|unique:suppliers,email,' . $supplier->id,
             'phone' => 'required|unique:suppliers,phone,' . $supplier->id,
             'address' => 'required',
-            'province' => 'required',
-            'city' => 'required',
+            'province_id' => 'nullable',
+            'city_id' => 'nullable',
+            'district_id' => 'nullable',
+            'village_id' => 'nullable',
             'description' => 'nullable',
         ];
     }

@@ -150,15 +150,15 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->resource('bank-accounts', BankAccountController::class);
 
-    $route->get('get-regions/kabupaten/{id}', function($id){
-        return response()->file(public_path('regions/kabupaten/'.$id));
+    $route->get('get-regions/city/{id}', function($id){
+        return response()->file(public_path('regions/city/'.$id));
     });
 
-    $route->get('get-regions/kecamatan/{id}', function($id){
-        return response()->file(public_path('regions/kecamatan/'.$id));
+    $route->get('get-regions/district/{id}', function($id){
+        return response()->file(public_path('regions/district/'.$id));
     });
 
-    $route->get('get-regions/kelurahan/{id}', function($id){
-        return response()->file(public_path('regions/kelurahan/'.$id));
+    $route->get('get-regions/village/{id}', function($id){
+        return response()->file(public_path('regions/village/'.$id));
     });
 });
