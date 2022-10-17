@@ -135,13 +135,12 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('stocks/massDestroy', [StockController::class, 'massDestroy'])->name('stocks.massDestroy');
     $route->resource('stocks', StockController::class)->only(['index', 'show', 'edit', 'update']);
 
-    $route->delete('stock-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stock-histories.massDestroy');
     $route->resource('stock-histories', StockHistoryController::class)->only(['index']);
 
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);
 
     $route->resource('reports', ReportController::class)->only(['index']);
 
-    $route->delete('discounts/massDestroy', [DiscountyController::class, 'massDestroy'])->name('discounts.massDestroy');
+    $route->delete('discounts/massDestroy', [DiscountController::class, 'massDestroy'])->name('discounts.massDestroy');
     $route->resource('discounts', DiscountController::class);
 });

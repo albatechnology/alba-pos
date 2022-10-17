@@ -157,4 +157,16 @@ class DiscountController extends Controller
         }
         return $this->ajaxSuccess('Data deleted successfully');
     }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:customers,id',
+        ]);
+
+        Discount::tenanted()->whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
+    }
 }
