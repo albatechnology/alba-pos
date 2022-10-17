@@ -5,8 +5,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('bank-accounts.index') }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>
-                    </div>
+                        <a href="{{ route($type.'s.bank-accounts.index', $id) }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>                    </div>
                 </div>
             </div>
         </section>
@@ -15,7 +14,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card card-primary">
-                            <form method="post" action="{{ route('bank-accounts.update', $bankAccount->id) }}" class="form-loading">
+                            <form method="post" action="{{ route($type.'s.bank-accounts.update', [$id, $bankAccount->id]) }}" class="form-loading">
                                 @csrf
                                 @method('PUT')
                                 <div class="card-body">

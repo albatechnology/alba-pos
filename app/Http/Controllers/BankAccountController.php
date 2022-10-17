@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBankAccountRequest;
 use App\Http\Requests\UpdateBankAccountRequest;
 use App\Models\BankAccount;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -18,10 +19,13 @@ class BankAccountController extends Controller
         $this->middleware('permission:bank_accounts_delete', ['only' => ['destroy', 'massDestroy']]);
     }
 
-    public function index(Request $request)
+    public function index($id, Request $request)
     {
+        $type = $request->route()->parameterNames()[0];
+
         if ($request->ajax()) {
-            $data = BankAccount::select(sprintf('%s.*', (new BankAccount())->table));
+            $data = BankAccount::whereId($id)->whereType('App\Models\\' . ucfirst($type))->select(sprintf('%s.*', (new BankAccount())->table));
+
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
@@ -30,17 +34,19 @@ class BankAccountController extends Controller
                 ->editColumn('updated_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
-                ->addColumn('actions', function ($row) {
-                    // $viewGate      = 'bank_accounts_show';
+                ->addColumn('actions', function ($row) use ($id, $type) {
+                    $prefixRoute = $id;
+                    $viewGate      = 'bank_accounts_show';
                     $editGate      = 'bank_accounts_edit';
                     $deleteGate    = 'bank_accounts_delete';
-                    $crudRoutePart = 'bank-accounts';
-                    return view('layouts.includes.datatablesActions', compact('row', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    $crudRoutePart = $type . 's.bank-accounts';
+                    return view('layouts.includes.nestedDatatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'prefixRoute'));
+                    // , 'editGate', 'deleteGate', 'crudRoutePart'
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
         }
-        return view('bankAccounts.index');
+        return view('bankAccounts.index', ['id' => $id, 'type' => $type]);
     }
 
     /**
@@ -48,9 +54,11 @@ class BankAccountController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id, Request $request)
     {
-        return view('bankAccounts.create');
+        $type = $request->route()->parameterNames()[0];
+
+        return view('bankAccounts.create', ['id' => $id, 'type' => $type]);
     }
 
     /**
@@ -59,11 +67,17 @@ class BankAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreBankAccountRequest $request)
+    public function store(StoreBankAccountRequest $request, $id)
     {
-        BankAccount::create($request->validated());
+        BankAccount::create([
+            'bank_accountable_id' => $id,
+            'bank_accountable_type' => 'App\Models\Supplier',
+            'account_number' => $request->account_number,
+            'account_name' => $request->account_name,
+            'bank_name' => $request->bank_name
+        ]);
         alert()->success('Success', 'Data created successfully');
-        return redirect('bank-accounts');
+        return redirect('suppliers/' . $id . '/bank-accounts');
     }
 
     /**
@@ -72,9 +86,11 @@ class BankAccountController extends Controller
      * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
-    public function show(BankAccount $bankAccount)
+    public function show($id, BankAccount $bankAccount, Request $request)
     {
-        //
+        $type = $request->route()->parameterNames()[0];
+
+        return view('bankAccounts.show', ['bankAccount' => $bankAccount, 'id' => $id, 'type' => $type]);
     }
 
     /**
@@ -83,9 +99,11 @@ class BankAccountController extends Controller
      * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
-    public function edit(BankAccount $bankAccount)
+    public function edit($id, BankAccount $bankAccount, Request $request)
     {
-        return view('bankAccounts.edit', ['bankAccount' => $bankAccount]);
+        $type = $request->route()->parameterNames()[0];
+
+        return view('bankAccounts.edit', ['bankAccount' => $bankAccount, 'id' => $id, 'type' => $type]);
     }
 
     /**
@@ -95,12 +113,12 @@ class BankAccountController extends Controller
      * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateBankAccountRequest $request, BankAccount $bankAccount)
+    public function update($id, UpdateBankAccountRequest $request, BankAccount $bankAccount)
     {
         $bankAccount->update($request->validated());
 
         alert()->success('Success', 'Data updated successfully');
-        return redirect('customers');
+        return redirect('suppliers/' . $id . '/bank-accounts');
     }
 
     /**
@@ -109,13 +127,25 @@ class BankAccountController extends Controller
      * @param  \App\Models\BankAccount  $bankAccount
      * @return \Illuminate\Http\Response
      */
-    public function destroy(BankAccount $bankAccount)
+    public function destroy($id)
     {
         try {
-            $bankAccount->delete();
+            BankAccount::destroy($id);
         } catch (\Exception $e) {
             return $this->ajaxError($e->getMessage());
         }
         return $this->ajaxSuccess('Data deleted successfully');
+    }
+
+    public function massDestroy(Request $request)
+    {
+        $request->validate([
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:bank_accounts,id',
+        ]);
+
+        BankAccount::tenanted()->whereIn('id', $request->ids)->delete();
+        alert()->success('Success', 'Data deleted successfully');
+        return response(null, 204);
     }
 }

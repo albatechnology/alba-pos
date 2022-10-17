@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSupplierRequest;
 use App\Http\Requests\UpdateSupplierRequest;
+use App\Models\BankAccount;
 use App\Models\Company;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
@@ -40,11 +41,15 @@ class SupplierController extends Controller
                     return date('d-m-Y H:i', strtotime($row->updated_at));
                 })
                 ->addColumn('actions', function ($row) {
+                    $extraActions  = '';
+                    if (user()->can('bank_accounts_access')) {
+                        $extraActions .= '<a class="btn btn-warning btn-sm" href="' . route('suppliers.bank-accounts.index', $row->id) . '">Bank Account</a>';
+                    }
                     $viewGate      = 'suppliers_view';
                     $editGate      = 'suppliers_edit';
                     $deleteGate    = 'suppliers_delete';
                     $crudRoutePart = 'suppliers';
-                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart'));
+                    return view('layouts.includes.datatablesActions', compact('row', 'viewGate', 'editGate', 'deleteGate', 'crudRoutePart', 'extraActions'));
                 })
                 ->rawColumns(['placeholder', 'actions'])
                 ->make(true);
@@ -72,7 +77,27 @@ class SupplierController extends Controller
      */
     public function store(StoreSupplierRequest $request)
     {
-        Supplier::create($request->validated());
+        $supplier = Supplier::create([
+            'company_id' => $request->company_id,
+            'code' => $request->code,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'province_id' => $request->province_id,
+            'city_id' => $request->city_id,
+            'district_id' => $request->district_id,
+            'village_id' => $request->village_id,
+            'description' => $request->description,
+        ]);
+
+        BankAccount::create([
+            'bank_accountable_id' => $supplier->id,
+            'bank_accountable_type' => 'App\Models\Supplier',
+            'account_number' => $request->account_number,
+            'account_name' => $request->account_name,
+            'bank_name' => $request->bank_name
+        ]);
         alert()->success('Success', 'Data created successfully');
         return redirect('suppliers');
     }

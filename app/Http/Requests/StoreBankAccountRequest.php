@@ -24,7 +24,7 @@ class StoreBankAccountRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_number' => 'required',
+            'account_number' => 'required|unique:bank_accounts,account_number',
             'account_name' => 'required',
             'bank_name' => 'required',
         ];

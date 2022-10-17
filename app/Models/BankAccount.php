@@ -19,4 +19,15 @@ class BankAccount extends Model implements TenantedInterface
     {
         return $this->morphTo();
     }
+
+    public function scopeWhereId($query, $id)
+    {
+        return $query->where('bank_accountable_id', $id);
+    }
+
+    public function scopeWhereType($query, $type)
+    {
+        return $query->where('bank_accountable_type', $type);
+    }
+
 }

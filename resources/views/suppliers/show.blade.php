@@ -40,7 +40,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Email</td>
-                                                <td>{{ $supplier->email}}</td>
+                                                <td>{{ $supplier->email }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Phone</td>
@@ -65,6 +65,23 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="dttbls" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th width="10"></th>
+                                                <th>ID</th>
+                                                <th>Account Number</th>
+                                                <th>Account Name</th>
+                                                <th>Bank Name</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -74,6 +91,124 @@
 @endsection
 
 @push('js')
-   <script>
+    <script>
+        let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        @can('bank_accounts_delete')
+            let deleteButton = {
+                text: 'Delete selected',
+                url: "{{ route('bank-accounts.massDestroy') }}",
+                className: 'btn-danger',
+                action: function(e, dt, node, config) {
+                    var ids = $.map(dt.rows({
+                        selected: true
+                    }).data(), function(entry) {
+                        return entry.id
+                    });
+                    if (ids.length === 0) {
+                        alert('No data selected')
+                        return
+                    }
+
+                    if (confirm('Delete selected data?')) {
+                        console.log('config', config.url);
+                        console.log('ids', ids);
+                        $.ajax({
+                                method: 'POST',
+                                url: config.url,
+                                data: {
+                                    ids: ids,
+                                    _method: 'DELETE'
+                                }
+                            })
+                            .done(function() {
+                                location.reload()
+                            })
+                    }
+                }
+            }
+            dtButtons.push(deleteButton)
+        @endcan
+
+        let table = $('#dttbls').DataTable({
+            buttons: dtButtons,
+            processing: true,
+            serverSide: true,
+            searching: true,
+            responsive: true,
+            ajax: '{{ route('suppliers.bank-accounts.index',$supplier->id) }}',
+            columns: [{
+                    data: 'placeholder',
+                    name: 'placeholder'
+                },
+                {
+                    data: 'id',
+                    name: 'id',
+                },
+                {
+                    data: 'account_name',
+                    name: 'account_name'
+                },
+                {
+                    data: 'account_number',
+                    name: 'account_number'
+                },
+                {
+                    data: 'bank_name',
+                    name: 'bank_name'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            orderCellsTop: true,
+            order: [
+                [1, 'desc']
+            ],
+            pageLength: 25,
+        });
+        $('a[data-toggle="tab"]').on('shown.bs.tab click', function(e) {
+            $($.fn.dataTable.tables(true)).DataTable()
+                .columns.adjust();
+        });
+
+        let visibleColumnsIndexes = null;
+        $('.datatable thead').on('input', '.search', function() {
+            let strict = $(this).attr('strict') || false
+            let value = strict && this.value ? "^" + this.value + "$" : this.value
+
+            let index = $(this).parent().index()
+            if (visibleColumnsIndexes !== null) {
+                index = visibleColumnsIndexes[index]
+            }
+
+            table
+                .column(index)
+                .search(value, strict)
+                .draw()
+        });
+        table.on('column-visibility.dt', function(e, settings, column, state) {
+            visibleColumnsIndexes = []
+            table.columns(":visible").every(function(colIdx) {
+                visibleColumnsIndexes.push(colIdx);
+            });
+        });
+
+        function deleteData(id) {
+            if (confirm('Delete data?')) {
+                $.post(`{{ url('bank-accounts') }}/` + id, {
+                    _method: 'delete'
+                }, function(res) {
+                    if (res.success) {
+                        table.ajax.reload();
+                        toastr.success(res.message);
+                    } else {
+                        toastr.error(res.message);
+                    }
+                }, 'json');
+            }
+        }
     </script>
 @endpush

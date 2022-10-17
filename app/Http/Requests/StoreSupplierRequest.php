@@ -35,6 +35,10 @@ class StoreSupplierRequest extends FormRequest
             'district_id' => 'nullable',
             'village_id' => 'nullable',
             'description' => 'nullable',
+
+            'account_number' => 'required',
+            'account_name' => 'required',
+            'bank_name' => 'required'
         ];
     }
 }

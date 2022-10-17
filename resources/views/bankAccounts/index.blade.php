@@ -5,8 +5,10 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
+                        <a href="{{ route($type.'s.index') }}" class="btn btn-success mr-3" title="Back"><i
+                            class="fa fa-arrow-left"></i> Back</a>
                         @can('bank-accounts_create')
-                        <a href="{{ route('bank-accounts.create') }}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
+                        <a href="{{ route('suppliers.bank-accounts.create', $id)}}" class="btn btn-success" title="Create"><i class="fa fa-plus"></i> Add Data</a>
                         @endcan
                     </div>
                 </div>
@@ -50,6 +52,41 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        @can('bank-accounts_delete')
+            let deleteButton = {
+                text: 'Delete selected',
+                url: "{{ route('bank-accounts.massDestroy') }}",
+                className: 'btn-danger',
+                action: function(e, dt, node, config) {
+                    var ids = $.map(dt.rows({
+                        selected: true
+                    }).data(), function(entry) {
+                        return entry.id
+                    });
+                    if (ids.length === 0) {
+                        alert('No data selected')
+                        return
+                    }
+
+                    if (confirm('Delete selected data?')) {
+                        console.log('config', config.url);
+                        console.log('ids', ids);
+                        $.ajax({
+                                method: 'POST',
+                                url: config.url,
+                                data: {
+                                    ids: ids,
+                                    _method: 'DELETE'
+                                }
+                            })
+                            .done(function() {
+                                location.reload()
+                            })
+                    }
+                }
+            }
+            dtButtons.push(deleteButton)
+        @endcan
 
         let table = $('#dttbls').DataTable({
             scrollY: '50vh',
@@ -58,7 +95,7 @@
             serverSide: true,
             searching: true,
             responsive: true,
-            ajax: '{{ route('bank-accounts.index') }}',
+            ajax: '{{ route('suppliers.bank-accounts.index', $id)}}',
             columns: [{
                     data: 'placeholder',
                     name: 'placeholder'

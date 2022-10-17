@@ -148,7 +148,13 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->resource('suppliers', SupplierController::class);
 
-    $route->resource('bank-accounts', BankAccountController::class);
+    $route->group(['prefix' => 'suppliers/{supplier}', 'as' => 'suppliers.'], function ($route) {
+        $route->resource('bank-accounts', BankAccountController::class)->except('destroy');
+    });
+    $route->delete('bank-accounts/massDestroy', [BankAccountController::class, 'massDestroy'])->name('bank-accounts.massDestroy');
+    $route->delete('bank-accounts/{id}', [BankAccountController::class, 'destroy'])->name('bank-accounts.destroy');
+
+    // $route->resource('bank-accounts', BankAccountController::class);
 
     $route->get('get-regions/city/{id}', function($id){
         return response()->file(public_path('regions/city/'.$id));
