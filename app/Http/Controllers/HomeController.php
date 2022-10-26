@@ -6,6 +6,7 @@ use App\Helpers\PermissionsHelper;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderDetail;
+use App\Models\PaymentType;
 use App\Models\Product;
 use App\Models\ProductTenant;
 use Illuminate\Http\Request;
@@ -64,7 +65,16 @@ class HomeController extends Controller
             })
             ->orderBy('orders_count', 'DESC')
             ->get();
-
+        $topPaymentType = PaymentType::tenanted()->selectRaw("name")
+            ->withCount('payments')
+            ->whereHas('payments', function($q) use($startDate, $endDate){
+                if ($activeTenant = activeTenant()) {
+                    $q->where('payments.tenant_id', $activeTenant->id);
+                }
+                $q->whereDate('created_at', '>=', $startDate)->whereDate('created_at', '<=', $endDate);
+            })
+            ->orderBy('payments_count', 'DESC')
+            ->get();
         // $topProduct = Product::tenanted()->whereHas('orders', function ($q) use ($startDate, $endDate) {
         //     $q->whereDate('orders.created_at', '>=', $startDate)->whereDate('orders.created_at', '<=', $endDate)->whereOrderDeal();
         // })->withSum('orderDetails', 'quantity')->orderBy('order_details_sum_quantity', 'desc')->limit(10)->get();
@@ -99,7 +109,7 @@ class HomeController extends Controller
             ->limit(10)
             ->get();
 
-        return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct, 'topCustomer' => $topCustomer,'startDate' => $startDate, 'endDate' => $endDate]);
+        return view('home', ['orderSummary' => $orderSummary, 'topProduct' => $topProduct, 'topCustomer' => $topCustomer, 'topPaymentType' => $topPaymentType,'startDate' => $startDate, 'endDate' => $endDate]);
     }
 
     public function productReport(Request $request)

@@ -113,9 +113,17 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3>65</h3>
+                                <h4>Top Payment Type</h4>
 
-                                <p>Unique Visitors</p>
+                                <table class="table no-border ">
+                                    <tbody>
+                                        @foreach ($topPaymentType as $paymentType)
+                                            <tr>
+                                                <td>{{ $paymentType->name }}</td>
+                                                <td>{{ $paymentType->payments_count }}</td>
+                                            </tr>
+                                        @endforeach
+                                </table>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
