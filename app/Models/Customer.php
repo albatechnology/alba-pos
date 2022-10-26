@@ -22,4 +22,9 @@ class Customer extends Model implements TenantedInterface
     {
         return $this->belongsTo(Tenant::class);
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

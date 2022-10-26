@@ -89,9 +89,17 @@
                         <!-- small box -->
                         <div class="small-box bg-warning">
                             <div class="inner">
-                                <h3>44</h3>
+                                <h4>Top Customer</h4>
 
-                                <p>User Registrations</p>
+                                <table class="table no-border ">
+                                    <tbody>
+                                        @foreach ($topCustomer as $customer)
+                                            <tr>
+                                                <td>{{ $customer->name }}</td>
+                                                <td>{{ $customer->orders_count }}</td>
+                                            </tr>
+                                        @endforeach
+                                </table>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
