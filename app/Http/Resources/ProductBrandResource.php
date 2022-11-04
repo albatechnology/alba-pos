@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TenantResource extends JsonResource
+class ProductBrandResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -12,17 +12,14 @@ class TenantResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
-    public static $wrap = 'tenants';
-
     public function toArray($request)
     {
-        return [
+        return[
             'id' => $this->id,
             'name' => $this->name,
             'company' => $this->company->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
-
     }
 }

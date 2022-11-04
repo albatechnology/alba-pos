@@ -9,8 +9,6 @@ use App\Http\Controllers\Api\Admin\ProductBrandController;
 use App\Http\Controllers\Api\Admin\ProductCategoryController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\ProductTenantController;
-use App\Http\Controllers\Api\Admin\StockController;
-use App\Http\Controllers\Api\Admin\StockHistoryController;
 use App\Http\Controllers\Api\Admin\TenantController;
 use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Api\AuthController;
@@ -53,7 +51,5 @@ Route::group(['middleware' => 'auth:sanctum'], function ($route) {
         $route->resource('product-tenants', ProductTenantController::class);
         $route->resource('customers', CustomerController::class);
         $route->resource('discounts', DiscountController::class);
-        $route->resource('stocks', StockController::class);
-        $route->resource('stock-histories', StockHistoryController::class);
     });
 });

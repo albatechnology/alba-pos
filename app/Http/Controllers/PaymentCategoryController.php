@@ -78,7 +78,7 @@ class PaymentCategoryController extends Controller
         foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
-            PaymentCategory::create($data);
+            $paymentCategory = PaymentCategory::create($data);
         }
         alert()->success('Success', 'Data created successfully');
         return redirect('payment-categories');
