@@ -12,8 +12,17 @@ class TenantResource extends JsonResource
      * @param  \Illuminate\Http\Request  $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
+    public static $wrap = 'tenants';
+
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'company' => $this->company->name,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+
     }
 }

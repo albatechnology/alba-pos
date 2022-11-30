@@ -53,6 +53,41 @@
 @push('js')
     <script>
         let dtButtons = $.extend(true, [], $.fn.dataTable.defaults.buttons)
+        @can('discounts_delete')
+            let deleteButton = {
+                text: 'Delete selected',
+                url: "{{ route('discounts.massDestroy') }}",
+                className: 'btn-danger',
+                action: function(e, dt, node, config) {
+                    var ids = $.map(dt.rows({
+                        selected: true
+                    }).data(), function(entry) {
+                        return entry.id
+                    });
+                    if (ids.length === 0) {
+                        alert('No data selected')
+                        return
+                    }
+
+                    if (confirm('Delete selected data?')) {
+                        console.log('config', config.url);
+                        console.log('ids', ids);
+                        $.ajax({
+                                method: 'POST',
+                                url: config.url,
+                                data: {
+                                    ids: ids,
+                                    _method: 'DELETE'
+                                }
+                            })
+                            .done(function() {
+                                location.reload()
+                            })
+                    }
+                }
+            }
+            dtButtons.push(deleteButton)
+        @endcan
 
         let table = $('#dttbls').DataTable({
             scrollY: '50vh',

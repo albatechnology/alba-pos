@@ -7,6 +7,8 @@ use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
+use App\Models\Tenant;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -60,20 +62,28 @@ class CustomerController extends Controller
 
     public function store(StoreCustomerRequest $request)
     {
-        Customer::create($request->validated());
+        $customer = Customer::create($request->validated());
+        $customer->customerGroups()->sync($request->customer_group_ids);
         alert()->success('Success', 'Data created successfully');
         return redirect('customers');
     }
 
     public function edit(Customer $customer)
     {
-        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company-', '');
-        return view('customers.edit', ['customer' => $customer, 'companies' => $companies]);
+        $companies = Company::tenanted()->pluck('name', 'id')->prepend('- Select Company -', '');;
+        $tenants = $customer->company_id ? Tenant::tenanted()->where('company_id', $customer->company_id)->pluck('name', 'id') : Tenant::tenanted()->pluck('name', 'id');
+        $tenants = $tenants->prepend('- Select Tenant -', '');
+
+        $customerGroups = CustomerGroup::tenanted()->pluck('name', 'id')->prepend('- Select Groups -', '');
+        $customerCustomerGroups = $customer->customerGroups->pluck('id')->all();
+
+        return view('customers.edit', ['customer' => $customer, 'companies' => $companies, 'tenants' => $tenants, 'customerGroups' => $customerGroups, 'customerCustomerGroups' => $customerCustomerGroups]);
     }
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
+        $customer->customerGroups()->sync($request->customer_group_ids);
 
         alert()->success('Success', 'Data updated successfully');
         return redirect('customers');

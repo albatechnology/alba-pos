@@ -37,6 +37,7 @@ class StorePaymentCategoryRequest extends FormRequest
                 $companies = Company::tenantedMyAllCompanies()->whereIn('id', $company_ids)->count();
                 if ($companies < count($company_ids)) $fail('Invalid company');
             }],
+            'is_exact_change' => 'nullable',
         ];
     }
 }

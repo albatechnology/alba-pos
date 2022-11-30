@@ -19,11 +19,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('tenant_id')->constrained()->cascadeOnDelete();
             $table->foreignId('discount_id')->nullable();
+            $table->string('code')->nullable();
             $table->unsignedInteger('total_price')->default(0);
             $table->unsignedInteger('total_discount')->default(0);
             $table->timestamps();
 
-            $table->unique(['user_id', 'tenant_id']);
+            // $table->unique(['user_id', 'tenant_id']);
         });
     }
 

@@ -30,4 +30,14 @@ class PaymentType extends Model implements TenantedInterface
     {
         return $this->belongsTo(PaymentCategory::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

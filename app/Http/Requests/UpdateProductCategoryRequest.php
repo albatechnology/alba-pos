@@ -36,7 +36,7 @@ class UpdateProductCategoryRequest extends FormRequest
                     $product = ProductCategory::where('company_id', $this->company_id)->where('name', $value)->first();
                     if ($product) $fail('The product category ' . $value . ' is already in company ' . $product->company->name);
                 }
-            }]
+            }],
         ];
     }
 }

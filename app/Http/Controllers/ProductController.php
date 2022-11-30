@@ -11,6 +11,7 @@ use App\Models\ProductBrand;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -83,7 +84,6 @@ class ProductController extends Controller
         foreach (arrayFilterAndReindex($request->company_ids) as $company_id) {
             $data = $request->safe()->except(['company_ids']);
             $data['company_id'] = $company_id;
-
             $product = Product::create($data);
             $product->productCategories()->sync($request->product_category_ids);
 

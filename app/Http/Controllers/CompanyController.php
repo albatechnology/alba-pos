@@ -75,7 +75,7 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
-        if ($company->id == 1) return $this->ajaxError('This company can not deleted!');
+        if ($company->id == 1) return $this->ajaxError('This company can not be deleted!');
         try {
             $company->delete();
         } catch (\Exception $e) {

@@ -29,6 +29,7 @@
                                                 <th>ID</th>
                                                 <th>Name</th>
                                                 <th>Company</th>
+                                                <th>Is Exact Change</th>
                                                 <th>Created At</th>
                                                 <th>Updated At</th>
                                                 <th>Action</th>
@@ -108,6 +109,10 @@
                 {
                     data: 'company_name',
                     name: 'company.name'
+                },
+                {
+                    data: 'is_exact_change',
+                    name: 'is_exact_change'
                 },
                 {
                     data: 'created_at',

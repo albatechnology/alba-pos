@@ -7,6 +7,7 @@ use App\Interfaces\TenantedInterface;
 use App\Traits\TenantedTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class StockHistory extends Model implements TenantedInterface
 {
@@ -17,6 +18,16 @@ class StockHistory extends Model implements TenantedInterface
     protected $casts = [
         'type' => StockTypeEnum::class
     ];
+
+    public function revertStock()
+    {
+        $this->stock->update([
+            'stock' =>  $this->old_amount
+        ]);
+        $this->delete();
+
+        return;
+    }
 
     public function stock()
     {

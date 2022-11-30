@@ -32,6 +32,8 @@ class UpdateCustomerRequest extends FormRequest
             'phone' => 'required|numeric|unique:customers,phone,' . $customer->id,
             'address' => 'nullable',
             'description' => 'nullable',
+            'customer_group_ids' => 'nullable|array',
+            'customer_group_ids.*' => 'exists:customer_groups,id',
         ];
     }
 }

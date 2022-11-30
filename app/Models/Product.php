@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Support\Str;
 
 class Product extends Model implements TenantedInterface, HasMedia
 {
@@ -26,6 +27,10 @@ class Product extends Model implements TenantedInterface, HasMedia
 
     protected static function booted()
     {
+        static::creating(function ($model){
+            $model->code = Str::random(15);
+        });
+
         static::created(function ($model) {
             $tenants = Company::getTenantsCompany($model->company_id);
             if (isset($tenants) && count($tenants) > 0) {

@@ -12,6 +12,7 @@ class Cart extends Model
         'user_id',
         'tenant_id',
         'discount_id',
+        'code',
         'total_price',
         'total_discount',
     ];
@@ -43,7 +44,7 @@ class Cart extends Model
 
     public function refreshTotalPrice()
     {
-        $total_price = $this->cartDetails->sum('total_price');
+        $total_price = $this->cartDetails?->sum('total_price') ?? 0;
         $total_discount = 0;
 
         if ($this->discount_id) {
@@ -60,8 +61,8 @@ class Cart extends Model
         $total_price = $total_price - $total_discount;
 
         $this->update([
-            'total_price' => $total_price ?? 0,
-            'total_discount' => $total_discount ?? 0,
+            'total_price' => $total_price > 0 ? $total_price : 0,
+            'total_discount' => $total_price > 0 ? ($total_discount ?? 0) : 0,
         ]);
     }
 
@@ -83,6 +84,12 @@ class Cart extends Model
     public function scopeMyCartHasDetails($query)
     {
         return $query->myCart()->has('cartDetails');
+    }
+
+    public function generateCode()
+    {
+        $user = user();
+        return date('Ymd') . $user->id . $user->tenant_id . date('His');
     }
 
     // public function calculateDiscount()

@@ -89,6 +89,12 @@ class PermissionsHelper
                     'customers_edit',
                     'customers_delete',
                 ],
+                'customer_groups_access' => [
+                    'customer_groups_view',
+                    'customer_groups_create',
+                    'customer_groups_edit',
+                    'customer_groups_delete',
+                ],
             ],
 
             'product_management_access' => [

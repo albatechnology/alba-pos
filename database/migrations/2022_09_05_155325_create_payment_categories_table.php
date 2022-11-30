@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('name');
+            $table->boolean('is_exact_change')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

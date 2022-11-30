@@ -5,7 +5,8 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
-                        <a href="{{ route('customers.index') }}" class="btn btn-success" title="Back"><i class="fa fa-arrow-left"></i> Back</a>
+                        <a href="{{ route('customers.index') }}" class="btn btn-success" title="Back"><i
+                                class="fa fa-arrow-left"></i> Back</a>
                     </div>
                 </div>
             </div>
@@ -26,28 +27,36 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>ID</td>
-                                                <td>{{$customer->id}}</td>
+                                                <td class="w-50">ID</td>
+                                                <td>{{ $customer->id }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Name</td>
-                                                <td>{{$customer->name}}</td>
+                                                <td>{{ $customer->name }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Email</td>
-                                                <td>{{$customer->email}}</td>
+                                                <td>{{ $customer->email }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Phone</td>
-                                                <td>{{$customer->phone}}</td>
+                                                <td>{{ $customer->phone }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Address</td>
-                                                <td>{{$customer->address}}</td>
+                                                <td>{{ $customer->address }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Description</td>
-                                                <td>{{$customer->description}}</td>
+                                                <td>{{ $customer->description }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Customer's Group</td>
+                                                <td>
+                                                    @foreach ($customer->customerGroups as $group)
+                                                        {{ $group->name }} <br>
+                                                    @endforeach
+                                                </td>
                                             </tr>
                                     </table>
                                 </div>
@@ -60,6 +69,5 @@
     </div>
 @endsection
 @push('js')
-    <script>
-    </script>
+    <script></script>
 @endpush

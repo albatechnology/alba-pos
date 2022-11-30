@@ -1,3 +1,4 @@
+@extends('layouts.app')
 @push('css')
     <style>
         .sidebar-item {
@@ -15,22 +16,15 @@
         }
     </style>
 @endpush
-@extends('layouts.app')
 @section('content')
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
-                {{-- <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Cashier</h1>
-          </div>
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Cashier v1</li>
-            </ol>
-          </div>
-        </div> --}}
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <button class="btn btn-info" data-toggle="modal" data-target="#modalOrderList">Daftar Order</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -50,7 +44,22 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="container-input-payment">
+                                <div class="form-group">
+                                    <label>Discount</label>
+                                    <select name="discount_id" id="discount_id" class="form-control">
+                                        @foreach ($discounts as $id => $name)
+                                            <option value="{{ $id }}"
+                                                {{ $cart?->discount_id == $id ? 'selected' : '' }}>
+                                                {{ $name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <button id="btnSaveCart" class="btn btn-outline-primary w-50 mx-1">Save</button>
+                                    <a href="{{ route('cashier.payment') }}" class="btn btn-primary w-50 mx-1">Payment</a>
+                                </div>
+                                {{-- <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#modalOrderList">Payment</button> --}}
+                                {{-- <div id="container-input-payment">
                                     <form id="formProceedPayment">
                                         @csrf
                                         <div class="form-group">
@@ -85,8 +94,7 @@
                                             disabled>Proceed
                                             Payment</button>
                                     </form>
-                                </div>
-
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -94,11 +102,10 @@
             </div>
         </section>
     </div>
+    <div class="modal fade" id="modalOrderList" tabindex="-1" aria-labelledby="modalOrderListLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+            <div class="modal-content" style="height: 100vh">
 
-    <div class="modal fade" id="modalPayment" data-backdrop="static" data-keyboard="false" tabindex="-1"
-        aria-labelledby="modalPaymentLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
             </div>
         </div>
     </div>
@@ -164,6 +171,8 @@
         });
 
         $(document).ready(function() {
+            $('body').addClass('sidebar-collapse');
+
             refreshCart();
 
             $('#amount_paid, #additional_discount').on('keyup', function() {
@@ -190,8 +199,11 @@
                     'opacity': 0.4,
                     'pointer-events': 'none'
                 })
-                $.post("{{ url('cashier/setDiscount') }}/" + $(this).val(), function(res) {
+                var discountId = $(this).val() ? '/' + $(this).val() : '';
+
+                $.post("{{ url('cashier/setDiscount') }}" + discountId, function(res) {
                     if (typeof res !== 'undefined') {
+                    console.log('res setDiscount refreshCart', res)
                         refreshCart();
                     } else {
                         $('#container-cart').css({
@@ -200,6 +212,22 @@
                         });
                     }
                 })
+            });
+
+            $('#btnSaveCart').on('click', function() {
+                $.post("{{ url('cashier/save-cart') }}", function(res) {
+                    console.log(res)
+                    if (res.success) {
+                        window.location.reload();
+                    } else {
+                        toastr.error("Cart can't be empty");
+                    }
+                })
+            })
+
+            // new
+            $('#modalOrderList').on('shown.bs.modal', function(e) {
+                $('#modalOrderList .modal-content').load("{{ url('cashier/order-list') }}");
             });
         })
     </script>

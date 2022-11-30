@@ -86,7 +86,7 @@ class Product extends Component
             if ($cart) $this->toggleSelectedProductIds($product_id, false);
         }
 
-        $this->emit('refreshCart');
+        // $this->emit('refreshCart');
     }
 
     public function setSelectedProductIds($product_id)

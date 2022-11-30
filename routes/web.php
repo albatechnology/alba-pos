@@ -3,6 +3,7 @@
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
@@ -42,12 +43,19 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->group(['prefix' => 'cashier', 'as' => 'cashier.'], function ($route) {
         $route->get('/', [CashierController::class, 'index']);
-        $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
         $route->get('/cart', [CashierController::class, 'cart'])->name('cart');
+        $route->get('/invoice/{order}', [CashierController::class, 'invoice']);
+        $route->get('/order-list', [CashierController::class, 'orderList']);
+        $route->get('/set-order/{code}', [CashierController::class, 'setOrder']);
+        $route->post('/save-cart', [CashierController::class, 'saveCart'])->name('saveCart');
         $route->post('/setDiscount/{discount?}', [CashierController::class, 'setDiscount']);
         $route->post('/proceed-payment', [CashierController::class, 'proceedPayment'])->name('proceedPayment');
         $route->post('/delete-cart-detail/{id}', [CashierController::class, 'deleteCartDetail']);
         $route->post('/plus-minus/{product_id}/{qty}', [CashierController::class, 'plusMinus']);
+
+
+        $route->get('/payment', [CashierController::class, 'payment'])->name('payment');
+        $route->get('/cart-list', [CashierController::class, 'cartList'])->name('cartList');
     });
 
     $route->patch('users/restore', [UserController::class, 'restore'])->name('users.restore');
@@ -79,6 +87,12 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('customers/forceDestroy', [CustomerController::class, 'forceDestroy'])->name('customers.forceDestroy');
     $route->delete('customers/massDestroy', [CustomerController::class, 'massDestroy'])->name('customers.massDestroy');
     $route->resource('customers', CustomerController::class);
+
+    $route->get('customer-groups/get-customer-groups', [CustomerGroupController::class, 'ajaxGetCustomerGroups']);
+    $route->patch('customer-groups/restore', [CustomerGroupController::class, 'restore'])->name('customer-groups.restore');
+    $route->delete('customer-groups/forceDestroy', [CustomerGroupController::class, 'forceDestroy'])->name('customer-groups.forceDestroy');
+    $route->delete('customer-groups/massDestroy', [CustomerGroupController::class, 'massDestroy'])->name('customer-groups.massDestroy');
+    $route->resource('customer-groups', CustomerGroupController::class);
 
     $route->patch('products/restore', [ProductController::class, 'restore'])->name('products.restore');
     $route->delete('products/forceDestroy', [ProductController::class, 'forceDestroy'])->name('products.forceDestroy');
@@ -135,5 +149,6 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->resource('reports', ReportController::class)->only(['index']);
 
+    $route->delete('discounts/massDestroy', [DiscountController::class, 'massDestroy'])->name('discounts.massDestroy');
     $route->resource('discounts', DiscountController::class);
 });
