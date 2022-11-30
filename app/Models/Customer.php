@@ -11,7 +11,15 @@ class Customer extends Model implements TenantedInterface
 {
     use SoftDeletes, TenantedTrait;
     public $table = 'customers';
-    protected $guarded = [];
+    protected $fillable = [
+        'company_id',
+        'tenant_id',
+        'name',
+        'email',
+        'phone',
+        'address',
+        'description',
+    ];
 
     public function company()
     {
@@ -26,5 +34,10 @@ class Customer extends Model implements TenantedInterface
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+
+    public function customerGroups()
+    {
+        return $this->belongsToMany(CustomerGroup::class, 'customer_customer_groups');
     }
 }

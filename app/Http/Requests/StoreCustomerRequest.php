@@ -31,6 +31,8 @@ class StoreCustomerRequest extends FormRequest
             'phone' => 'required|unique:customers,phone|numeric',
             'address' => 'nullable',
             'description' => 'nullable',
+            'customer_group_ids' => 'nullable|array',
+            'customer_group_ids.*' => 'exists:customer_groups,id',
         ];
     }
 }

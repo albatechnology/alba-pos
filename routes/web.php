@@ -3,6 +3,7 @@
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDetailController;
@@ -87,6 +88,12 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('customers/massDestroy', [CustomerController::class, 'massDestroy'])->name('customers.massDestroy');
     $route->resource('customers', CustomerController::class);
 
+    $route->get('customer-groups/get-customer-groups', [CustomerGroupController::class, 'ajaxGetCustomerGroups']);
+    $route->patch('customer-groups/restore', [CustomerGroupController::class, 'restore'])->name('customer-groups.restore');
+    $route->delete('customer-groups/forceDestroy', [CustomerGroupController::class, 'forceDestroy'])->name('customer-groups.forceDestroy');
+    $route->delete('customer-groups/massDestroy', [CustomerGroupController::class, 'massDestroy'])->name('customer-groups.massDestroy');
+    $route->resource('customer-groups', CustomerGroupController::class);
+
     $route->patch('products/restore', [ProductController::class, 'restore'])->name('products.restore');
     $route->delete('products/forceDestroy', [ProductController::class, 'forceDestroy'])->name('products.forceDestroy');
     $route->delete('products/massDestroy', [ProductController::class, 'massDestroy'])->name('products.massDestroy');
@@ -135,6 +142,7 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('stocks/massDestroy', [StockController::class, 'massDestroy'])->name('stocks.massDestroy');
     $route->resource('stocks', StockController::class)->only(['index', 'show', 'edit', 'update']);
 
+    $route->delete('stock-histories/massDestroy', [StockHistoryController::class, 'massDestroy'])->name('stock-histories.massDestroy');
     $route->resource('stock-histories', StockHistoryController::class)->only(['index']);
 
     $route->resource('profiles', ProfileController::class)->only(['index', 'edit', 'update']);

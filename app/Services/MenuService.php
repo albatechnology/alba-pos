@@ -58,8 +58,9 @@ class MenuService
     protected static function customerManagement()
     {
         $customers = new Submenu('customers_access', 'customers', 'fa fa-users', 'Customers');
+        $customerGroups = new Submenu('customer_groups_access', 'customer-groups', 'fa fa-users', 'Customer Groups');
 
-        return new Menu('customer_management_access', 'fa fa-users', 'Customers Management', ...[$customers]);
+        return new Menu('customer_management_access', 'fa fa-users', 'Customer Management', ...[$customers, $customerGroups]);
     }
 
     // protected static function paymentManagement()
