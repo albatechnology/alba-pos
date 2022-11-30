@@ -126,7 +126,7 @@ class PermissionsHelper
                 ],
             ],
 
-            'warehouse_management_access' => [
+            'inventory_management_access' => [
                 'stocks_access' => [
                     'stocks_view',
                     'stocks_create',
@@ -179,7 +179,15 @@ class PermissionsHelper
                     'discounts_create',
                     'discounts_edit',
                     'discounts_delete',
-                ]
+                ],
+
+                'bank_accounts_access' => [
+                    'bank_accounts_view',
+                    'bank_accounts_create',
+                    'bank_accounts_edit',
+                    'bank_accounts_delete',
+                ],
+
             ]
         ];
     }

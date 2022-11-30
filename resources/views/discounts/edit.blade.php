@@ -44,8 +44,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label class="">Description</label>
-                                        <textarea name="description" type="text" value="{{ $discounts->description }}"
-                                            class="form-control @error('description') is-invalid @enderror" placeholder="Description"></textarea>
+                                        <textarea name="description" type="text"
+                                            class="form-control @error('description') is-invalid @enderror" placeholder="Description">{{ $discounts->description }}</textarea>
                                         @error('description')
                                             <span class="error invalid-feedback">{{ $message }}</span>
                                         @enderror

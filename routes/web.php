@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\CashierController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockHistoryController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TenantController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -151,4 +153,26 @@ Route::group(['middleware' => 'auth'], function ($route) {
 
     $route->delete('discounts/massDestroy', [DiscountController::class, 'massDestroy'])->name('discounts.massDestroy');
     $route->resource('discounts', DiscountController::class);
+
+    $route->resource('suppliers', SupplierController::class);
+
+    $route->group(['prefix' => 'suppliers/{supplier}', 'as' => 'suppliers.'], function ($route) {
+        $route->resource('bank-accounts', BankAccountController::class)->except('destroy');
+    });
+    $route->delete('bank-accounts/massDestroy', [BankAccountController::class, 'massDestroy'])->name('bank-accounts.massDestroy');
+    $route->delete('bank-accounts/{id}', [BankAccountController::class, 'destroy'])->name('bank-accounts.destroy');
+
+    // $route->resource('bank-accounts', BankAccountController::class);
+
+    $route->get('get-regions/city/{id}', function($id){
+        return response()->file(public_path('regions/city/'.$id));
+    });
+
+    $route->get('get-regions/district/{id}', function($id){
+        return response()->file(public_path('regions/district/'.$id));
+    });
+
+    $route->get('get-regions/village/{id}', function($id){
+        return response()->file(public_path('regions/village/'.$id));
+    });
 });
