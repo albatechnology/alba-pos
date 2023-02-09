@@ -124,6 +124,18 @@ class PermissionsHelper
                     'product_tenants_edit',
                     'product_tenants_delete',
                 ],
+                'product_variants_access' => [
+                    'product_variants_view',
+                    'product_variants_create',
+                    'product_variants_edit',
+                    'product_variants_delete',
+                ],
+                'product_variant_items_access' => [
+                    'product_variant_items_view',
+                    'product_variant_items_create',
+                    'product_variant_items_edit',
+                    'product_variant_items_delete',
+                ],
             ],
 
             'inventory_management_access' => [

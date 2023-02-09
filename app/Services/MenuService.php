@@ -34,8 +34,9 @@ class MenuService
         $products = new Submenu('products_access', 'products', 'fa fa-products', 'Products');
         $product_categories = new Submenu('product_categories_access', 'product-categories', 'fa fa-users', 'Product Categories');
         $product_brands = new Submenu('product_brands_access', 'product-brands', 'fa fa-users', 'Product Brand');
+        $product_variants = new Submenu('product_variants_access', 'product-variants', 'fa fa-users', 'Product Variant');
 
-        return new Menu('product_management_access', 'fa fa-shopping-cart', 'Product Management', ...[$products, $product_categories, $product_brands]);
+        return new Menu('product_management_access', 'fa fa-shopping-cart', 'Product Management', ...[$products, $product_categories, $product_brands, $product_variants]);
     }
 
     protected static function marketingManagement()

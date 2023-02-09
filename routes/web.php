@@ -16,6 +16,8 @@ use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTenantController;
+use App\Http\Controllers\ProductVariantController;
+use App\Http\Controllers\ProductVariantItemController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
@@ -99,11 +101,19 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->patch('products/restore', [ProductController::class, 'restore'])->name('products.restore');
     $route->delete('products/forceDestroy', [ProductController::class, 'forceDestroy'])->name('products.forceDestroy');
     $route->delete('products/massDestroy', [ProductController::class, 'massDestroy'])->name('products.massDestroy');
-    $route->resource('products', ProductController::class);
-
     $route->group(['prefix' => 'products/{product}', 'as' => 'products.'], function ($route) {
         $route->resource('tenants', ProductTenantController::class)->only(['index', 'edit', 'update']);
+        // $route->get('/variants', ProductController::class, 'indexVariant')->name('variants.index');
+
+        $route->group(['prefix' => 'variants', 'as' => 'variants.'], function ($route){
+            $route->get('/', [ProductController::class, 'indexVariant'])->name('index');
+            // $route->get('create', ProductController::class)->name('create');
+            // $route->post('/', ProductController::class)->name('store');
+            // $route->delete('forceDestroy', [ProductController::class, 'forceDestroy'])->name('forceDestroy');
+            // $route->delete('massDestroy', [ProductController::class, 'massDestroy'])->name('massDestroy');
+        });
     });
+    $route->resource('products', ProductController::class);
 
     $route->patch('product-categories/restore', [ProductCategoryController::class, 'restore'])->name('product-categories.restore');
     $route->delete('product-categories/forceDestroy', [ProductCategoryController::class, 'forceDestroy'])->name('product-categories.forceDestroy');
@@ -114,6 +124,17 @@ Route::group(['middleware' => 'auth'], function ($route) {
     $route->delete('product-brands/forceDestroy', [ProductBrandController::class, 'forceDestroy'])->name('product-brands.forceDestroy');
     $route->delete('product-brands/massDestroy', [ProductBrandController::class, 'massDestroy'])->name('product-brands.massDestroy');
     $route->resource('product-brands', ProductBrandController::class);
+
+    $route->patch('product-variants/restore', [ProductVariantController::class, 'restore'])->name('product-variants.restore');
+    $route->delete('product-variants/forceDestroy', [ProductVariantController::class, 'forceDestroy'])->name('product-variants.forceDestroy');
+    $route->delete('product-variants/massDestroy', [ProductVariantController::class, 'massDestroy'])->name('product-variants.massDestroy');
+    $route->group(['prefix' => 'product-variants/{productVariant}', 'as' => 'product-variants.'], function ($route) {
+        $route->patch('product-variant-items/restore', [ProductVariantController::class, 'restore'])->name('product-variant-items.restore');
+        $route->delete('product-variant-items/forceDestroy', [ProductVariantController::class, 'forceDestroy'])->name('product-variant-items.forceDestroy');
+        $route->delete('product-variant-items/massDestroy', [ProductVariantController::class, 'massDestroy'])->name('product-variant-items.massDestroy');
+        $route->resource('product-variant-items', ProductVariantItemController::class);
+    });
+    $route->resource('product-variants', ProductVariantController::class);
 
     $route->patch('payment-categories/restore', [PaymentCategoryController::class, 'restore'])->name('payment-categories.restore');
     $route->delete('payment-categories/forceDestroy', [PaymentCategoryController::class, 'forceDestroy'])->name('payment-categories.forceDestroy');
