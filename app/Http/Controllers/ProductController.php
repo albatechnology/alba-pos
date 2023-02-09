@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\Product;
 use App\Models\ProductBrand;
 use App\Models\ProductCategory;
+use App\Models\ProductProductVariant;
 use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -59,7 +60,7 @@ class ProductController extends Controller
                     if (user()->can('product_tenants_access')) {
                         $extraActions .= '<a class="btn btn-warning btn-sm" href="' . route('products.tenants.index', $row->id) . '">Tenant Product</a>';
                     }
-                    if (user()->can('variants_access')) {
+                    if (user()->can('product_variants_access')) {
                         $extraActions .= '<a class="btn btn-warning btn-sm ml-1" href="' . route('products.variants.index', $row->id) . '">Product Variants</a>';
                     }
                     $viewGate      = 'products_show';
@@ -171,25 +172,31 @@ class ProductController extends Controller
     public function indexVariant(Product $product, Request $request)
     {
         if ($request->ajax()) {
-            $data = ProductVariant::with(['company', 'products'])->whereProductId($product->id)->select(sprintf('%s.*', (new ProductVariant)->table));
+            // $data = ProductVariant::tenanted()->with(['company', 'productProductVariant' => function ($q) use ($product) {
+            //     $q->where('product_id', $product->id);
+            // }])->select(sprintf('%s.*', (new ProductVariant)->table));
+            $data = ProductProductVariant::with(['product', 'productVariant'])->where('product_id', $product->id)->select(sprintf('%s.*', (new ProductProductVariant)->table));
 
-            dd($data->get());
+            // dd($data->get());
             return DataTables::of($data)->addIndexColumn()
                 ->addColumn('placeholder', '&nbsp;')
                 ->editColumn('created_at', function ($row) {
                     return date('d-m-Y H:i', strtotime($row->created_at));
                 })
                 ->addColumn('selection_type', function ($row) {
-                    return $row->pivot->selection_type ?? '';
+                    return $row->selection_type->description ?? '';
                 })
                 ->addColumn('product_name', function ($row) {
-                    return $row->products->name ?? '';
+                    return $row->product->name ?? '';
+                })
+                ->addColumn('product_variant_name', function ($row) {
+                    return $row->productVariant->name ?? '';
                 })
                 ->addColumn('actions', function ($row) {
                     $extraActions  = '';
-                    if (user()->can('product_variant_items_access')) {
-                        $extraActions .= '<a class="btn btn-warning btn-sm" href="' . route('product-variants.product-variant-items.index', $row->id) . '">Variant Items</a>';
-                    }
+                    // if (user()->can('product_variant_items_access')) {
+                    //     $extraActions .= '<a class="btn btn-warning btn-sm" href="' . route('product-variants.product-variant-items.index', $row->id) . '">Variant Items</a>';
+                    // }
                     $deleteGate    = 'product_variants_delete';
                     $crudRoutePart = 'products.variants';
                     return view('layouts.includes.nestedDatatablesActions', compact('row', 'deleteGate', 'crudRoutePart'));

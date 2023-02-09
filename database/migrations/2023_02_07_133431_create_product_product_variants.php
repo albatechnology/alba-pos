@@ -14,11 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('product_product_variants', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_variant_id')->constrained()->cascadeOnDelete();
             $table->tinyInteger('selection_type')->default(0);
-            $table->timestamps();
         });
     }
 

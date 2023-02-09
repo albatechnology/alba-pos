@@ -25,11 +25,9 @@
                                         <thead>
                                             <tr>
                                                 <th width="10"></th>
-                                                <th>ID</th>
                                                 <th>Product</th>
                                                 <th>Variants</th>
                                                 <th>Selection Type</th>
-                                                <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -97,24 +95,16 @@
                     name: 'placeholder'
                 },
                 {
-                    data: 'id',
-                    name: 'id',
-                },
-                {
                     data: 'product_name',
-                    name: 'products.name'
+                    name: 'product.name'
                 },
                 {
-                    data: 'name',
-                    name: 'name'
+                    data: 'product_variant_name',
+                    name: 'productVariant.name'
                 },
                 {
                     data: 'selection_type',
-                    name: 'products.pivot_selection_type'
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at'
+                    name: 'selection_type'
                 },
                 {
                     data: 'actions',
@@ -158,7 +148,7 @@
 
         function deleteData(id) {
             if (confirm('Delete data?')) {
-                $.post(`{{ url('products/'.$product->id.'/tenants') }}/` + id, {
+                $.post(`{{ url('products/' . $product->id . '/tenants') }}/` + id, {
                     _method: 'delete'
                 }, function(res) {
                     if (res.success) {
